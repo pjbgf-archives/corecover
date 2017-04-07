@@ -1,8 +1,8 @@
 using System;
-using NetCover.Sample.Library;
+using CoreCover.Sample.Library;
 using Xunit;
 
-namespace NetCover.Sample.Tests
+namespace CoreCover.Sample.Tests
 {
     public class PartiallyCoveredTest
     {

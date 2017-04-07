@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26228.12
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetCover.Sample.Tests", "NetCover.Sample.Tests\NetCover.Sample.Tests.csproj", "{0A2EDEF1-38D6-4474-BB0A-4D5221DBEE7B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoreCover.Sample.Tests", "CoreCover.Sample.Tests\CoreCover.Sample.Tests.csproj", "{0A2EDEF1-38D6-4474-BB0A-4D5221DBEE7B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetCover.Sample.Library", "NetCover.Sample.Library\NetCover.Sample.Library.csproj", "{26609B59-E48F-40DE-BED9-ED1D5F65661F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoreCover.Sample.Library", "CoreCover.Sample.Library\CoreCover.Sample.Library.csproj", "{26609B59-E48F-40DE-BED9-ED1D5F65661F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCover.Tests", "NetCover.Tests\NetCover.Tests.csproj", "{5E93C818-7CDA-41BC-BB33-0BEA1FE133F3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreCover.Tests", "CoreCover.Tests\CoreCover.Tests.csproj", "{5E93C818-7CDA-41BC-BB33-0BEA1FE133F3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCover", "NetCover\NetCover.csproj", "{9F49029D-EA95-49F3-9A35-DBC1AA731BB1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreCover", "CoreCover\CoreCover.csproj", "{9F49029D-EA95-49F3-9A35-DBC1AA731BB1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NetCover.Sample.Library
+namespace CoreCover.Sample.Library
 {
     public class PartiallyCovered
     {

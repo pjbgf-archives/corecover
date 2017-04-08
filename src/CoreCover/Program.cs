@@ -73,31 +73,36 @@ namespace CoreCover
         {
             Console.WriteLine($"Method: {method.Name}");
 
-            var voidRef = method.Module.ImportReference(
-                new TypeReference("System", "Void", null, new AssemblyNameReference("netstandard", null)));
-            var coverageTrackerRef = method.Module.ImportReference(
-                new TypeReference("CoreCover.Instrumentation", "CoverageTracker", null, new AssemblyNameReference("CoreCover.Instrumentation", Version.Parse("1.0.0.0"))));
-            
-            var instrumentationMethodRef = method.Module.ImportReference(new MethodReference("MarkExecution", voidRef, 
-                coverageTrackerRef));
-            var stringRef = method.Module.ImportReference(
-                new TypeReference("System", "String", null, new AssemblyNameReference("netstandard", null)));
-            var int32Ref = method.Module.ImportReference(
-                new TypeReference("System", "Int32", null, new AssemblyNameReference("netstandard", null)));
-
-            instrumentationMethodRef.Parameters.Add(new ParameterDefinition("fileName", ParameterAttributes.In, stringRef));
-            instrumentationMethodRef.Parameters.Add(new ParameterDefinition("lineNumber", ParameterAttributes.In, int32Ref));
-
             var ilProcessor = method.Body.GetILProcessor();
             var firstInstruction = ilProcessor.Body.Instructions[0];
 
             ilProcessor.Body.SimplifyMacros();
 
+            var instrumentationMethodRef = GetMethodReference(method.Module);
             ilProcessor.InsertAfter(firstInstruction, Instruction.Create(OpCodes.Call, instrumentationMethodRef));
             ilProcessor.InsertAfter(firstInstruction, Instruction.Create(OpCodes.Ldc_I4, 66));
             ilProcessor.InsertAfter(firstInstruction, Instruction.Create(OpCodes.Ldstr, "FileName"));
 
             ilProcessor.Body.OptimizeMacros();
+        }
+
+        private static MethodReference GetMethodReference(ModuleDefinition module)
+        {
+            var voidRef = module.ImportReference(
+                new TypeReference("System", "Void", null, new AssemblyNameReference("netstandard", null)));
+            var coverageTrackerRef = module.ImportReference(
+                new TypeReference("CoreCover.Instrumentation", "CoverageTracker", null,
+                    new AssemblyNameReference("CoreCover.Instrumentation", Version.Parse("1.0.0.0"))));
+            var instrumentationMethodRef = module.ImportReference(new MethodReference("MarkExecution", voidRef,
+                coverageTrackerRef));
+            var stringRef = module.ImportReference(
+                new TypeReference("System", "String", null, new AssemblyNameReference("netstandard", null)));
+            var int32Ref = module.ImportReference(
+                new TypeReference("System", "Int32", null, new AssemblyNameReference("netstandard", null)));
+
+            instrumentationMethodRef.Parameters.Add(new ParameterDefinition("fileName", ParameterAttributes.In, stringRef));
+            instrumentationMethodRef.Parameters.Add(new ParameterDefinition("lineNumber", ParameterAttributes.In, int32Ref));
+            return instrumentationMethodRef;
         }
     }
 }

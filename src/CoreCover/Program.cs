@@ -25,6 +25,15 @@ namespace CoreCover
             }
         }
 
+        private static AssemblyDefinition LoadAssembly(string assemblyPath)
+        {
+            var assembly = AssemblyDefinition.ReadAssembly(assemblyPath);
+
+            Console.WriteLine($"Processing Assembly: {assembly.FullName}");
+
+            return assembly;
+        }
+
         private static void ProcessAssembly(AssemblyDefinition assembly)
         {
             foreach (var module in assembly.Modules)
@@ -54,15 +63,6 @@ namespace CoreCover
         private static void ProcessMethod(MethodDefinition method)
         {
             Console.WriteLine($"Method: {method.Name}");
-        }
-
-        private static AssemblyDefinition LoadAssembly(string assemblyPath)
-        {
-            var assembly = AssemblyDefinition.ReadAssembly(assemblyPath);
-
-            Console.WriteLine($"Processing Assembly: {assembly.FullName}");
-
-            return assembly;
         }
     }
 }

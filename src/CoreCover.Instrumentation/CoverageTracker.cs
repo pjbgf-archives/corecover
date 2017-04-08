@@ -11,7 +11,7 @@ namespace CoreCover.Instrumentation
         public static void MarkExecution(string fileName, int lineNumber)
         {
             Debug.WriteLine($"{fileName}: {lineNumber}");
-            File.AppendAllLines("C:\\git\\corecover\\src\\CoreCover.Sample.Library\\bin\\Debug\\netcoreapp1.1\\coverage.xml", new string[] { $"{fileName}: {lineNumber}" });
+            File.AppendAllLines("C:\\git\\corecover\\src\\CoreCover.Sample.Tests\\bin\\Debug\\netcoreapp1.1\\coverage.xml", new string[] { $"{fileName}: {lineNumber}" });
         }
     }
 }

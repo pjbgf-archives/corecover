@@ -2,6 +2,8 @@
 using System.Diagnostics;
 using System.IO;
 using Mono.Cecil;
+using Mono.Cecil.Rocks;
+using Mono.Cecil.Cil;
 
 namespace CoreCover
 {
@@ -10,7 +12,7 @@ namespace CoreCover
         static void Main(string[] args)
         {
             args = new[]
-                {@"C:\git\CoreCover\src\CoreCover.Sample.Library\bin\Debug\netcoreapp1.1\CoreCover.Sample.Library.dll"};
+                {@"C:\git\corecover\src\CoreCover.Sample.Tests\bin\Debug\netcoreapp1.1\CoreCover.Sample.Library.dll"};
 
             if (args == null || args.Length == 0)
             {
@@ -20,8 +22,13 @@ namespace CoreCover
 
             foreach (var assemblyPath in args)
             {
-                var assembly = LoadAssembly(assemblyPath);
+                if (File.Exists(assemblyPath + ".bak"))
+                    File.Delete(assemblyPath + ".bak");
+
+                File.Move(assemblyPath, assemblyPath + ".bak");
+                var assembly = LoadAssembly(assemblyPath + ".bak");
                 ProcessAssembly(assembly);
+                assembly.Write(assemblyPath);
             }
         }
 
@@ -45,6 +52,7 @@ namespace CoreCover
         private static void ProcessModule(ModuleDefinition module)
         {
             Console.WriteLine($"Module: {module.Name}");
+
             foreach (var type in module.Types)
             {
                 ProcessType(type);
@@ -54,6 +62,7 @@ namespace CoreCover
         private static void ProcessType(TypeDefinition type)
         {
             Console.WriteLine($"Type: {type.Name}");
+
             foreach (var method in type.Methods)
             {
                 ProcessMethod(method);
@@ -64,11 +73,31 @@ namespace CoreCover
         {
             Console.WriteLine($"Method: {method.Name}");
 
-            //var instrumentationCall = 
+            var voidRef = method.Module.ImportReference(
+                new TypeReference("System", "Void", null, new AssemblyNameReference("netstandard", null)));
+            var coverageTrackerRef = method.Module.ImportReference(
+                new TypeReference("CoreCover.Instrumentation", "CoverageTracker", null, new AssemblyNameReference("CoreCover.Instrumentation", Version.Parse("1.0.0.0"))));
+            
+            var instrumentationMethodRef = method.Module.ImportReference(new MethodReference("MarkExecution", voidRef, 
+                coverageTrackerRef));
+            var stringRef = method.Module.ImportReference(
+                new TypeReference("System", "String", null, new AssemblyNameReference("netstandard", null)));
+            var int32Ref = method.Module.ImportReference(
+                new TypeReference("System", "Int32", null, new AssemblyNameReference("netstandard", null)));
 
-            //var ilProcessor = method.Body.GetILProcessor();
-            //var firstInstruction = ilProcessor.Body.Instructions[0];
-            //ilProcessor.InsertAfter(firstInstruction, instrumentationCall);
+            instrumentationMethodRef.Parameters.Add(new ParameterDefinition("fileName", ParameterAttributes.In, stringRef));
+            instrumentationMethodRef.Parameters.Add(new ParameterDefinition("lineNumber", ParameterAttributes.In, int32Ref));
+
+            var ilProcessor = method.Body.GetILProcessor();
+            var firstInstruction = ilProcessor.Body.Instructions[0];
+
+            ilProcessor.Body.SimplifyMacros();
+
+            ilProcessor.InsertAfter(firstInstruction, Instruction.Create(OpCodes.Call, instrumentationMethodRef));
+            ilProcessor.InsertAfter(firstInstruction, Instruction.Create(OpCodes.Ldc_I4, 66));
+            ilProcessor.InsertAfter(firstInstruction, Instruction.Create(OpCodes.Ldstr, "FileName"));
+
+            ilProcessor.Body.OptimizeMacros();
         }
     }
 }

@@ -63,6 +63,12 @@ namespace CoreCover
         private static void ProcessMethod(MethodDefinition method)
         {
             Console.WriteLine($"Method: {method.Name}");
+
+            //var instrumentationCall = 
+
+            //var ilProcessor = method.Body.GetILProcessor();
+            //var firstInstruction = ilProcessor.Body.Instructions[0];
+            //ilProcessor.InsertAfter(firstInstruction, instrumentationCall);
         }
     }
 }

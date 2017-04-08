@@ -22,14 +22,21 @@ namespace CoreCover
 
             foreach (var assemblyPath in args)
             {
-                if (File.Exists(assemblyPath + ".bak"))
-                    File.Delete(assemblyPath + ".bak");
+                var shadowAssemblyPath = Path.ChangeExtension(assemblyPath, "bak");
+                RenameOriginalAssembly(assemblyPath, shadowAssemblyPath);
 
-                File.Move(assemblyPath, assemblyPath + ".bak");
-                var assembly = LoadAssembly(assemblyPath + ".bak");
+                var assembly = LoadAssembly(shadowAssemblyPath);
                 ProcessAssembly(assembly);
                 assembly.Write(assemblyPath);
             }
+        }
+
+        private static void RenameOriginalAssembly(string assemblyPath, string newAssemblyPath)
+        {
+            if (File.Exists(newAssemblyPath))
+                File.Delete(newAssemblyPath);
+
+            File.Move(assemblyPath, newAssemblyPath);
         }
 
         private static AssemblyDefinition LoadAssembly(string assemblyPath)
@@ -79,6 +86,7 @@ namespace CoreCover
             ilProcessor.Body.SimplifyMacros();
 
             var instrumentationMethodRef = GetMethodReference(method.Module);
+            
             ilProcessor.InsertAfter(firstInstruction, Instruction.Create(OpCodes.Call, instrumentationMethodRef));
             ilProcessor.InsertAfter(firstInstruction, Instruction.Create(OpCodes.Ldc_I4, 66));
             ilProcessor.InsertAfter(firstInstruction, Instruction.Create(OpCodes.Ldstr, "FileName"));

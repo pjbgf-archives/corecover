@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Text.RegularExpressions;
 using Mono.Cecil;
-using Mono.Cecil.Rocks;
-using Mono.Cecil.Cil;
+using Mono.Cecil.Pdb;
 
 namespace CoreCover
 {
-    class Program
+    partial class Program
     {
         static void Main(string[] args)
         {
@@ -16,101 +16,54 @@ namespace CoreCover
 
             if (args == null || args.Length == 0)
             {
-                Console.WriteLine("usage: CoreCover [path]fileName.dll");
+                Console.WriteLine("usage: CoreCover [path]MyTests.dll");
                 return;
             }
 
-            foreach (var assemblyPath in args)
-            {
-                var shadowAssemblyPath = Path.ChangeExtension(assemblyPath, "bak");
-                RenameOriginalAssembly(assemblyPath, shadowAssemblyPath);
+            new Program().ProcessAssemblies(args);
+        }
 
-                var assembly = LoadAssembly(shadowAssemblyPath);
-                ProcessAssembly(assembly);
-                assembly.Write(assemblyPath);
+        public void ProcessAssemblies(string[] assemblyPaths)
+        {
+            var instrumentator = new ReportHandler(new InstrumentatorHandler());
+            foreach (var assemblyPath in assemblyPaths)
+            {
+                var shadowAssemblyPath = Path.ChangeExtension(assemblyPath, "orig.dll");
+                RenameOriginalAssembly(assemblyPath, shadowAssemblyPath);
+                using (var assembly = LoadAssembly(shadowAssemblyPath))
+                {
+                    instrumentator.Handle(assembly);
+                    assembly.Write(assemblyPath, new WriterParameters { WriteSymbols = true });
+                }
+
+                CleanTempFiles(Path.GetDirectoryName(assemblyPath));
             }
         }
 
-        private static void RenameOriginalAssembly(string assemblyPath, string newAssemblyPath)
+        private void CleanTempFiles(string folder)
         {
-            if (File.Exists(newAssemblyPath))
-                File.Delete(newAssemblyPath);
+            foreach (var file in Directory.EnumerateFiles(folder, "*.orig.*"))
+            {
+                if (Regex.IsMatch(Path.GetExtension(file), "^\\.(pdb|dll)$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled))
+                    File.Delete(file);
+            }
+        }
+
+        private void RenameOriginalAssembly(string assemblyPath, string newAssemblyPath)
+        {
+            var shadowPdbFilePath = Path.ChangeExtension(newAssemblyPath, "pdb");
+            var originalPdbFilePath = Path.ChangeExtension(assemblyPath, "pdb");
 
             File.Move(assemblyPath, newAssemblyPath);
+            File.Copy(originalPdbFilePath, shadowPdbFilePath);
         }
 
-        private static AssemblyDefinition LoadAssembly(string assemblyPath)
+        private AssemblyDefinition LoadAssembly(string assemblyPath)
         {
-            var assembly = AssemblyDefinition.ReadAssembly(assemblyPath);
-
-            Console.WriteLine($"Processing Assembly: {assembly.FullName}");
+            var readerParameters = new ReaderParameters { ReadSymbols = true };
+            var assembly = AssemblyDefinition.ReadAssembly(assemblyPath, readerParameters);
 
             return assembly;
-        }
-
-        private static void ProcessAssembly(AssemblyDefinition assembly)
-        {
-            foreach (var module in assembly.Modules)
-            {
-                ProcessModule(module);
-            }
-        }
-
-        private static void ProcessModule(ModuleDefinition module)
-        {
-            Console.WriteLine($"Module: {module.Name}");
-
-            foreach (var type in module.Types)
-            {
-                ProcessType(type);
-            }
-        }
-
-        private static void ProcessType(TypeDefinition type)
-        {
-            Console.WriteLine($"Type: {type.Name}");
-
-            foreach (var method in type.Methods)
-            {
-                ProcessMethod(method);
-            }
-        }
-
-        private static void ProcessMethod(MethodDefinition method)
-        {
-            Console.WriteLine($"Method: {method.Name}");
-
-            var ilProcessor = method.Body.GetILProcessor();
-            var firstInstruction = ilProcessor.Body.Instructions[0];
-
-            ilProcessor.Body.SimplifyMacros();
-
-            var instrumentationMethodRef = GetMethodReference(method.Module);
-            
-            ilProcessor.InsertAfter(firstInstruction, Instruction.Create(OpCodes.Call, instrumentationMethodRef));
-            ilProcessor.InsertAfter(firstInstruction, Instruction.Create(OpCodes.Ldc_I4, 66));
-            ilProcessor.InsertAfter(firstInstruction, Instruction.Create(OpCodes.Ldstr, "FileName"));
-
-            ilProcessor.Body.OptimizeMacros();
-        }
-
-        private static MethodReference GetMethodReference(ModuleDefinition module)
-        {
-            var voidRef = module.ImportReference(
-                new TypeReference("System", "Void", null, new AssemblyNameReference("netstandard", null)));
-            var coverageTrackerRef = module.ImportReference(
-                new TypeReference("CoreCover.Instrumentation", "CoverageTracker", null,
-                    new AssemblyNameReference("CoreCover.Instrumentation", Version.Parse("1.0.0.0"))));
-            var instrumentationMethodRef = module.ImportReference(new MethodReference("MarkExecution", voidRef,
-                coverageTrackerRef));
-            var stringRef = module.ImportReference(
-                new TypeReference("System", "String", null, new AssemblyNameReference("netstandard", null)));
-            var int32Ref = module.ImportReference(
-                new TypeReference("System", "Int32", null, new AssemblyNameReference("netstandard", null)));
-
-            instrumentationMethodRef.Parameters.Add(new ParameterDefinition("fileName", ParameterAttributes.In, stringRef));
-            instrumentationMethodRef.Parameters.Add(new ParameterDefinition("lineNumber", ParameterAttributes.In, int32Ref));
-            return instrumentationMethodRef;
         }
     }
 }

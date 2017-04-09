@@ -10,7 +10,7 @@ namespace CoreCover.Sample.Tests
         public void TestOneMethod()
         {
             var partiallyCovered = new PartiallyCovered();
-            Assert.True(partiallyCovered.TestedMethod());
+            Assert.True(partiallyCovered.TestedMethod(true));
         }
     }
 }

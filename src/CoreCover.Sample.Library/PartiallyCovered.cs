@@ -4,16 +4,27 @@ namespace CoreCover.Sample.Library
 {
     public class PartiallyCovered
     {
-        public bool TestedMethod()
+        public bool TestedMethod(bool condition)
         {
-            return true;
+            bool returnValue;
+
+            if (condition)
+            {
+                returnValue = false;
+            }
+            else
+            {
+                returnValue = true;
+            }
+
+            return returnValue;
         }
 
-        public void NotTestedMethod()
+        public int NotTestedMethod()
         {
             var a = 1;
             var b = 2;
-            var c = a + b;
+            return a + b;
         }
     }
 }

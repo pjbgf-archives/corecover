@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp1.1</TargetFramework>
+    <PostBuildEvent></PostBuildEvent>
   </PropertyGroup>
 
   <ItemGroup>
@@ -9,9 +10,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\..\..\Users\pj-pc\.nuget\packages\newtonsoft.json\9.0.1\lib\netstandard1.0\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System.Runtime.Loader">
       <HintPath>..\..\..\..\Users\pj-pc\.nuget\packages\system.runtime.loader\4.3.0\ref\netstandard1.5\System.Runtime.Loader.dll</HintPath>
     </Reference>

@@ -9,13 +9,13 @@ namespace CoreCover.Instrumentation
 {
     public static class CoverageTracker
     {
-        private static bool _UnloadMethodSetFlag = false;
+        private static bool _unloadMethodSetFlag = false;
         
         private static void SetUnloadingDelegate()
         {
-            if (!_UnloadMethodSetFlag)
+            if (!_unloadMethodSetFlag)
             {
-                _UnloadMethodSetFlag = true;
+                _unloadMethodSetFlag = true;
                 //HACK: Need to find a better way to loading/keeping report state
                 ReportTracker.LoadReport();
                 AssemblyLoadContext.Default.Unloading += Default_Unloading;
@@ -29,7 +29,7 @@ namespace CoreCover.Instrumentation
 
         public static void MarkExecution(string fileName, int lineNumber)
         {
-            if (!_UnloadMethodSetFlag)
+            if (!_unloadMethodSetFlag)
                 SetUnloadingDelegate();
 
             Debug.WriteLine($"{fileName}: {lineNumber}");

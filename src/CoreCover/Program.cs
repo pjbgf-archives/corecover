@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using CoreCover.Instrumentation;
 using Mono.Cecil;
@@ -21,9 +22,20 @@ namespace CoreCover
                 Console.WriteLine("usage: CoreCover [path]MyTests.dll");
                 return;
             }
-
+            
+            CopyInstrumentationToTargetPath(Path.GetDirectoryName(args[0]));
             new Program().ProcessAssemblies(args);
             ReportTracker.WriteReport();
+        }
+
+        private static void CopyInstrumentationToTargetPath(string targetPath)
+        {
+            var directoryPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            var instrumentationFilePath = Path.Combine(directoryPath, "CoreCover.Instrumentation.dll");
+            var targetFilePath = Path.Combine(targetPath, "CoreCover.Instrumentation.dll");
+
+            if (!File.Exists(targetFilePath))
+                File.Move(instrumentationFilePath, targetFilePath);
         }
 
         public void ProcessAssemblies(string[] assemblyPaths)

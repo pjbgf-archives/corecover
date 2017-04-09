@@ -22,6 +22,7 @@ namespace CoreCover
             }
 
             new Program().ProcessAssemblies(args);
+            ReportTracker.WriteReport();
         }
 
         public void ProcessAssemblies(string[] assemblyPaths)

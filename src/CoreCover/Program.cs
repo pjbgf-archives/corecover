@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
+using CoreCover.Instrumentation;
 using Mono.Cecil;
 using Mono.Cecil.Pdb;
 

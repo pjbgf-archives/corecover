@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 using System.Text;
 using Newtonsoft.Json;
 
-namespace CoreCover
+namespace CoreCover.Instrumentation
 {
-    public static partial class ReportTracker
+    public static class ReportTracker
     {
-        private static readonly Report _report;
+        private static Report _report;
 
         static ReportTracker()
         {
@@ -20,6 +18,20 @@ namespace CoreCover
         {
             Debug.WriteLine($"{fileName}: {lineNumber}");
             _report.AddLine(fileName, lineNumber);
+        }
+
+        public static void MarkLineAsCovered(string fileName, int lineNumber)
+        {
+            _report.MarkLineAsCovered(fileName, lineNumber);
+        }
+
+        public static void LoadReport()
+        {
+            var sw = new StringReader(File.ReadAllText("C:\\git\\corecover\\src\\CoreCover.Sample.Tests\\bin\\Debug\\netcoreapp1.1\\report.xml"));
+            var serializer = JsonSerializer.Create(new JsonSerializerSettings { });
+
+            using (var jsonTextWriter = new JsonTextReader(sw))
+                _report = serializer.Deserialize<Report>(jsonTextWriter);
         }
 
         public static void WriteReport()

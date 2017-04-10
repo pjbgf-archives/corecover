@@ -13,9 +13,6 @@ namespace CoreCover
     {
         static void Main(string[] args)
         {
-            args = new[]
-                {@"C:\git\corecover\src\CoreCover.Sample.Tests\bin\Debug\netcoreapp1.1\CoreCover.Sample.Library.dll"};
-
             //TODO: Try to load target dlls through csproj
             if (args == null || args.Length == 0)
             {

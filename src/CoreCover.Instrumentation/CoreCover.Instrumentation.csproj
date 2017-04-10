@@ -1,18 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>netcoreapp1.1</TargetFramework>
-    <PostBuildEvent></PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="10.0.2" />
+    <PackageReference Include="System.Runtime.Loader">
+      <Version>4.3.0</Version>
+    </PackageReference>
   </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="System.Runtime.Loader">
-      <HintPath>..\..\..\..\Users\pj-pc\.nuget\packages\system.runtime.loader\4.3.0\ref\netstandard1.5\System.Runtime.Loader.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>

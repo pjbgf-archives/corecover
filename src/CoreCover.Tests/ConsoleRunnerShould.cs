@@ -1,4 +1,5 @@
-﻿using NSubstitute;
+﻿using CoreCover.Framework;
+using NSubstitute;
 using Xunit;
 
 namespace CoreCover.Tests

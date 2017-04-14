@@ -1,4 +1,6 @@
-﻿namespace CoreCover
+﻿using CoreCover.Framework;
+
+namespace CoreCover
 {
     public class Program
     {

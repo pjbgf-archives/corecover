@@ -1,6 +1,6 @@
 using System.Linq;
 
-namespace CoreCover
+namespace CoreCover.Framework
 {
     public class ConsoleRunner
     {

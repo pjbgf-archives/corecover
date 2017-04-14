@@ -1,14 +1,13 @@
 using System;
-using System.IO;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Mono.Cecil.Rocks;
 
-namespace CoreCover
+namespace CoreCover.Framework
 {
     public sealed class InstrumentatorHandler : AssemblyHandler
     {
-        public InstrumentatorHandler() : this(null)
+        public InstrumentatorHandler() : this((AssemblyHandler) null)
         {
             
         }

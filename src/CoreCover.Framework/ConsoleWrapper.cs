@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CoreCover
+namespace CoreCover.Framework
 {
     public class ConsoleWrapper : IConsole
     {

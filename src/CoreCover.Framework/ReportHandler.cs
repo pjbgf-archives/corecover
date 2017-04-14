@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
 using CoreCover.Instrumentation;
 using Mono.Cecil;
 
-namespace CoreCover
+namespace CoreCover.Framework
 {
     public sealed class ReportHandler : AssemblyHandler
     {

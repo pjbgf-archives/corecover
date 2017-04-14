@@ -9,7 +9,7 @@ using OpenCover.Framework.Model;
 using File = System.IO.File;
 using Module = OpenCover.Framework.Model.Module;
 
-namespace CoreCover
+namespace CoreCover.Framework
 {
     public class Runner : IRunner
     {

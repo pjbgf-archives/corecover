@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Mono.Cecil;
+﻿using Mono.Cecil;
 
-namespace CoreCover
+namespace CoreCover.Framework
 {
     public abstract class AssemblyHandler
     {

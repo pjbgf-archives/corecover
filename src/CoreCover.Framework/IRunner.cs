@@ -1,4 +1,4 @@
-﻿namespace CoreCover
+﻿namespace CoreCover.Framework
 {
     public interface IRunner
     {

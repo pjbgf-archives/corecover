@@ -11,7 +11,7 @@ using Module = OpenCover.Framework.Model.Module;
 
 namespace CoreCover
 {
-    public class Runner
+    public class Runner : IRunner
     {
         public void Run(string testProjectPath, string reportPath)
         {

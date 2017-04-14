@@ -6,7 +6,7 @@ namespace CoreCover
     {
         public static void Main(string[] args)
         {
-            new ConsoleRunner(new ConsoleWrapper(), new Runner())
+            new ConsoleRunner(new ConsoleWrapper(), new CodeCoverage())
                 .ProcessCommand(args);
         }
     }

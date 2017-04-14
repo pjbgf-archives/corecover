@@ -10,7 +10,7 @@ using File = System.IO.File;
 
 namespace CoreCover.Framework
 {
-    public class Runner : IRunner
+    public class CodeCoverage : ICodeCoverage
     {
         public void Run(string testProjectPath, string reportPath)
         {

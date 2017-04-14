@@ -1,6 +1,6 @@
 ﻿namespace CoreCover.Framework
 {
-    public interface IRunner
+    public interface ICodeCoverage
     {
         void Run(string testProjectPath, string reportPath);
     }

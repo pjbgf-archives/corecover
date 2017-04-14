@@ -2,10 +2,15 @@
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml.Serialization;
 using CoreCover.Instrumentation;
 using Mono.Cecil;
 using Mono.Cecil.Pdb;
+using OpenCover.Framework.Model;
+using File = System.IO.File;
+using Module = OpenCover.Framework.Model.Module;
 
 namespace CoreCover
 {
@@ -23,6 +28,24 @@ namespace CoreCover
             CopyInstrumentationToTargetPath(Path.GetDirectoryName(args[0]));
             new Program().ProcessAssemblies(args);
             ReportTracker.WriteReport();
+
+            var openCoverReport = new OpenCover.Framework.Model.CoverageSession();
+            openCoverReport.Summary = new Summary();
+            
+            var serializer = new XmlSerializer(typeof(CoverageSession),
+                new[] { typeof(Module), typeof(OpenCover.Framework.Model.File), typeof(Class) });
+
+            var reportPath = "C:\\git\\corecover\\src\\CoreCover.Sample.Tests\\bin\\Debug\\netcoreapp1.1\\test.xml";
+            ExportReport(reportPath, serializer, openCoverReport);
+        }
+
+        private static void ExportReport(string reportPath, XmlSerializer serializer, CoverageSession openCoverReport)
+        {
+            using (var fs = new FileStream(reportPath, FileMode.Create))
+            using (var writer = new StreamWriter(fs, new UTF8Encoding()))
+            {
+                serializer.Serialize(writer, openCoverReport);
+            }
         }
 
         private static void CopyInstrumentationToTargetPath(string targetPath)

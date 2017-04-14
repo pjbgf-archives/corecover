@@ -2,7 +2,7 @@
 using NSubstitute;
 using Xunit;
 
-namespace CoreCover.Tests
+namespace CoreCover.Tests.Framework
 {
     public class ConsoleRunnerShould
     {

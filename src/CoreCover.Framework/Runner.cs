@@ -3,11 +3,10 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
-using CoreCover.Framework.OpenCoverReport;
 using CoreCover.Instrumentation;
 using Mono.Cecil;
+using OpenCover.Framework.Model;
 using File = System.IO.File;
-using Module = CoreCover.Framework.OpenCoverReport.Module;
 
 namespace CoreCover.Framework
 {
@@ -23,7 +22,7 @@ namespace CoreCover.Framework
             openCoverReport.Summary = new Summary();
 
             var serializer = new XmlSerializer(typeof(CoverageSession),
-                new[] { typeof(Module), typeof(OpenCoverReport.File), typeof(Class) });
+                new[] { typeof(OpenCover.Framework.Model.Module), typeof(OpenCover.Framework.Model.File), typeof(Class) });
             ExportReport(reportPath, serializer, openCoverReport);
         }
 

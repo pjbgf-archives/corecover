@@ -5,13 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Mono.Cecil" Version="0.10.0-beta5" />
     <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CoreCover.Instrumentation\CoreCover.Instrumentation.csproj" />
-    <ProjectReference Include="..\OpenCover.Framework.Model\OpenCover.Framework.Model.csproj" />
+    <Reference Include="System.Runtime.Serialization.Formatters">
+      <HintPath>..\..\..\..\Users\pj-pc\.nuget\packages\system.runtime.serialization.formatters\4.3.0\ref\netstandard1.3\System.Runtime.Serialization.Formatters.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

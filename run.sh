@@ -1,1 +1,1 @@
- dotnet run --project src/CoreCover/CoreCover.csproj $1
+dotnet run --project src/CoreCover/CoreCover.csproj $1 $2

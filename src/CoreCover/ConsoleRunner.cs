@@ -13,7 +13,7 @@ namespace CoreCover
             _coverageRunner = coverageRunner;
         }
 
-        public void ProcessCommand(string[] inputArgs)
+        public void ProcessCommand(params string[] inputArgs)
         {
             if (inputArgs == null || inputArgs.Length < 2)
             {

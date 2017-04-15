@@ -8,7 +8,7 @@ namespace CoreCover.Framework
 {
     public class Instrumentator : IInstrumentator
     {
-        private IAssemblyInstrumentationHandler _assemblyInstrumentationHandler;
+        private readonly IAssemblyInstrumentationHandler _assemblyInstrumentationHandler;
 
         public Instrumentator(IAssemblyInstrumentationHandler assemblyInstrumentationHandler)
         {

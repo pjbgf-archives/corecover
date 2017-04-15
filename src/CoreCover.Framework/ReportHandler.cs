@@ -4,9 +4,9 @@ using Mono.Cecil;
 
 namespace CoreCover.Framework
 {
-    public sealed class ReportHandler : AssemblyHandler
+    public sealed class ReportHandler : AssemblyInstrumentationHandler
     {
-        public ReportHandler(AssemblyHandler sucessorHandler) : base(sucessorHandler)
+        public ReportHandler(AssemblyInstrumentationHandler sucessorHandler) : base(sucessorHandler)
         {
         }
 

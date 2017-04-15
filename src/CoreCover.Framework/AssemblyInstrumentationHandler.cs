@@ -2,11 +2,11 @@
 
 namespace CoreCover.Framework
 {
-    public abstract class AssemblyHandler
+    public abstract class AssemblyInstrumentationHandler : IAssemblyInstrumentationHandler
     {
-        private readonly AssemblyHandler _sucessorHandler;
+        private readonly AssemblyInstrumentationHandler _sucessorHandler;
 
-        protected AssemblyHandler(AssemblyHandler sucessorHandler)
+        protected AssemblyInstrumentationHandler(AssemblyInstrumentationHandler sucessorHandler)
         {
             _sucessorHandler = sucessorHandler;
         }

@@ -1,3 +1,5 @@
+using System.IO;
+
 namespace CoreCover.Framework
 {
     public class CodeCoverage : ICodeCoverage
@@ -16,7 +18,15 @@ namespace CoreCover.Framework
         public void Run(string testProjectOutputPath, string reportPath)
         {
             _instrumentator.Process(testProjectOutputPath);
-            _testRunner.Run(testProjectOutputPath);
+
+            //HACK: All paths should come from within the project file.
+            var fullPath = testProjectOutputPath;
+            if (!Path.IsPathRooted(testProjectOutputPath))
+                fullPath = Path.Combine(Directory.GetCurrentDirectory(), testProjectOutputPath);
+
+            var testProjectPath = Directory.GetParent(fullPath).Parent.Parent.Parent.FullName;
+            _testRunner.Run(testProjectPath);
+
             _coverageReport.Export(reportPath);
         }
     }

@@ -20,7 +20,7 @@ namespace CoreCover.Framework
         public void Process(string folderPath)
         {
             CopyDependenciesTo(folderPath);
-            ProcessAssemblies(new string[] { folderPath });
+            ProcessAssemblies(Directory.GetFiles(folderPath, "*.dll"));
             ReportTracker.WriteReport();
         }
 
@@ -38,39 +38,21 @@ namespace CoreCover.Framework
         {
             foreach (var assemblyPath in assemblyPaths)
             {
-                var shadowAssemblyPath = Path.ChangeExtension(assemblyPath, "orig.dll");
-                RenameOriginalAssembly(assemblyPath, shadowAssemblyPath);
-                using (var assembly = LoadAssembly(shadowAssemblyPath))
+                var pdbFile = Path.ChangeExtension(assemblyPath, "pdb");
+                if (!File.Exists(pdbFile))
+                    continue;
+                
+                using (var assembly = LoadAssembly(assemblyPath))
                 {
                     _assemblyInstrumentationHandler.Handle(assembly);
-                    assembly.Write(assemblyPath, new WriterParameters { WriteSymbols = true });
+                    assembly.Write(new WriterParameters { WriteSymbols = true });
                 }
-
-                CleanTempFiles(Path.GetDirectoryName(assemblyPath));
             }
-        }
-
-        private void CleanTempFiles(string folder)
-        {
-            foreach (var file in Directory.EnumerateFiles(folder, "*.orig.*"))
-            {
-                if (Regex.IsMatch(Path.GetExtension(file), "^\\.(pdb|dll)$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled))
-                    File.Delete(file);
-            }
-        }
-
-        private void RenameOriginalAssembly(string assemblyPath, string newAssemblyPath)
-        {
-            var shadowPdbFilePath = Path.ChangeExtension(newAssemblyPath, "pdb");
-            var originalPdbFilePath = Path.ChangeExtension(assemblyPath, "pdb");
-
-            File.Move(assemblyPath, newAssemblyPath);
-            File.Copy(originalPdbFilePath, shadowPdbFilePath);
         }
 
         private AssemblyDefinition LoadAssembly(string assemblyPath)
         {
-            var readerParameters = new ReaderParameters { ReadSymbols = true };
+            var readerParameters = new ReaderParameters { ReadSymbols = true, ReadWrite = true};
             var assembly = AssemblyDefinition.ReadAssembly(assemblyPath, readerParameters);
 
             return assembly;

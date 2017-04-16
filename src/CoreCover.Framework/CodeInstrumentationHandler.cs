@@ -5,14 +5,14 @@ using Mono.Cecil.Rocks;
 
 namespace CoreCover.Framework
 {
-    public sealed class InstrumentatorHandler : AssemblyInstrumentationHandler
+    public sealed class CodeInstrumentationHandler : AssemblyInstrumentationHandler
     {
-        public InstrumentatorHandler() : this((AssemblyInstrumentationHandler)null)
+        public CodeInstrumentationHandler() : this((AssemblyInstrumentationHandler)null)
         {
 
         }
 
-        public InstrumentatorHandler(AssemblyInstrumentationHandler sucessorHandler) : base(sucessorHandler)
+        public CodeInstrumentationHandler(AssemblyInstrumentationHandler sucessorHandler) : base(sucessorHandler)
         {
         }
 

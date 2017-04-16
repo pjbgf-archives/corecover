@@ -9,7 +9,7 @@ namespace CoreCover
         {
             new ConsoleRunner(
                 new ConsoleWrapper(), new CodeCoverage(
-                    new Instrumentator(new ReportHandler(new InstrumentatorHandler())),
+                    new Instrumentator(new CodeCoverageHandler(new CodeInstrumentationHandler())),
                     new DotNetTestRunner(), 
                     new OpenCoverReportAdapter()))
                 .ProcessCommand(args);

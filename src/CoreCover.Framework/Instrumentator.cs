@@ -3,6 +3,8 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using CoreCover.Instrumentation;
 using Mono.Cecil;
+using OpenCover.Framework.Model;
+using File = System.IO.File;
 
 namespace CoreCover.Framework
 {
@@ -18,10 +20,10 @@ namespace CoreCover.Framework
 
         private const string InstrumentationAssemblyName = "CoreCover.Instrumentation.dll";
 
-        public void Process(string folderPath)
+        public void Process(CoverageSession coverageSession, string folderPath)
         {
             CopyDependenciesTo(folderPath);
-            ProcessAssemblies(Directory.GetFiles(folderPath, "*.dll"));
+            ProcessAssemblies(coverageSession, Directory.GetFiles(folderPath, "*.dll"));
             ReportTracker.WriteReport();
         }
 
@@ -40,7 +42,7 @@ namespace CoreCover.Framework
                 File.Copy(dependencyFilePath, targetFilePath);
         }
 
-        public void ProcessAssemblies(string[] assemblyPaths)
+        public void ProcessAssemblies(CoverageSession coverageSession, string[] assemblyPaths)
         {
             foreach (var assemblyPath in assemblyPaths)
             {
@@ -57,7 +59,7 @@ namespace CoreCover.Framework
 
                 using (var assembly = LoadAssembly(assemblyPathLocal))
                 {
-                    _assemblyInstrumentationHandler.Handle(assembly);
+                    _assemblyInstrumentationHandler.Handle(coverageSession, assembly);
                     if (_useShadowFile)
                         assembly.Write(assemblyPath, new WriterParameters { WriteSymbols = true });
                     else

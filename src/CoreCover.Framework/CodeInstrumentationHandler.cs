@@ -2,6 +2,7 @@ using System;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Mono.Cecil.Rocks;
+using OpenCover.Framework.Model;
 
 namespace CoreCover.Framework
 {
@@ -16,7 +17,7 @@ namespace CoreCover.Framework
         {
         }
 
-        public override void Handle(AssemblyDefinition assemblyDefinition)
+        public override void Handle(CoverageSession coverageSession, AssemblyDefinition assemblyDefinition)
         {
             Console.WriteLine($"Instrumentating Assembly: {assemblyDefinition.FullName}");
             foreach (var module in assemblyDefinition.Modules)
@@ -24,7 +25,7 @@ namespace CoreCover.Framework
                 ProcessModule(module);
             }
 
-            base.Handle(assemblyDefinition);
+            base.Handle(coverageSession, assemblyDefinition);
         }
 
         private void ProcessModule(ModuleDefinition module)

@@ -1,4 +1,5 @@
 using System.IO;
+using OpenCover.Framework.Model;
 
 namespace CoreCover.Framework
 {
@@ -17,7 +18,9 @@ namespace CoreCover.Framework
 
         public void Run(string testProjectOutputPath, string reportPath)
         {
-            _instrumentator.Process(testProjectOutputPath);
+            var coverageSession = new CoverageSession();
+
+            _instrumentator.Process(coverageSession, testProjectOutputPath);
 
             //HACK: All paths should come from within the project file.
             var fullPath = testProjectOutputPath;
@@ -27,7 +30,7 @@ namespace CoreCover.Framework
             var testProjectPath = Directory.GetParent(fullPath).Parent.Parent.Parent.FullName;
             _testRunner.Run(testProjectPath);
 
-            _coverageReport.Export(reportPath);
+            _coverageReport.Export(coverageSession, reportPath);
         }
     }
 }

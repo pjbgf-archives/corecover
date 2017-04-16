@@ -7,18 +7,16 @@ namespace CoreCover.Framework.Adapters
 {
     public class OpenCoverReportAdapter : ICoverageReport
     {
-        public void Export(string reportPath)
+        public void Export(CoverageSession coverageSession, string reportPath)
         {
-            GenerateReport(reportPath);
+            GenerateReport(coverageSession, reportPath);
         }
         
-        private void GenerateReport(string reportPath)
+        private void GenerateReport(CoverageSession coverageSession, string reportPath)
         {
-            var openCoverReport = new CoverageSession { Summary = new Summary() };
-
             var serializer = new XmlSerializer(typeof(CoverageSession),
                 new[] { typeof(OpenCover.Framework.Model.Module), typeof(OpenCover.Framework.Model.File), typeof(Class) });
-            ExportReport(reportPath, serializer, openCoverReport);
+            ExportReport(reportPath, serializer, coverageSession);
         }
 
         private void ExportReport(string reportPath, XmlSerializer serializer, CoverageSession openCoverReport)

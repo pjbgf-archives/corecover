@@ -1,4 +1,5 @@
 ﻿using Mono.Cecil;
+using OpenCover.Framework.Model;
 
 namespace CoreCover.Framework
 {
@@ -11,9 +12,9 @@ namespace CoreCover.Framework
             _sucessorHandler = sucessorHandler;
         }
 
-        public virtual void Handle(AssemblyDefinition assemblyDefinition)
+        public virtual void Handle(CoverageSession coverageSession, AssemblyDefinition assemblyDefinition)
         {
-            _sucessorHandler?.Handle(assemblyDefinition);
+            _sucessorHandler?.Handle(coverageSession, assemblyDefinition);
         }
     }
 }

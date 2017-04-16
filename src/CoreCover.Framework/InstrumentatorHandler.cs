@@ -7,9 +7,9 @@ namespace CoreCover.Framework
 {
     public sealed class InstrumentatorHandler : AssemblyInstrumentationHandler
     {
-        public InstrumentatorHandler() : this((AssemblyInstrumentationHandler) null)
+        public InstrumentatorHandler() : this((AssemblyInstrumentationHandler)null)
         {
-            
+
         }
 
         public InstrumentatorHandler(AssemblyInstrumentationHandler sucessorHandler) : base(sucessorHandler)
@@ -58,22 +58,27 @@ namespace CoreCover.Framework
             // https://github.com/dotnet/corefx/blob/master/src/System.Reflection.Metadata/specs/PortablePdb-Metadata.md
             if (method.DebugInformation.HasSequencePoints)
             {
+                ilProcessor.Body.SimplifyMacros();
+
                 for (var i = ilProcessor.Body.Instructions.Count; i > 0; i--)
                 {
                     var instruction = ilProcessor.Body.Instructions[i - 1];
+                    if (instruction.OpCode != OpCodes.Nop)
+                        continue;
+
                     var sequencePoint = method.DebugInformation.GetSequencePoint(instruction);
                     if (sequencePoint != null)
                     {
-                        ilProcessor.Body.SimplifyMacros();
                         ilProcessor.InsertAfter(instruction,
                             Instruction.Create(OpCodes.Call, (MethodReference)instrumentationMethodRef));
                         ilProcessor.InsertAfter(instruction,
                             Instruction.Create(OpCodes.Ldc_I4, sequencePoint.StartLine));
                         ilProcessor.InsertAfter(instruction,
                             Instruction.Create(OpCodes.Ldstr, sequencePoint.Document.Url));
-                        ilProcessor.Body.OptimizeMacros();
                     }
                 }
+
+                ilProcessor.Body.OptimizeMacros();
             }
         }
 

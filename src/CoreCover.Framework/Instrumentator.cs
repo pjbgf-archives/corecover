@@ -1,7 +1,6 @@
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using CoreCover.Instrumentation;
 using Mono.Cecil;
 using OpenCover.Framework.Model;
 using File = System.IO.File;
@@ -24,7 +23,6 @@ namespace CoreCover.Framework
         {
             CopyDependenciesTo(folderPath);
             ProcessAssemblies(coverageSession, Directory.GetFiles(folderPath, "*.dll"));
-            ReportTracker.WriteReport();
         }
 
         private void CopyDependenciesTo(string targetPath)

@@ -1,0 +1,15 @@
+﻿syntax = "proto3";
+
+package CoreCover.Framework;
+
+service ExecutionTracker {
+	rpc Track (ExecutedLine) returns (ExecutedLineReply) {}
+}
+
+message ExecutedLine {
+	string fileName = 1;
+	int32 lineNumber = 12;
+}
+
+message ExecutedLineReply {
+}

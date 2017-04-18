@@ -25,6 +25,7 @@ namespace CoreCover.Framework
 
             _instrumentator.Process(coverageSession, testProjectOutputPath);
 
+            //TODO: SRP violation. Whose responsibility is this?
             var server = new Server
             {
                 Services = { ExecutionTracker.BindService(new ExecutionTrackerServer()) },

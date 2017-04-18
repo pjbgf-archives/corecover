@@ -23,7 +23,7 @@ namespace CoreCover.Framework
 
             foreach (var module in assemblyDefinition.Modules)
             {
-                modules.Add(ProcessModule(coverageSession, module));
+                modules.Add(ProcessModule(module));
             }
 
             coverageSession.Modules = modules.ToArray();
@@ -31,7 +31,7 @@ namespace CoreCover.Framework
             base.Handle(coverageSession, assemblyDefinition);
         }
 
-        private Module ProcessModule(CoverageSession coverageSession, ModuleDefinition module)
+        private Module ProcessModule(ModuleDefinition module)
         {
             var coverageModule = new Module();
             var types = new List<Class>(module.Types.Count);
@@ -76,17 +76,6 @@ namespace CoreCover.Framework
                     StartColumn = x.StartColumn,
                     EndColumn = x.EndColumn
                 }).ToArray();
-
-                var ilProcessor = method.Body.GetILProcessor();
-                for (var i = ilProcessor.Body.Instructions.Count; i > 0; i--)
-                {
-                    var instruction = ilProcessor.Body.Instructions[i - 1];
-                    var sequencePoint = method.DebugInformation.GetSequencePoint(instruction);
-                    if (sequencePoint != null)
-                    {
-                        ReportTracker.ReportLine(sequencePoint.Document.Url, sequencePoint.StartLine);
-                    }
-                }
             }
 
             return coverageMethod;

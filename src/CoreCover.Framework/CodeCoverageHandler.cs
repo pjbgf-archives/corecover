@@ -49,10 +49,13 @@ namespace CoreCover.Framework
             {
                 //HACK: Needs refactoring.
                 var documentUrl = type.Methods.FirstOrDefault()?.DebugInformation.SequencePoints.FirstOrDefault()?.Document.Url;
-                if (!string.IsNullOrEmpty(documentUrl))
-                    files.Add(new File { FullPath = documentUrl });
+                if (string.IsNullOrEmpty(documentUrl))
+                    continue;
 
-                var processType = ProcessType(type);
+                var file = new File { FullPath = documentUrl };
+                files.Add(file);
+                
+                var processType = ProcessType(type, file.UniqueId);
                 if (processType != null)
                     types.Add(processType);
             }
@@ -63,7 +66,7 @@ namespace CoreCover.Framework
             return coverageModule;
         }
 
-        private Class ProcessType(TypeDefinition type)
+        private Class ProcessType(TypeDefinition type, uint fileId)
         {
             var coverageClass = new Class();
             var methods = new List<Method>(type.Methods.Capacity);
@@ -71,7 +74,7 @@ namespace CoreCover.Framework
             coverageClass.FullName = type.FullName;
 
             foreach (var method in type.Methods)
-                methods.Add(ProcessMethod(method));
+                methods.Add(ProcessMethod(method, fileId));
 
             coverageClass.Summary = new Summary
             {
@@ -83,7 +86,7 @@ namespace CoreCover.Framework
             return coverageClass;
         }
 
-        private Method ProcessMethod(MethodDefinition method)
+        private Method ProcessMethod(MethodDefinition method, uint fileId)
         {
             var coverageMethod = new Method();
 
@@ -98,13 +101,16 @@ namespace CoreCover.Framework
 
             if (method.DebugInformation.HasSequencePoints)
             {
+                uint ordinal = 0;
                 coverageMethod.SequencePoints = method.DebugInformation.SequencePoints.Select(x => new SequencePoint
                 {
                     Offset = x.Offset,
                     StartLine = x.StartLine,
                     EndLine = x.EndLine,
                     StartColumn = x.StartColumn,
-                    EndColumn = x.EndColumn
+                    EndColumn = x.EndColumn,
+                    Ordinal = ordinal++,
+                    FileId = fileId
                 }).ToArray();
 
                 coverageMethod.Summary.NumSequencePoints = coverageMethod.SequencePoints.Length;

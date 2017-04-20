@@ -28,7 +28,7 @@ namespace CoreCover.Framework
             //TODO: SRP violation. Whose responsibility is this?
             var server = new Server
             {
-                Services = { ExecutionTracker.BindService(new ExecutionTrackerServer()) },
+                Services = { ExecutionTracker.BindService(new ExecutionTrackerServer(coverageSession)) },
                 Ports = { new ServerPort("localhost", 50051, ServerCredentials.Insecure) }
             };
             server.Start();

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Grpc.Core;
 using OpenCover.Framework.Model;
@@ -16,7 +17,13 @@ namespace CoreCover.Framework
 
         public override Task<ExecutedLineReply> Track(ExecutedLine request, ServerCallContext context)
         {
-            Console.WriteLine($"Server: {request.FileName}:{request.LineNumber}");
+            var method = _coverageSession.Modules.First(x => x.ModuleHash == request.ModuleHash)
+                .Classes.First(x => x.Methods.Any(y => y.MetadataToken == request.MetadataToken))
+                .Methods.First(y => y.MetadataToken == request.MetadataToken);
+            
+            method.Visited = true;
+
+            Console.WriteLine($"Server: {request.MetadataToken}:{request.LineNumber}");
             return Task.FromResult(new ExecutedLineReply());
         }
     }

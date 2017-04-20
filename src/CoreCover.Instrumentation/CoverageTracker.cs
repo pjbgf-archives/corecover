@@ -14,9 +14,9 @@ namespace CoreCover.Instrumentation
             _executionTrackerClient = new ExecutionTracker.ExecutionTrackerClient(channel);
         }
 
-        public static void MarkExecution(string fileName, int lineNumber)
+        public static void MarkExecution(string moduleHash, int metadataToken, int lineNumber)
         {
-            _executionTrackerClient.Track(new ExecutedLine { FileName = fileName, LineNumber = lineNumber });
+            _executionTrackerClient.Track(new ExecutedLine { ModuleHash = moduleHash, MetadataToken = metadataToken, LineNumber = lineNumber });
         }
     }
 }

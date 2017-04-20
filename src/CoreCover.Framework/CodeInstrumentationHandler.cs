@@ -75,7 +75,9 @@ namespace CoreCover.Framework
                         ilProcessor.InsertAfter(instruction,
                             Instruction.Create(OpCodes.Ldc_I4, sequencePoint.StartLine));
                         ilProcessor.InsertAfter(instruction,
-                            Instruction.Create(OpCodes.Ldstr, sequencePoint.Document.Url));
+                            Instruction.Create(OpCodes.Ldc_I4, method.MetadataToken.ToInt32()));
+                        ilProcessor.InsertAfter(instruction,
+                            Instruction.Create(OpCodes.Ldstr, method.Module.Mvid.ToString()));
                     }
                 }
 
@@ -98,7 +100,9 @@ namespace CoreCover.Framework
                 new TypeReference("System", "Int32", null, new AssemblyNameReference("netstandard", null)));
 
             instrumentationMethodRef.Parameters.Add(
-                new ParameterDefinition("fileName", ParameterAttributes.In, stringRef));
+                new ParameterDefinition("moduleHash", ParameterAttributes.In, stringRef));
+            instrumentationMethodRef.Parameters.Add(
+                new ParameterDefinition("metadataToken", ParameterAttributes.In, int32Ref));
             instrumentationMethodRef.Parameters.Add(
                 new ParameterDefinition("lineNumber", ParameterAttributes.In, int32Ref));
             return instrumentationMethodRef;

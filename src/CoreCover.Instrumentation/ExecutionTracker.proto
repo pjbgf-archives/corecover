@@ -7,7 +7,8 @@ service ExecutionTracker {
 }
 
 message ExecutedLine {
-	string fileName = 1;
+	string moduleHash = 1;
+	int32 metadataToken = 1111;
 	int32 lineNumber = 12;
 }
 

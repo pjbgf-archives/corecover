@@ -23,15 +23,15 @@ namespace CoreCover.Framework {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChZFeGVjdXRpb25UcmFja2VyLnByb3RvEhNDb3JlQ292ZXIuRnJhbWV3b3Jr",
-            "IjQKDEV4ZWN1dGVkTGluZRIQCghmaWxlTmFtZRgBIAEoCRISCgpsaW5lTnVt",
-            "YmVyGAwgASgFIhMKEUV4ZWN1dGVkTGluZVJlcGx5MmgKEEV4ZWN1dGlvblRy",
-            "YWNrZXISVAoFVHJhY2sSIS5Db3JlQ292ZXIuRnJhbWV3b3JrLkV4ZWN1dGVk",
-            "TGluZRomLkNvcmVDb3Zlci5GcmFtZXdvcmsuRXhlY3V0ZWRMaW5lUmVwbHki",
-            "AGIGcHJvdG8z"));
+            "Ik4KDEV4ZWN1dGVkTGluZRISCgptb2R1bGVIYXNoGAEgASgJEhYKDW1ldGFk",
+            "YXRhVG9rZW4Y1wggASgFEhIKCmxpbmVOdW1iZXIYDCABKAUiEwoRRXhlY3V0",
+            "ZWRMaW5lUmVwbHkyaAoQRXhlY3V0aW9uVHJhY2tlchJUCgVUcmFjaxIhLkNv",
+            "cmVDb3Zlci5GcmFtZXdvcmsuRXhlY3V0ZWRMaW5lGiYuQ29yZUNvdmVyLkZy",
+            "YW1ld29yay5FeGVjdXRlZExpbmVSZXBseSIAYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::CoreCover.Framework.ExecutedLine), global::CoreCover.Framework.ExecutedLine.Parser, new[]{ "FileName", "LineNumber" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::CoreCover.Framework.ExecutedLine), global::CoreCover.Framework.ExecutedLine.Parser, new[]{ "ModuleHash", "MetadataToken", "LineNumber" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::CoreCover.Framework.ExecutedLineReply), global::CoreCover.Framework.ExecutedLineReply.Parser, null, null, null, null)
           }));
     }
@@ -63,7 +63,8 @@ namespace CoreCover.Framework {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public ExecutedLine(ExecutedLine other) : this() {
-      fileName_ = other.fileName_;
+      moduleHash_ = other.moduleHash_;
+      metadataToken_ = other.metadataToken_;
       lineNumber_ = other.lineNumber_;
     }
 
@@ -72,14 +73,25 @@ namespace CoreCover.Framework {
       return new ExecutedLine(this);
     }
 
-    /// <summary>Field number for the "fileName" field.</summary>
-    public const int FileNameFieldNumber = 1;
-    private string fileName_ = "";
+    /// <summary>Field number for the "moduleHash" field.</summary>
+    public const int ModuleHashFieldNumber = 1;
+    private string moduleHash_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public string FileName {
-      get { return fileName_; }
+    public string ModuleHash {
+      get { return moduleHash_; }
       set {
-        fileName_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+        moduleHash_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "metadataToken" field.</summary>
+    public const int MetadataTokenFieldNumber = 1111;
+    private int metadataToken_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int MetadataToken {
+      get { return metadataToken_; }
+      set {
+        metadataToken_ = value;
       }
     }
 
@@ -107,7 +119,8 @@ namespace CoreCover.Framework {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (FileName != other.FileName) return false;
+      if (ModuleHash != other.ModuleHash) return false;
+      if (MetadataToken != other.MetadataToken) return false;
       if (LineNumber != other.LineNumber) return false;
       return true;
     }
@@ -115,7 +128,8 @@ namespace CoreCover.Framework {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
-      if (FileName.Length != 0) hash ^= FileName.GetHashCode();
+      if (ModuleHash.Length != 0) hash ^= ModuleHash.GetHashCode();
+      if (MetadataToken != 0) hash ^= MetadataToken.GetHashCode();
       if (LineNumber != 0) hash ^= LineNumber.GetHashCode();
       return hash;
     }
@@ -127,21 +141,28 @@ namespace CoreCover.Framework {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
-      if (FileName.Length != 0) {
+      if (ModuleHash.Length != 0) {
         output.WriteRawTag(10);
-        output.WriteString(FileName);
+        output.WriteString(ModuleHash);
       }
       if (LineNumber != 0) {
         output.WriteRawTag(96);
         output.WriteInt32(LineNumber);
+      }
+      if (MetadataToken != 0) {
+        output.WriteRawTag(184, 69);
+        output.WriteInt32(MetadataToken);
       }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
-      if (FileName.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(FileName);
+      if (ModuleHash.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(ModuleHash);
+      }
+      if (MetadataToken != 0) {
+        size += 2 + pb::CodedOutputStream.ComputeInt32Size(MetadataToken);
       }
       if (LineNumber != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(LineNumber);
@@ -154,8 +175,11 @@ namespace CoreCover.Framework {
       if (other == null) {
         return;
       }
-      if (other.FileName.Length != 0) {
-        FileName = other.FileName;
+      if (other.ModuleHash.Length != 0) {
+        ModuleHash = other.ModuleHash;
+      }
+      if (other.MetadataToken != 0) {
+        MetadataToken = other.MetadataToken;
       }
       if (other.LineNumber != 0) {
         LineNumber = other.LineNumber;
@@ -171,11 +195,15 @@ namespace CoreCover.Framework {
             input.SkipLastField();
             break;
           case 10: {
-            FileName = input.ReadString();
+            ModuleHash = input.ReadString();
             break;
           }
           case 96: {
             LineNumber = input.ReadInt32();
+            break;
+          }
+          case 8888: {
+            MetadataToken = input.ReadInt32();
             break;
           }
         }

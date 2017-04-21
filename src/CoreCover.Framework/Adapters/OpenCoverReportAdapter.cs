@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿// MIT License
+// Copyright (c) 2017 Paulo Gomes
+
+using System.IO;
 using System.Text;
 using System.Xml.Serialization;
 using OpenCover.Framework.Model;

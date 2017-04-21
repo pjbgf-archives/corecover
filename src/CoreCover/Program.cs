@@ -1,4 +1,7 @@
-﻿using CoreCover.Framework;
+﻿// MIT License
+// Copyright (c) 2017 Paulo Gomes
+
+using CoreCover.Framework;
 using CoreCover.Framework.Adapters;
 
 namespace CoreCover

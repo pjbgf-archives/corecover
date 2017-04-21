@@ -1,4 +1,7 @@
-﻿using System;
+﻿// MIT License
+// Copyright (c) 2017 Paulo Gomes
+
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Grpc.Core;

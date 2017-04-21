@@ -1,4 +1,7 @@
-﻿syntax = "proto3";
+﻿// MIT License
+// Copyright (c) 2017 Paulo Gomes
+
+syntax = "proto3";
 
 package CoreCover.Framework;
 

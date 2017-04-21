@@ -1,4 +1,7 @@
-﻿using System;
+﻿// MIT License
+// Copyright (c) 2017 Paulo Gomes
+
+using System;
 
 namespace CoreCover.Framework
 {

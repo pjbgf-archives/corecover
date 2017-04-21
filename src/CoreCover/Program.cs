@@ -10,9 +10,11 @@ namespace CoreCover
     {
         public static void Main(string[] args)
         {
+            var console = new ConsoleWrapper();
+
             new ConsoleRunner(
-                new ConsoleWrapper(), new CodeCoverage(
-                    new Instrumentator(new CodeCoverageHandler(new CodeInstrumentationHandler())),
+                console, new CodeCoverage(
+                    new Instrumentator(new CodeCoverageHandler(new CodeInstrumentationHandler(console))),
                     new DotNetTestRunner(), 
                     new OpenCoverReportAdapter(), new RpcServer()))
                 .ProcessCommand(args);

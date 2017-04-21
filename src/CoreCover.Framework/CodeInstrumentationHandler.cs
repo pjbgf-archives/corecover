@@ -2,8 +2,6 @@
 // Copyright (c) 2017 Paulo Gomes
 
 using System;
-using System.Collections;
-using System.Linq;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Mono.Cecil.Rocks;
@@ -13,18 +11,20 @@ namespace CoreCover.Framework
 {
     public sealed class CodeInstrumentationHandler : AssemblyInstrumentationHandler
     {
-        public CodeInstrumentationHandler() : this((AssemblyInstrumentationHandler)null)
-        {
+        private readonly IConsole _console;
 
+        public CodeInstrumentationHandler(IConsole console) : this(console, null)
+        {
         }
 
-        public CodeInstrumentationHandler(AssemblyInstrumentationHandler sucessorHandler) : base(sucessorHandler)
+        public CodeInstrumentationHandler(IConsole console, AssemblyInstrumentationHandler sucessorHandler) : base(sucessorHandler)
         {
+            _console = console;
         }
 
         public override void Handle(CoverageSession coverageSession, AssemblyDefinition assemblyDefinition)
         {
-            Console.WriteLine($"Instrumentating Assembly: {assemblyDefinition.FullName}");
+            _console.WriteLine($"Instrumentating Assembly: {assemblyDefinition.FullName}");
             foreach (var module in assemblyDefinition.Modules)
             {
                 ProcessModule(module);
@@ -35,7 +35,7 @@ namespace CoreCover.Framework
 
         private void ProcessModule(ModuleDefinition module)
         {
-            Console.WriteLine($"Module: {module.Name}");
+            _console.WriteLine($"Module: {module.Name}");
 
             foreach (var type in module.Types)
             {
@@ -45,7 +45,7 @@ namespace CoreCover.Framework
 
         private void ProcessType(TypeDefinition type)
         {
-            Console.WriteLine($"Type: {type.Name}");
+            _console.WriteLine($"Type: {type.Name}");
 
             foreach (var method in type.Methods)
             {
@@ -55,7 +55,7 @@ namespace CoreCover.Framework
 
         private void ProcessMethod(MethodDefinition method)
         {
-            Console.WriteLine($"Method: {method.Name}");
+            _console.WriteLine($"Method: {method.Name}");
 
             var ilProcessor = method.Body.GetILProcessor();
             var instrumentationMethodRef = GetMethodReference(method.Module);

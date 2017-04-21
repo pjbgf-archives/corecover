@@ -31,13 +31,7 @@ namespace CoreCover.Framework
 
             _rpcServer.Start(coverageSession);
 
-            //HACK: All paths should come from within the project file.
-            var fullPath = testProjectOutputPath;
-            if (!Path.IsPathRooted(testProjectOutputPath))
-                fullPath = Path.Combine(Directory.GetCurrentDirectory(), testProjectOutputPath);
-
-            var testProjectPath = Directory.GetParent(fullPath).Parent.Parent.Parent.FullName;
-            _testRunner.Run(testProjectPath);
+            _testRunner.Run(testProjectOutputPath);
 
             _rpcServer.Stop();
 

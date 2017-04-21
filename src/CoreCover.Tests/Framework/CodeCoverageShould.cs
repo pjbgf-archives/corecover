@@ -27,7 +27,7 @@ namespace CoreCover.Tests.Framework
         [Fact]
         public void Instrument_Code_Before_Starting_Rpc()
         {
-            var codeCoverage = new CodeCoverage(_instrumentatorMock, _testRunnerMock, _coverageReportMock, _rpcServerMock);
+            var codeCoverage = new CoverageRunner(_instrumentatorMock, _testRunnerMock, _coverageReportMock, _rpcServerMock);
 
             codeCoverage.Run("testProjectOutputPath", "report.xml");
 
@@ -41,7 +41,7 @@ namespace CoreCover.Tests.Framework
         [Fact]
         public void Start_Rpc_Server_Before_Running_Tests()
         {
-            var codeCoverage = new CodeCoverage(_instrumentatorMock, _testRunnerMock, _coverageReportMock, _rpcServerMock);
+            var codeCoverage = new CoverageRunner(_instrumentatorMock, _testRunnerMock, _coverageReportMock, _rpcServerMock);
 
             codeCoverage.Run("testProjectOutputPath", "report.xml");
 
@@ -55,7 +55,7 @@ namespace CoreCover.Tests.Framework
         [Fact]
         public void Stop_Rpc_Server_After_Running_Tests()
         {
-            var codeCoverage = new CodeCoverage(_instrumentatorMock, _testRunnerMock, _coverageReportMock, _rpcServerMock);
+            var codeCoverage = new CoverageRunner(_instrumentatorMock, _testRunnerMock, _coverageReportMock, _rpcServerMock);
 
             codeCoverage.Run("testProjectOutputPath", "report.xml");
 
@@ -69,7 +69,7 @@ namespace CoreCover.Tests.Framework
         [Fact]
         public void Generate_Report_Once_Tests_Were_Executed()
         {
-            var codeCoverage = new CodeCoverage(_instrumentatorMock, _testRunnerMock, _coverageReportMock, _rpcServerMock);
+            var codeCoverage = new CoverageRunner(_instrumentatorMock, _testRunnerMock, _coverageReportMock, _rpcServerMock);
 
             codeCoverage.Run("testProjectOutputPath", "report.xml");
 

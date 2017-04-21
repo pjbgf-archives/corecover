@@ -9,9 +9,9 @@ namespace CoreCover.Framework
     public class ConsoleRunner
     {
         private readonly IConsole _console;
-        private readonly ICodeCoverage _coverageRunner;
+        private readonly ICoverageRunner _coverageRunner;
 
-        public ConsoleRunner(IConsole console, ICodeCoverage coverageRunner)
+        public ConsoleRunner(IConsole console, ICoverageRunner coverageRunner)
         {
             _console = console;
             _coverageRunner = coverageRunner;

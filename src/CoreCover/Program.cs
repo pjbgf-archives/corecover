@@ -13,7 +13,7 @@ namespace CoreCover
             var console = new ConsoleAdapter();
 
             new ConsoleRunner(
-                console, new CodeCoverage(
+                console, new CoverageRunner(
                     new Instrumentator(new CodeCoverageHandler(new CodeInstrumentationHandler(console))),
                     new DotNetTestRunner(), 
                     new OpenCoverReportAdapter(), new RpcServer()))

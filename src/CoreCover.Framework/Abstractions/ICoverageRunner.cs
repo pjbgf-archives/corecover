@@ -3,7 +3,7 @@
 
 namespace CoreCover.Framework.Abstractions
 {
-    public interface ICodeCoverage
+    public interface ICoverageRunner
     {
         void Run(string testProjectPath, string reportPath);
     }

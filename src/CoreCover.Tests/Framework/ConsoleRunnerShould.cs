@@ -16,7 +16,7 @@ namespace CoreCover.Tests.Framework
         public void Show_Usage_When_Not_All_Mandatory_Parameters_Are_Provided(params string[] inputArgs)
         {
             var consoleMock = Substitute.For<IConsole>();
-            var codeCoverageMock = Substitute.For<ICodeCoverage>();
+            var codeCoverageMock = Substitute.For<ICoverageRunner>();
 
             var consoleRunner = new ConsoleRunner(consoleMock, codeCoverageMock);
 
@@ -30,7 +30,7 @@ namespace CoreCover.Tests.Framework
         public void Run_Coverage_Tool_When_All_Mandatory_Parameters_Are_Provided()
         {
             var consoleMock = Substitute.For<IConsole>();
-            var codeCoverageMock = Substitute.For<ICodeCoverage>();
+            var codeCoverageMock = Substitute.For<ICoverageRunner>();
 
             var consoleRunner = new ConsoleRunner(consoleMock, codeCoverageMock);
 

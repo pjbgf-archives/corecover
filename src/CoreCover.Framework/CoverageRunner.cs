@@ -6,14 +6,14 @@ using OpenCover.Framework.Model;
 
 namespace CoreCover.Framework
 {
-    public class CodeCoverage : ICodeCoverage
+    public class CoverageRunner : ICoverageRunner
     {
         private readonly ITestsRunner _testRunner;
         private readonly IInstrumentator _instrumentator;
         private readonly ICoverageReport _coverageReport;
         private readonly IRpcServer _rpcServer;
 
-        public CodeCoverage(IInstrumentator instrumentator, ITestsRunner testRunner, ICoverageReport coverageReport, IRpcServer rpcServer)
+        public CoverageRunner(IInstrumentator instrumentator, ITestsRunner testRunner, ICoverageReport coverageReport, IRpcServer rpcServer)
         {
             _instrumentator = instrumentator;
             _coverageReport = coverageReport;

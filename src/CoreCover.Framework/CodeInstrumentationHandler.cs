@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Linq;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Mono.Cecil.Rocks;
@@ -60,7 +62,7 @@ namespace CoreCover.Framework
             if (method.DebugInformation.HasSequencePoints)
             {
                 ilProcessor.Body.SimplifyMacros();
-
+                
                 for (var i = ilProcessor.Body.Instructions.Count; i > 0; i--)
                 {
                     var instruction = ilProcessor.Body.Instructions[i - 1];
@@ -72,6 +74,8 @@ namespace CoreCover.Framework
                     {
                         ilProcessor.InsertAfter(instruction,
                             Instruction.Create(OpCodes.Call, (MethodReference)instrumentationMethodRef));
+                        ilProcessor.InsertAfter(instruction,
+                            Instruction.Create(OpCodes.Ldc_I4, sequencePoint.EndLine));
                         ilProcessor.InsertAfter(instruction,
                             Instruction.Create(OpCodes.Ldc_I4, sequencePoint.StartLine));
                         ilProcessor.InsertAfter(instruction,
@@ -104,7 +108,10 @@ namespace CoreCover.Framework
             instrumentationMethodRef.Parameters.Add(
                 new ParameterDefinition("metadataToken", ParameterAttributes.In, int32Ref));
             instrumentationMethodRef.Parameters.Add(
-                new ParameterDefinition("lineNumber", ParameterAttributes.In, int32Ref));
+                new ParameterDefinition("startLineNumber", ParameterAttributes.In, int32Ref));
+            instrumentationMethodRef.Parameters.Add(
+                new ParameterDefinition("endLineNumber", ParameterAttributes.In, int32Ref));
+
             return instrumentationMethodRef;
         }
     }

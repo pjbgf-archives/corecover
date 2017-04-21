@@ -23,15 +23,16 @@ namespace CoreCover.Framework {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChZFeGVjdXRpb25UcmFja2VyLnByb3RvEhNDb3JlQ292ZXIuRnJhbWV3b3Jr",
-            "Ik4KDEV4ZWN1dGVkTGluZRISCgptb2R1bGVIYXNoGAEgASgJEhYKDW1ldGFk",
-            "YXRhVG9rZW4Y1wggASgFEhIKCmxpbmVOdW1iZXIYDCABKAUiEwoRRXhlY3V0",
-            "ZWRMaW5lUmVwbHkyaAoQRXhlY3V0aW9uVHJhY2tlchJUCgVUcmFjaxIhLkNv",
-            "cmVDb3Zlci5GcmFtZXdvcmsuRXhlY3V0ZWRMaW5lGiYuQ29yZUNvdmVyLkZy",
-            "YW1ld29yay5FeGVjdXRlZExpbmVSZXBseSIAYgZwcm90bzM="));
+            "ImoKDEV4ZWN1dGVkTGluZRISCgptb2R1bGVIYXNoGAEgASgJEhYKDW1ldGFk",
+            "YXRhVG9rZW4Y1wggASgFEhcKD3N0YXJ0TGluZU51bWJlchgKIAEoBRIVCg1l",
+            "bmRMaW5lTnVtYmVyGAwgASgFIhMKEUV4ZWN1dGVkTGluZVJlcGx5MmgKEEV4",
+            "ZWN1dGlvblRyYWNrZXISVAoFVHJhY2sSIS5Db3JlQ292ZXIuRnJhbWV3b3Jr",
+            "LkV4ZWN1dGVkTGluZRomLkNvcmVDb3Zlci5GcmFtZXdvcmsuRXhlY3V0ZWRM",
+            "aW5lUmVwbHkiAGIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::CoreCover.Framework.ExecutedLine), global::CoreCover.Framework.ExecutedLine.Parser, new[]{ "ModuleHash", "MetadataToken", "LineNumber" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::CoreCover.Framework.ExecutedLine), global::CoreCover.Framework.ExecutedLine.Parser, new[]{ "ModuleHash", "MetadataToken", "StartLineNumber", "EndLineNumber" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::CoreCover.Framework.ExecutedLineReply), global::CoreCover.Framework.ExecutedLineReply.Parser, null, null, null, null)
           }));
     }
@@ -65,7 +66,8 @@ namespace CoreCover.Framework {
     public ExecutedLine(ExecutedLine other) : this() {
       moduleHash_ = other.moduleHash_;
       metadataToken_ = other.metadataToken_;
-      lineNumber_ = other.lineNumber_;
+      startLineNumber_ = other.startLineNumber_;
+      endLineNumber_ = other.endLineNumber_;
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -95,14 +97,25 @@ namespace CoreCover.Framework {
       }
     }
 
-    /// <summary>Field number for the "lineNumber" field.</summary>
-    public const int LineNumberFieldNumber = 12;
-    private int lineNumber_;
+    /// <summary>Field number for the "startLineNumber" field.</summary>
+    public const int StartLineNumberFieldNumber = 10;
+    private int startLineNumber_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int LineNumber {
-      get { return lineNumber_; }
+    public int StartLineNumber {
+      get { return startLineNumber_; }
       set {
-        lineNumber_ = value;
+        startLineNumber_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "endLineNumber" field.</summary>
+    public const int EndLineNumberFieldNumber = 12;
+    private int endLineNumber_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int EndLineNumber {
+      get { return endLineNumber_; }
+      set {
+        endLineNumber_ = value;
       }
     }
 
@@ -121,7 +134,8 @@ namespace CoreCover.Framework {
       }
       if (ModuleHash != other.ModuleHash) return false;
       if (MetadataToken != other.MetadataToken) return false;
-      if (LineNumber != other.LineNumber) return false;
+      if (StartLineNumber != other.StartLineNumber) return false;
+      if (EndLineNumber != other.EndLineNumber) return false;
       return true;
     }
 
@@ -130,7 +144,8 @@ namespace CoreCover.Framework {
       int hash = 1;
       if (ModuleHash.Length != 0) hash ^= ModuleHash.GetHashCode();
       if (MetadataToken != 0) hash ^= MetadataToken.GetHashCode();
-      if (LineNumber != 0) hash ^= LineNumber.GetHashCode();
+      if (StartLineNumber != 0) hash ^= StartLineNumber.GetHashCode();
+      if (EndLineNumber != 0) hash ^= EndLineNumber.GetHashCode();
       return hash;
     }
 
@@ -145,9 +160,13 @@ namespace CoreCover.Framework {
         output.WriteRawTag(10);
         output.WriteString(ModuleHash);
       }
-      if (LineNumber != 0) {
+      if (StartLineNumber != 0) {
+        output.WriteRawTag(80);
+        output.WriteInt32(StartLineNumber);
+      }
+      if (EndLineNumber != 0) {
         output.WriteRawTag(96);
-        output.WriteInt32(LineNumber);
+        output.WriteInt32(EndLineNumber);
       }
       if (MetadataToken != 0) {
         output.WriteRawTag(184, 69);
@@ -164,8 +183,11 @@ namespace CoreCover.Framework {
       if (MetadataToken != 0) {
         size += 2 + pb::CodedOutputStream.ComputeInt32Size(MetadataToken);
       }
-      if (LineNumber != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(LineNumber);
+      if (StartLineNumber != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(StartLineNumber);
+      }
+      if (EndLineNumber != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(EndLineNumber);
       }
       return size;
     }
@@ -181,8 +203,11 @@ namespace CoreCover.Framework {
       if (other.MetadataToken != 0) {
         MetadataToken = other.MetadataToken;
       }
-      if (other.LineNumber != 0) {
-        LineNumber = other.LineNumber;
+      if (other.StartLineNumber != 0) {
+        StartLineNumber = other.StartLineNumber;
+      }
+      if (other.EndLineNumber != 0) {
+        EndLineNumber = other.EndLineNumber;
       }
     }
 
@@ -198,8 +223,12 @@ namespace CoreCover.Framework {
             ModuleHash = input.ReadString();
             break;
           }
+          case 80: {
+            StartLineNumber = input.ReadInt32();
+            break;
+          }
           case 96: {
-            LineNumber = input.ReadInt32();
+            EndLineNumber = input.ReadInt32();
             break;
           }
           case 8888: {

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Grpc.Core;
+using Mono.Cecil;
 using OpenCover.Framework.Model;
 
 namespace CoreCover.Framework
@@ -20,10 +21,14 @@ namespace CoreCover.Framework
             var method = _coverageSession.Modules.First(x => x.ModuleHash == request.ModuleHash)
                 .Classes.First(x => x.Methods.Any(y => y.MetadataToken == request.MetadataToken))
                 .Methods.First(y => y.MetadataToken == request.MetadataToken);
-            
-            method.Visited = true;
 
-            Console.WriteLine($"Server: {request.MetadataToken}:{request.LineNumber}");
+            method.Visited = true;
+            var sequencePoints = method.SequencePoints.Where(x => request.StartLineNumber == x.StartLine);
+
+            foreach (var sequencePoint in sequencePoints)
+                sequencePoint.VisitCount++;
+            
+            Console.WriteLine($"Server: {request.MetadataToken}:{request.StartLineNumber}:{request.EndLineNumber}");
             return Task.FromResult(new ExecutedLineReply());
         }
     }

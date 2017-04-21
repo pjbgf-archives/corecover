@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "CoreCover": {
+      "commandName": "Project",
+      "commandLineArgs": "src\\CoreCover.Sample.Tests\\bin\\Debug\\netcoreapp1.1\\ report2.xml",
+      "workingDirectory": "c:\\git\\corecover"
+    }
+  }
+}

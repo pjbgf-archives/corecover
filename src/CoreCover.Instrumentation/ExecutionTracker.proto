@@ -9,7 +9,8 @@ service ExecutionTracker {
 message ExecutedLine {
 	string moduleHash = 1;
 	int32 metadataToken = 1111;
-	int32 lineNumber = 12;
+	int32 startLineNumber = 10;
+	int32 endLineNumber = 12;
 }
 
 message ExecutedLineReply {

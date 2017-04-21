@@ -1,4 +1,5 @@
 # corecover
+![Alt text](https://travis-ci.org/pjbgf/corecover.svg?branch=master "Master branch status") [![Coverage Status](https://coveralls.io/repos/github/pjbgf/corecover/badge.svg?branch=master)](https://coveralls.io/github/pjbgf/corecover?branch=master) [![License](http://img.shields.io/:license-mit-blue.svg)](http://pjbgf.mit-license.org)  
 Light-weight cross platform code coverage tool for .Net Core applications.
 
 The goal is to provide an easy to use command line for linux:

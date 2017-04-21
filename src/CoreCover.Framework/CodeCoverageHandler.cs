@@ -5,8 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using CoreCover.Instrumentation;
 using Mono.Cecil;
 using OpenCover.Framework.Model;
 using File = OpenCover.Framework.Model.File;

@@ -1,8 +1,6 @@
 ﻿// MIT License
 // Copyright (c) 2017 Paulo Gomes
 
-using System;
-
 namespace CoreCover.Sample.Library
 {
     public class PartiallyCovered
@@ -13,7 +11,7 @@ namespace CoreCover.Sample.Library
 
             if (condition)
             {
-                returnValue = false;
+                returnValue = false; // Should not be covered
             }
             else
             {

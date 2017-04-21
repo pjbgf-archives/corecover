@@ -4,10 +4,9 @@
 #region Designer generated code
 
 using pb = global::Google.Protobuf;
-using pbc = global::Google.Protobuf.Collections;
 using pbr = global::Google.Protobuf.Reflection;
-using scg = global::System.Collections.Generic;
-namespace CoreCover.Framework {
+
+namespace CoreCover.Instrumentation {
 
   /// <summary>Holder for reflection information generated from ExecutionTracker.proto</summary>
   public static partial class ExecutionTrackerReflection {
@@ -32,8 +31,8 @@ namespace CoreCover.Framework {
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::CoreCover.Framework.ExecutedLine), global::CoreCover.Framework.ExecutedLine.Parser, new[]{ "ModuleHash", "MetadataToken", "StartLineNumber", "EndLineNumber" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::CoreCover.Framework.ExecutedLineReply), global::CoreCover.Framework.ExecutedLineReply.Parser, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::CoreCover.Instrumentation.ExecutedLine), global::CoreCover.Instrumentation.ExecutedLine.Parser, new[]{ "ModuleHash", "MetadataToken", "StartLineNumber", "EndLineNumber" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::CoreCover.Instrumentation.ExecutedLineReply), global::CoreCover.Instrumentation.ExecutedLineReply.Parser, null, null, null, null)
           }));
     }
     #endregion
@@ -47,7 +46,7 @@ namespace CoreCover.Framework {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::CoreCover.Framework.ExecutionTrackerReflection.Descriptor.MessageTypes[0]; }
+      get { return global::CoreCover.Instrumentation.ExecutionTrackerReflection.Descriptor.MessageTypes[0]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -248,7 +247,7 @@ namespace CoreCover.Framework {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::CoreCover.Framework.ExecutionTrackerReflection.Descriptor.MessageTypes[1]; }
+      get { return global::CoreCover.Instrumentation.ExecutionTrackerReflection.Descriptor.MessageTypes[1]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

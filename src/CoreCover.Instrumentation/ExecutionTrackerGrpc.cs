@@ -4,18 +4,17 @@
 
 using System;
 using System.Threading;
-using System.Threading.Tasks;
 using grpc = global::Grpc.Core;
 
-namespace CoreCover.Framework {
+namespace CoreCover.Instrumentation {
   public static partial class ExecutionTracker
   {
     static readonly string __ServiceName = "CoreCover.Framework.ExecutionTracker";
 
-    static readonly grpc::Marshaller<global::CoreCover.Framework.ExecutedLine> __Marshaller_ExecutedLine = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::CoreCover.Framework.ExecutedLine.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::CoreCover.Framework.ExecutedLineReply> __Marshaller_ExecutedLineReply = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::CoreCover.Framework.ExecutedLineReply.Parser.ParseFrom);
+    static readonly grpc::Marshaller<global::CoreCover.Instrumentation.ExecutedLine> __Marshaller_ExecutedLine = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::CoreCover.Instrumentation.ExecutedLine.Parser.ParseFrom);
+    static readonly grpc::Marshaller<global::CoreCover.Instrumentation.ExecutedLineReply> __Marshaller_ExecutedLineReply = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::CoreCover.Instrumentation.ExecutedLineReply.Parser.ParseFrom);
 
-    static readonly grpc::Method<global::CoreCover.Framework.ExecutedLine, global::CoreCover.Framework.ExecutedLineReply> __Method_Track = new grpc::Method<global::CoreCover.Framework.ExecutedLine, global::CoreCover.Framework.ExecutedLineReply>(
+    static readonly grpc::Method<global::CoreCover.Instrumentation.ExecutedLine, global::CoreCover.Instrumentation.ExecutedLineReply> __Method_Track = new grpc::Method<global::CoreCover.Instrumentation.ExecutedLine, global::CoreCover.Instrumentation.ExecutedLineReply>(
         grpc::MethodType.Unary,
         __ServiceName,
         "Track",
@@ -25,13 +24,13 @@ namespace CoreCover.Framework {
     /// <summary>Service descriptor</summary>
     public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
     {
-      get { return global::CoreCover.Framework.ExecutionTrackerReflection.Descriptor.Services[0]; }
+      get { return global::CoreCover.Instrumentation.ExecutionTrackerReflection.Descriptor.Services[0]; }
     }
 
     /// <summary>Base class for server-side implementations of ExecutionTracker</summary>
     public abstract partial class ExecutionTrackerBase
     {
-      public virtual global::System.Threading.Tasks.Task<global::CoreCover.Framework.ExecutedLineReply> Track(global::CoreCover.Framework.ExecutedLine request, grpc::ServerCallContext context)
+      public virtual global::System.Threading.Tasks.Task<global::CoreCover.Instrumentation.ExecutedLineReply> Track(global::CoreCover.Instrumentation.ExecutedLine request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
@@ -61,19 +60,19 @@ namespace CoreCover.Framework {
       {
       }
 
-      public virtual global::CoreCover.Framework.ExecutedLineReply Track(global::CoreCover.Framework.ExecutedLine request, grpc::Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      public virtual global::CoreCover.Instrumentation.ExecutedLineReply Track(global::CoreCover.Instrumentation.ExecutedLine request, grpc::Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
         return Track(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
-      public virtual global::CoreCover.Framework.ExecutedLineReply Track(global::CoreCover.Framework.ExecutedLine request, grpc::CallOptions options)
+      public virtual global::CoreCover.Instrumentation.ExecutedLineReply Track(global::CoreCover.Instrumentation.ExecutedLine request, grpc::CallOptions options)
       {
         return CallInvoker.BlockingUnaryCall(__Method_Track, null, options, request);
       }
-      public virtual grpc::AsyncUnaryCall<global::CoreCover.Framework.ExecutedLineReply> TrackAsync(global::CoreCover.Framework.ExecutedLine request, grpc::Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      public virtual grpc::AsyncUnaryCall<global::CoreCover.Instrumentation.ExecutedLineReply> TrackAsync(global::CoreCover.Instrumentation.ExecutedLine request, grpc::Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
         return TrackAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
-      public virtual grpc::AsyncUnaryCall<global::CoreCover.Framework.ExecutedLineReply> TrackAsync(global::CoreCover.Framework.ExecutedLine request, grpc::CallOptions options)
+      public virtual grpc::AsyncUnaryCall<global::CoreCover.Instrumentation.ExecutedLineReply> TrackAsync(global::CoreCover.Instrumentation.ExecutedLine request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_Track, null, options, request);
       }

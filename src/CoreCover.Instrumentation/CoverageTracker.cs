@@ -2,7 +2,6 @@
 // Copyright (c) 2017 Paulo Gomes
 
 using System;
-using CoreCover.Framework;
 using Grpc.Core;
 
 namespace CoreCover.Instrumentation

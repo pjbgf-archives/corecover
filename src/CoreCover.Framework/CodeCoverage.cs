@@ -1,14 +1,11 @@
 // MIT License
 // Copyright (c) 2017 Paulo Gomes
 
-using System;
-using System.Collections.Generic;
-using System.IO;
 using OpenCover.Framework.Model;
 
 namespace CoreCover.Framework
 {
-    public partial class CodeCoverage : ICodeCoverage
+    public class CodeCoverage : ICodeCoverage
     {
         private readonly ITestsRunner _testRunner;
         private readonly IInstrumentator _instrumentator;
@@ -30,9 +27,7 @@ namespace CoreCover.Framework
             _instrumentator.Process(coverageSession, testProjectOutputPath);
 
             _rpcServer.Start(coverageSession);
-
             _testRunner.Run(testProjectOutputPath);
-
             _rpcServer.Stop();
 
             _coverageReport.Export(coverageSession, reportPath);

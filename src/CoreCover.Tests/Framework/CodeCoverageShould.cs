@@ -10,20 +10,73 @@ namespace CoreCover.Tests.Framework
 {
     public class CodeCoverageShould
     {
-        [Fact]
-        public void Generate_Report_After_Successful_Execution()
+        private readonly ITestsRunner _testRunnerMock;
+        private readonly ICoverageReport _coverageReportMock;
+        private readonly IInstrumentator _instrumentatorMock;
+        private readonly IRpcServer _rpcServerMock;
+
+        public CodeCoverageShould()
         {
-            var testRunnerMock = Substitute.For<ITestsRunner>();
-            var coverageReportMock = Substitute.For<ICoverageReport>();
-            var instrumentatorMock = Substitute.For<IInstrumentator>();
-            var rpcServerMock = Substitute.For<IRpcServer>();
-            var codeCoverage = new CodeCoverage(instrumentatorMock, testRunnerMock, coverageReportMock, rpcServerMock);
+            _testRunnerMock = Substitute.For<ITestsRunner>();
+            _coverageReportMock = Substitute.For<ICoverageReport>();
+            _instrumentatorMock = Substitute.For<IInstrumentator>();
+            _rpcServerMock = Substitute.For<IRpcServer>();
+        }
+
+        [Fact]
+        public void Instrument_Code_Before_Starting_Rpc()
+        {
+            var codeCoverage = new CodeCoverage(_instrumentatorMock, _testRunnerMock, _coverageReportMock, _rpcServerMock);
 
             codeCoverage.Run("testProjectOutputPath", "report.xml");
 
-            testRunnerMock.Received(1).Run(Arg.Any<string>());
-            instrumentatorMock.Received(1).Process(Arg.Any<CoverageSession>(), Arg.Is("testProjectOutputPath"));
-            coverageReportMock.Received(1).Export(Arg.Any<CoverageSession>(), Arg.Is("report.xml"));
+            Received.InOrder(() =>
+            {
+                _instrumentatorMock.Process(Arg.Any<CoverageSession>(), Arg.Any<string>());
+                _rpcServerMock.Start(Arg.Any<CoverageSession>());
+            });
+        }
+
+        [Fact]
+        public void Start_Rpc_Server_Before_Running_Tests()
+        {
+            var codeCoverage = new CodeCoverage(_instrumentatorMock, _testRunnerMock, _coverageReportMock, _rpcServerMock);
+
+            codeCoverage.Run("testProjectOutputPath", "report.xml");
+
+            Received.InOrder(() =>
+            {
+                _rpcServerMock.Start(Arg.Any<CoverageSession>());
+                _testRunnerMock.Run(Arg.Any<string>());
+            });
+        }
+
+        [Fact]
+        public void Stop_Rpc_Server_After_Running_Tests()
+        {
+            var codeCoverage = new CodeCoverage(_instrumentatorMock, _testRunnerMock, _coverageReportMock, _rpcServerMock);
+
+            codeCoverage.Run("testProjectOutputPath", "report.xml");
+
+            Received.InOrder(() =>
+            {
+                _testRunnerMock.Run(Arg.Any<string>());
+                _rpcServerMock.Stop();
+            });
+        }
+
+        [Fact]
+        public void Generate_Report_Once_Tests_Were_Executed()
+        {
+            var codeCoverage = new CodeCoverage(_instrumentatorMock, _testRunnerMock, _coverageReportMock, _rpcServerMock);
+
+            codeCoverage.Run("testProjectOutputPath", "report.xml");
+
+            Received.InOrder(() =>
+            {
+                _testRunnerMock.Run(Arg.Any<string>());
+                _coverageReportMock.Export(Arg.Any<CoverageSession>(), Arg.Any<string>());
+            });
         }
     }
 }

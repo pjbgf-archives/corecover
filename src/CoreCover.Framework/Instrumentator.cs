@@ -14,13 +14,12 @@ namespace CoreCover.Framework
     {
         private readonly bool _useShadowFile = false;
         private readonly IAssemblyInstrumentationHandler _assemblyInstrumentationHandler;
+        private readonly string InstrumentationAssemblyName = "CoreCover.Instrumentation.dll";
 
         public Instrumentator(IAssemblyInstrumentationHandler assemblyInstrumentationHandler)
         {
             _assemblyInstrumentationHandler = assemblyInstrumentationHandler;
         }
-
-        private const string InstrumentationAssemblyName = "CoreCover.Instrumentation.dll";
 
         public void Process(CoverageSession coverageSession, string folderPath)
         {

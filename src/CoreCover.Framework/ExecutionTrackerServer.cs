@@ -6,7 +6,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using CoreCover.Instrumentation;
 using Grpc.Core;
-using Mono.Cecil;
 using OpenCover.Framework.Model;
 
 namespace CoreCover.Framework

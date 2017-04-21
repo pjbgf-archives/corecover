@@ -24,8 +24,8 @@ namespace CoreCover.Framework.Adapters
 
         private void ExportReport(string reportPath, XmlSerializer serializer, CoverageSession openCoverReport)
         {
-            using (var fs = new FileStream(reportPath, FileMode.Create))
-            using (var writer = new StreamWriter(fs, new UTF8Encoding()))
+            using (var stream = new FileStream(reportPath, FileMode.Create))
+            using (var writer = new StreamWriter(stream, new UTF8Encoding()))
             {
                 serializer.Serialize(writer, openCoverReport);
             }

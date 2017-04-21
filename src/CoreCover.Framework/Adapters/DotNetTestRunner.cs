@@ -1,7 +1,6 @@
 // MIT License
 // Copyright (c) 2017 Paulo Gomes
 
-using System;
 using System.Diagnostics;
 using System.IO;
 
@@ -12,9 +11,12 @@ namespace CoreCover.Framework.Adapters
         public void Run(string testProjectOutputPath)
         {
             var testProjectPath = GetTestProjectPath(testProjectOutputPath);
-            var processStartInfo =
-                new ProcessStartInfo("dotnet", $"test --no-build") {WorkingDirectory = testProjectPath};
 
+            /*
+             * It is important that the --no-build flag is used, otherwise dotnet-test will run a new build of the project 
+             * which will overwrite the assembly files that were instrumented.
+             */
+            var processStartInfo = new ProcessStartInfo("dotnet", $"test --no-build") { WorkingDirectory = testProjectPath };
             using (var process = Process.Start(processStartInfo))
             {
                 process.WaitForExit();

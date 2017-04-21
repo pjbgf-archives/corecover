@@ -300,3 +300,4 @@ __pycache__/
 
 # Do not version control coverage report by mistake.
 coverage.xml
+report

@@ -21,8 +21,8 @@ namespace CoreCover.Tests.Framework
             codeCoverage.Run("testProjectOutputPath", "report.xml");
 
             testRunnerMock.Received(1).Run(Arg.Any<string>());
-            coverageReportMock.Received(1).Export(Arg.Any<CoverageSession>(), Arg.Is("report.xml"));
             instrumentatorMock.Received(1).Process(Arg.Any<CoverageSession>(), Arg.Is("testProjectOutputPath"));
+            coverageReportMock.Received(1).Export(Arg.Any<CoverageSession>(), Arg.Is("report.xml"));
         }
     }
 }

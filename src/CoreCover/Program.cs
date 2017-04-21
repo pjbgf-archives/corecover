@@ -14,7 +14,7 @@ namespace CoreCover
                 new ConsoleWrapper(), new CodeCoverage(
                     new Instrumentator(new CodeCoverageHandler(new CodeInstrumentationHandler())),
                     new DotNetTestRunner(), 
-                    new OpenCoverReportAdapter()))
+                    new OpenCoverReportAdapter(), new RpcServer()))
                 .ProcessCommand(args);
         }
     }

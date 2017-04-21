@@ -4,21 +4,22 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Grpc.Core;
 using OpenCover.Framework.Model;
 
 namespace CoreCover.Framework
 {
-    public class CodeCoverage : ICodeCoverage
+    public partial class CodeCoverage : ICodeCoverage
     {
         private readonly ITestsRunner _testRunner;
         private readonly IInstrumentator _instrumentator;
         private readonly ICoverageReport _coverageReport;
+        private readonly IRpcServer _rpcServer;
 
-        public CodeCoverage(IInstrumentator instrumentator, ITestsRunner testRunner, ICoverageReport coverageReport)
+        public CodeCoverage(IInstrumentator instrumentator, ITestsRunner testRunner, ICoverageReport coverageReport, IRpcServer rpcServer)
         {
             _instrumentator = instrumentator;
             _coverageReport = coverageReport;
+            _rpcServer = rpcServer;
             _testRunner = testRunner;
         }
 
@@ -28,13 +29,7 @@ namespace CoreCover.Framework
 
             _instrumentator.Process(coverageSession, testProjectOutputPath);
 
-            //TODO: SRP violation. Whose responsibility is this?
-            var server = new Server
-            {
-                Services = { ExecutionTracker.BindService(new ExecutionTrackerServer(coverageSession)) },
-                Ports = { new ServerPort("localhost", 50051, ServerCredentials.Insecure) }
-            };
-            server.Start();
+            _rpcServer.Start(coverageSession);
 
             //HACK: All paths should come from within the project file.
             var fullPath = testProjectOutputPath;
@@ -44,7 +39,7 @@ namespace CoreCover.Framework
             var testProjectPath = Directory.GetParent(fullPath).Parent.Parent.Parent.FullName;
             _testRunner.Run(testProjectPath);
 
-            server.ShutdownAsync();
+            _rpcServer.Stop();
 
             _coverageReport.Export(coverageSession, reportPath);
         }

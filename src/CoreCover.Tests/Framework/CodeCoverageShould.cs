@@ -16,7 +16,8 @@ namespace CoreCover.Tests.Framework
             var testRunnerMock = Substitute.For<ITestsRunner>();
             var coverageReportMock = Substitute.For<ICoverageReport>();
             var instrumentatorMock = Substitute.For<IInstrumentator>();
-            var codeCoverage = new CodeCoverage(instrumentatorMock, testRunnerMock, coverageReportMock);
+            var rpcServerMock = Substitute.For<IRpcServer>();
+            var codeCoverage = new CodeCoverage(instrumentatorMock, testRunnerMock, coverageReportMock, rpcServerMock);
 
             codeCoverage.Run("testProjectOutputPath", "report.xml");
 

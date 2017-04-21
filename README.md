@@ -1,16 +1,23 @@
-[ This is currently work in process, therefore not fully functional. ]
-
 # corecover
-Light-weight code coverage command-line application running over .Net core to support cross-platform applications.
+Light-weight cross platform code coverage tool for .Net Core applications.
 
 The goal is to provide an easy to use command line for linux:
 
 ```
-./run.sh MyTestProject.csproj myReport.xml
+./run.sh TestProject/BinFolder/ coverage.xml **CURRENT**
+./run.sh MyTestProject.csproj myReport.xml **FUTURE**
 ```
 And windows:
 ```
-run.cmd MyTestProject.csproj myReport.xml
+run TestProject\BinFolder\ coverage.xml **CURRENT**
+run MyTestProject.csproj myReport.xml **FUTURE**
 ```
 
-The reports generated will be based on OpenCover format.
+The reports generated are currently based on [OpenCover](https://github.com/OpenCover/opencover) format.
+
+# Status
+
+* Only methods are being covered.
+* Coverage is not yet accurate.
+* Dynamically generated classes are not removed from report.
+* Coverage report only shows first line of the branch.

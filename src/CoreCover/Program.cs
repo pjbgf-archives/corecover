@@ -10,7 +10,7 @@ namespace CoreCover
     {
         public static void Main(string[] args)
         {
-            var console = new ConsoleWrapper();
+            var console = new ConsoleAdapter();
 
             new ConsoleRunner(
                 console, new CodeCoverage(

@@ -1,3 +1,4 @@
+using CoreCover.Framework.Abstractions;
 using CoreCover.Instrumentation;
 using Grpc.Core;
 using OpenCover.Framework.Model;

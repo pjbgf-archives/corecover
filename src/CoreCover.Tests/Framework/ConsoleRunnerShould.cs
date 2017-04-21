@@ -2,6 +2,7 @@
 // Copyright (c) 2017 Paulo Gomes
 
 using CoreCover.Framework;
+using CoreCover.Framework.Abstractions;
 using NSubstitute;
 using Xunit;
 

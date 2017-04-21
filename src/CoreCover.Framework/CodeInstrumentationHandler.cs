@@ -2,6 +2,7 @@
 // Copyright (c) 2017 Paulo Gomes
 
 using System;
+using CoreCover.Framework.Abstractions;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Mono.Cecil.Rocks;

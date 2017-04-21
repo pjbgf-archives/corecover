@@ -3,6 +3,7 @@
 
 using System.Diagnostics;
 using System.IO;
+using CoreCover.Framework.Abstractions;
 
 namespace CoreCover.Framework.Adapters
 {

@@ -4,6 +4,7 @@
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using CoreCover.Framework.Abstractions;
 using Mono.Cecil;
 using OpenCover.Framework.Model;
 using File = System.IO.File;

@@ -4,6 +4,7 @@
 using System.IO;
 using System.Text;
 using System.Xml.Serialization;
+using CoreCover.Framework.Abstractions;
 using OpenCover.Framework.Model;
 
 namespace CoreCover.Framework.Adapters

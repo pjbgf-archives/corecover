@@ -23,8 +23,7 @@ namespace CoreCover.Framework
                 _console.WriteLine("usage: dotnet corecover.dll TestProjectOutputPath [path]coverage-report.xml");
                 return;
             }
-
-            //TODO: Load target dlls through csproj
+            
             var testProjectOutputPath = inputArgs.First();
             var reportPath = inputArgs.Last();
             

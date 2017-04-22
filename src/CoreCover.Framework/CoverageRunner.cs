@@ -21,6 +21,9 @@ namespace CoreCover.Framework
 
         public void Run(string testProjectOutputPath, string reportPath)
         {
+            if (string.IsNullOrEmpty(reportPath))
+                reportPath = "coverage.xml";
+
             var coverageSession = new CoverageSession();
 
             _instrumentator.Process(coverageSession, testProjectOutputPath);

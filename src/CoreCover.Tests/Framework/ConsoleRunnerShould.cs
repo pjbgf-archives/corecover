@@ -11,34 +11,36 @@ namespace CoreCover.Tests.Framework
 {
     public class ConsoleRunnerShould
     {
+        private readonly ILogger _consoleMock;
+        private readonly ICoverageRunner _coverageRunnerMock;
+
+        public ConsoleRunnerShould()
+        {
+            _consoleMock = Substitute.For<ILogger>();
+            _coverageRunnerMock = Substitute.For<ICoverageRunner>();
+        }
+
         [Theory]
         [InlineData(null)]
-        [InlineData("ProjectPath")]
         public void Show_Usage_When_Not_All_Mandatory_Parameters_Are_Provided(params string[] inputArgs)
         {
-            var consoleMock = Substitute.For<ILogger>();
-            var coverageRunnerMock = Substitute.For<ICoverageRunner>();
-
-            var consoleRunner = new ConsoleRunner(consoleMock, coverageRunnerMock);
+            var consoleRunner = new ConsoleRunner(_consoleMock, _coverageRunnerMock);
 
             consoleRunner.ProcessCommand(inputArgs);
 
-            consoleMock.ReceivedWithAnyArgs(1).LogError(Arg.Any<string>());
-            coverageRunnerMock.DidNotReceiveWithAnyArgs().Run(Arg.Any<string>(), Arg.Any<string>());
+            _consoleMock.ReceivedWithAnyArgs(1).LogError(Arg.Any<string>());
+            _coverageRunnerMock.DidNotReceiveWithAnyArgs().Run(Arg.Any<string>(), Arg.Any<string>());
         }
 
         [Fact]
         public void Run_Coverage_Runner_When_All_Mandatory_Parameters_Are_Provided()
         {
-            var consoleMock = Substitute.For<ILogger>();
-            var coverageRunnerMock = Substitute.For<ICoverageRunner>();
+            var consoleRunner = new ConsoleRunner(_consoleMock, _coverageRunnerMock);
 
-            var consoleRunner = new ConsoleRunner(consoleMock, coverageRunnerMock);
+            consoleRunner.ProcessCommand("TestProject//OutputPath");
 
-            consoleRunner.ProcessCommand("TestProject//OutputPath", "coverage-report.xml");
-
-            consoleMock.DidNotReceiveWithAnyArgs().LogError(Arg.Any<string>());
-            coverageRunnerMock.ReceivedWithAnyArgs(1).Run(Arg.Any<string>(), Arg.Any<string>());
+            _consoleMock.DidNotReceiveWithAnyArgs().LogError(Arg.Any<string>());
+            _coverageRunnerMock.ReceivedWithAnyArgs(1).Run(Arg.Any<string>(), Arg.Any<string>());
         }
     }
 }

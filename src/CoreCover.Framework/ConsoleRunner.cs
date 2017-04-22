@@ -20,14 +20,14 @@ namespace CoreCover.Framework
 
         public void ProcessCommand(params string[] inputArgs)
         {
-            if (inputArgs == null || inputArgs.Length < 2)
+            if (inputArgs == null || inputArgs.Length < 1)
             {
                 _logger.LogError("usage: dotnet corecover.dll TestProjectOutputPath [path]coverage-report.xml");
                 return;
             }
             
             var testProjectOutputPath = inputArgs.First();
-            var reportPath = inputArgs.Last();
+            var reportPath = inputArgs.LastOrDefault();
             
             _coverageRunner.Run(testProjectOutputPath, reportPath);
         }

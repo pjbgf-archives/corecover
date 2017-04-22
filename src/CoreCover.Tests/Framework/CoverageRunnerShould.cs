@@ -49,5 +49,17 @@ namespace CoreCover.Tests.Framework
                 _coverageReportMock.Export(Arg.Any<CoverageSession>(), Arg.Any<string>());
             });
         }
+
+        [Fact]
+        public void Use_Default_Report_File_Name_If_None_Is_Provided()
+        {
+            var coverageRunner = new CoverageRunner(_instrumentatorMock, _testRunnerMock, _coverageReportMock);
+
+            coverageRunner.Run("testProjectOutputPath", string.Empty);
+
+            _coverageReportMock.Received(1).Export(Arg.Any<CoverageSession>(), 
+                Arg.Is<string>(s => s.EndsWith("coverage.xml"))
+            );
+        }
     }
 }

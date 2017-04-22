@@ -62,6 +62,19 @@ namespace CoreCover.Tests.Framework.Adapters
         }
 
         [Fact]
+        public void Disregard_Lack_Of_Trailing_slash()
+        {
+            var dotNetTestRunner = new DotNetTestRunner(_rpcServerMock, _process);
+            var testProjectOutputPath = @"c:\git\project\src\projectname\bin\debug\netcoreapp1.1";
+            var expectedProjectName = @"c:\git\project\src\projectname";
+            var coverageSession = new CoverageSession();
+
+            dotNetTestRunner.Run(coverageSession, testProjectOutputPath);
+
+            _process.Received(1).Execute(Arg.Any<string>(), Arg.Any<string>(), Arg.Is(expectedProjectName));
+        }
+
+        [Fact]
         public void Stop_Rpc_Server_After_Running_Tests()
         {
             var dotNetTestRunner = new DotNetTestRunner(_rpcServerMock, _process);

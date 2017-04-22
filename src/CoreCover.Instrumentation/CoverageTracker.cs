@@ -8,10 +8,12 @@ namespace CoreCover.Instrumentation
     public static class CoverageTracker
     {
         private static readonly ExecutionTracker.ExecutionTrackerClient ExecutionTrackerClient;
+        private static string ServerAddress = "127.0.0.1";
+        private static string ServerPort = "50051";
 
         static CoverageTracker()
         {
-            var channel = new Channel("127.0.0.1:50051", ChannelCredentials.Insecure);
+            var channel = new Channel($"{ServerAddress}:{ServerPort}", ChannelCredentials.Insecure);
             ExecutionTrackerClient = new ExecutionTracker.ExecutionTrackerClient(channel);
         }
 

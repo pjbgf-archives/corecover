@@ -14,68 +14,38 @@ namespace CoreCover.Tests.Framework
         private readonly ITestsRunner _testRunnerMock;
         private readonly ICoverageReport _coverageReportMock;
         private readonly IInstrumentator _instrumentatorMock;
-        private readonly IRpcServer _rpcServerMock;
 
         public CodeCoverageShould()
         {
             _testRunnerMock = Substitute.For<ITestsRunner>();
             _coverageReportMock = Substitute.For<ICoverageReport>();
             _instrumentatorMock = Substitute.For<IInstrumentator>();
-            _rpcServerMock = Substitute.For<IRpcServer>();
         }
 
         [Fact]
-        public void Instrument_Code_Before_Starting_Rpc()
+        public void Instrument_Code_Before_Executing_Tests()
         {
-            var coverageRunner = new CoverageRunner(_instrumentatorMock, _testRunnerMock, _coverageReportMock, _rpcServerMock);
+            var coverageRunner = new CoverageRunner(_instrumentatorMock, _testRunnerMock, _coverageReportMock);
 
             coverageRunner.Run("testProjectOutputPath", "report.xml");
 
             Received.InOrder(() =>
             {
                 _instrumentatorMock.Process(Arg.Any<CoverageSession>(), Arg.Any<string>());
-                _rpcServerMock.Start(Arg.Any<CoverageSession>());
-            });
-        }
-
-        [Fact]
-        public void Start_Rpc_Server_Before_Running_Tests()
-        {
-            var coverageRunner = new CoverageRunner(_instrumentatorMock, _testRunnerMock, _coverageReportMock, _rpcServerMock);
-
-            coverageRunner.Run("testProjectOutputPath", "report.xml");
-
-            Received.InOrder(() =>
-            {
-                _rpcServerMock.Start(Arg.Any<CoverageSession>());
-                _testRunnerMock.Run(Arg.Any<string>());
-            });
-        }
-
-        [Fact]
-        public void Stop_Rpc_Server_After_Running_Tests()
-        {
-            var coverageRunner = new CoverageRunner(_instrumentatorMock, _testRunnerMock, _coverageReportMock, _rpcServerMock);
-
-            coverageRunner.Run("testProjectOutputPath", "report.xml");
-
-            Received.InOrder(() =>
-            {
-                _testRunnerMock.Run(Arg.Any<string>());
-                _rpcServerMock.Stop();
+                _testRunnerMock.Run(Arg.Any<CoverageSession>(), Arg.Any<string>());
             });
         }
 
         [Fact]
         public void Generate_Report_Once_Tests_Were_Executed()
         {
-            var coverageRunner = new CoverageRunner(_instrumentatorMock, _testRunnerMock, _coverageReportMock, _rpcServerMock);
+            var coverageRunner = new CoverageRunner(_instrumentatorMock, _testRunnerMock, _coverageReportMock);
 
             coverageRunner.Run("testProjectOutputPath", "report.xml");
 
             Received.InOrder(() =>
             {
-                _testRunnerMock.Run(Arg.Any<string>());
+                _testRunnerMock.Run(Arg.Any<CoverageSession>(), Arg.Any<string>());
                 _coverageReportMock.Export(Arg.Any<CoverageSession>(), Arg.Any<string>());
             });
         }

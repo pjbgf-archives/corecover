@@ -11,14 +11,12 @@ namespace CoreCover.Framework
         private readonly ITestsRunner _testRunner;
         private readonly IInstrumentator _instrumentator;
         private readonly ICoverageReport _coverageReport;
-        private readonly IRpcServer _rpcServer;
 
-        public CoverageRunner(IInstrumentator instrumentator, ITestsRunner testRunner, ICoverageReport coverageReport, IRpcServer rpcServer)
+        public CoverageRunner(IInstrumentator instrumentator, ITestsRunner testRunner, ICoverageReport coverageReport)
         {
             _instrumentator = instrumentator;
-            _coverageReport = coverageReport;
-            _rpcServer = rpcServer;
             _testRunner = testRunner;
+            _coverageReport = coverageReport;
         }
 
         public void Run(string testProjectOutputPath, string reportPath)
@@ -26,11 +24,7 @@ namespace CoreCover.Framework
             var coverageSession = new CoverageSession();
 
             _instrumentator.Process(coverageSession, testProjectOutputPath);
-
-            _rpcServer.Start(coverageSession);
-            _testRunner.Run(testProjectOutputPath);
-            _rpcServer.Stop();
-
+            _testRunner.Run(coverageSession, testProjectOutputPath);
             _coverageReport.Export(coverageSession, reportPath);
         }
     }

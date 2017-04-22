@@ -35,12 +35,37 @@ namespace CoreCover.Framework.Adapters
 
         private static string GetTestProjectPath(string testProjectOutputPath)
         {
+            var absolutePath = GetAbsolutePath(testProjectOutputPath);
+            var absolutePathWithTrailingSlash = GetAbsolutePathWithTrailingSlash(absolutePath);
+            var testProjectPath = ConvertToTestProjectPath(absolutePathWithTrailingSlash);
+
+            return testProjectPath;
+        }
+
+        private static string ConvertToTestProjectPath(string absolutePathWithTrailingSlash)
+        {
+            var testProjectPath = Directory.GetParent(absolutePathWithTrailingSlash)
+                .Parent.Parent.Parent.FullName;
+
+            return testProjectPath;
+        }
+
+        private static string GetAbsolutePathWithTrailingSlash(string absolutePath)
+        {
+            var directorySeparator = Path.DirectorySeparatorChar.ToString();
+            if (!absolutePath.EndsWith(directorySeparator))
+                absolutePath += directorySeparator;
+
+            return absolutePath;
+        }
+
+        private static string GetAbsolutePath(string testProjectOutputPath)
+        {
             var fullPath = testProjectOutputPath;
-            if (!Path.IsPathRooted(testProjectOutputPath))
+            if (!Path.IsPathRooted(fullPath))
                 fullPath = Path.Combine(Directory.GetCurrentDirectory(), testProjectOutputPath);
 
-            var testProjectPath = Directory.GetParent(fullPath).Parent.Parent.Parent.FullName;
-            return testProjectPath;
+            return fullPath;
         }
     }
 }

@@ -22,7 +22,7 @@ namespace CoreCover.Framework
         {
             if (inputArgs == null || inputArgs.Length < 1)
             {
-                _logger.LogError("usage: dotnet corecover.dll TestProjectOutputPath [path]coverage-report.xml");
+                _logger.LogCritical("usage: dotnet corecover.dll TestProjectOutputPath [path]coverage-report.xml");
                 return;
             }
             

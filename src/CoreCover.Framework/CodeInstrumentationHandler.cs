@@ -3,6 +3,7 @@
 
 using System;
 using CoreCover.Framework.Abstractions;
+using Microsoft.Extensions.Logging;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Mono.Cecil.Rocks;
@@ -12,20 +13,20 @@ namespace CoreCover.Framework
 {
     public sealed class CodeInstrumentationHandler : AssemblyInstrumentationHandler
     {
-        private readonly IConsole _console;
+        private readonly ILogger _logger;
 
-        public CodeInstrumentationHandler(IConsole console) : this(console, null)
+        public CodeInstrumentationHandler(ILogger logger) : this(logger, null)
         {
         }
 
-        public CodeInstrumentationHandler(IConsole console, AssemblyInstrumentationHandler sucessorHandler) : base(sucessorHandler)
+        public CodeInstrumentationHandler(ILogger logger, AssemblyInstrumentationHandler sucessorHandler) : base(sucessorHandler)
         {
-            _console = console;
+            _logger = logger;
         }
 
         public override void Handle(CoverageSession coverageSession, AssemblyDefinition assemblyDefinition)
         {
-            _console.WriteLine($"Instrumentating Assembly: {assemblyDefinition.FullName}");
+            _logger.LogInformation($"Instrumentating Assembly: {assemblyDefinition.FullName}");
             foreach (var module in assemblyDefinition.Modules)
             {
                 ProcessModule(module);
@@ -36,7 +37,7 @@ namespace CoreCover.Framework
 
         private void ProcessModule(ModuleDefinition module)
         {
-            _console.WriteLine($"Module: {module.Name}");
+            _logger.LogInformation($"Module: {module.Name}");
 
             foreach (var type in module.Types)
             {
@@ -46,7 +47,7 @@ namespace CoreCover.Framework
 
         private void ProcessType(TypeDefinition type)
         {
-            _console.WriteLine($"Type: {type.Name}");
+            _logger.LogInformation($"Type: {type.Name}");
 
             foreach (var method in type.Methods)
             {
@@ -56,7 +57,7 @@ namespace CoreCover.Framework
 
         private void ProcessMethod(MethodDefinition method)
         {
-            _console.WriteLine($"Method: {method.Name}");
+            _logger.LogInformation($"Method: {method.Name}");
 
             var ilProcessor = method.Body.GetILProcessor();
             var instrumentationMethodRef = GetMethodReference(method.Module);

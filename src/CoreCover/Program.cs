@@ -3,6 +3,7 @@
 
 using CoreCover.Framework;
 using CoreCover.Framework.Adapters;
+using Microsoft.Extensions.Logging;
 
 namespace CoreCover
 {
@@ -10,11 +11,12 @@ namespace CoreCover
     {
         public static void Main(string[] args)
         {
+            var logger = new LoggerFactory().AddConsole().CreateLogger("");
             var console = new ConsoleAdapter();
 
             new ConsoleRunner(
-                console, new CoverageRunner(
-                    new Instrumentator(new CodeCoverageHandler(new CodeInstrumentationHandler(console))),
+                    logger, new CoverageRunner(
+                    new Instrumentator(new CodeCoverageHandler(new CodeInstrumentationHandler(logger))),
                     new DotNetTestRunner(), 
                     new OpenCoverReportAdapter(), new RpcServer()))
                 .ProcessCommand(args);

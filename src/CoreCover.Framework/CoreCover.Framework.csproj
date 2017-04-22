@@ -8,6 +8,7 @@
     <PackageReference Include="Google.Protobuf" Version="3.2.0" />
     <PackageReference Include="Grpc" Version="1.2.2" />
     <PackageReference Include="Grpc.Tools" Version="1.2.2" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="1.1.1" />
     <PackageReference Include="Mono.Cecil" Version="0.10.0-beta5" />
     <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
   </ItemGroup>

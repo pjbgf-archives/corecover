@@ -3,17 +3,18 @@
 
 using System.Linq;
 using CoreCover.Framework.Abstractions;
+using Microsoft.Extensions.Logging;
 
 namespace CoreCover.Framework
 {
     public class ConsoleRunner
     {
-        private readonly IConsole _console;
+        private readonly ILogger _logger;
         private readonly ICoverageRunner _coverageRunner;
 
-        public ConsoleRunner(IConsole console, ICoverageRunner coverageRunner)
+        public ConsoleRunner(ILogger logger, ICoverageRunner coverageRunner)
         {
-            _console = console;
+            _logger = logger;
             _coverageRunner = coverageRunner;
         }
 
@@ -21,7 +22,7 @@ namespace CoreCover.Framework
         {
             if (inputArgs == null || inputArgs.Length < 2)
             {
-                _console.WriteLine("usage: dotnet corecover.dll TestProjectOutputPath [path]coverage-report.xml");
+                _logger.LogError("usage: dotnet corecover.dll TestProjectOutputPath [path]coverage-report.xml");
                 return;
             }
             

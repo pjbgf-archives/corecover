@@ -1,5 +1,5 @@
 ﻿// MIT License
-// Copyright (c) 2017 Paulo Gomes
+// Copyright (c) 2017 Paulo Gomes (https://pjbgf.mit-license.org/)
 
 using CoreCover.Framework.Abstractions;
 using CoreCover.Framework.Adapters;

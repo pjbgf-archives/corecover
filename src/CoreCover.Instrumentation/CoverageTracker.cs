@@ -1,7 +1,6 @@
 ﻿// MIT License
 // Copyright (c) 2017 Paulo Gomes (https://pjbgf.mit-license.org/)
 
-using System;
 using Grpc.Core;
 
 namespace CoreCover.Instrumentation

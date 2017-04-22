@@ -49,6 +49,9 @@ namespace CoreCover.Framework
 
             foreach (var type in module.Types)
             {
+                if (type.Name == "__CORECOVER__")
+                    continue;
+
                 //HACK: Needs refactoring.
                 var documentUrl = type.Methods.FirstOrDefault()?.DebugInformation.SequencePoints.FirstOrDefault()?.Document.Url;
                 if (string.IsNullOrEmpty(documentUrl))

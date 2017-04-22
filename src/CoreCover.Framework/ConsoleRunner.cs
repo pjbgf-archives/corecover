@@ -27,7 +27,7 @@ namespace CoreCover.Framework
             }
             
             var testProjectOutputPath = inputArgs.First();
-            var reportPath = inputArgs.LastOrDefault();
+            var reportPath = inputArgs.ElementAtOrDefault(1);
             
             _coverageRunner.Run(testProjectOutputPath, reportPath);
         }

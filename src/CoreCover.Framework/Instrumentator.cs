@@ -2,9 +2,11 @@
 // Copyright (c) 2017 Paulo Gomes (https://pjbgf.mit-license.org/)
 
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using CoreCover.Framework.Abstractions;
+using Microsoft.Extensions.Logging;
 using Mono.Cecil;
 using OpenCover.Framework.Model;
 using File = System.IO.File;
@@ -16,10 +18,12 @@ namespace CoreCover.Framework
         private readonly bool _useShadowFile = false;
         private readonly IAssemblyInstrumentationHandler _assemblyInstrumentationHandler;
         private readonly string InstrumentationAssemblyName = "CoreCover.Instrumentation.dll";
+        private ILogger _logger;
 
-        public Instrumentator(IAssemblyInstrumentationHandler assemblyInstrumentationHandler)
+        public Instrumentator(ILogger logger, IAssemblyInstrumentationHandler assemblyInstrumentationHandler)
         {
             _assemblyInstrumentationHandler = assemblyInstrumentationHandler;
+            _logger = logger;
         }
 
         public void Process(CoverageSession coverageSession, string folderPath)

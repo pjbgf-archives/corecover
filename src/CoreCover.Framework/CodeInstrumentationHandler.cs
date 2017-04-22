@@ -2,6 +2,7 @@
 // Copyright (c) 2017 Paulo Gomes (https://pjbgf.mit-license.org/)
 
 using System;
+using System.Linq;
 using CoreCover.Framework.Abstractions;
 using Microsoft.Extensions.Logging;
 using Mono.Cecil;
@@ -13,6 +14,7 @@ namespace CoreCover.Framework
 {
     public sealed class CodeInstrumentationHandler : AssemblyInstrumentationHandler
     {
+        private const string InstrumentedAssemblyFlagName = "__CORECOVER__";
         private readonly ILogger _logger;
 
         public CodeInstrumentationHandler(ILogger logger) : this(logger, null)
@@ -29,10 +31,26 @@ namespace CoreCover.Framework
             _logger.LogInformation($"Instrumentating Assembly: {assemblyDefinition.FullName}");
             foreach (var module in assemblyDefinition.Modules)
             {
-                ProcessModule(module);
+                if (!IsAssemblyInstrumented(assemblyDefinition))
+                {
+                    ProcessModule(module);
+                    MarkAssemblyAsInstrumented(assemblyDefinition);
+                }
+                else
+                    _logger.LogInformation($"Skipping {assemblyDefinition.FullName}, assembly is already instrumented.");
             }
 
             base.Handle(coverageSession, assemblyDefinition);
+        }
+
+        private static bool IsAssemblyInstrumented(AssemblyDefinition assembly)
+        {
+            return assembly.Modules.First().Types.Any(x => x.Name == InstrumentedAssemblyFlagName);
+        }
+
+        private static void MarkAssemblyAsInstrumented(AssemblyDefinition assemblyDefinition)
+        {
+            assemblyDefinition.Modules.First().Types.Add(new TypeDefinition("CoreCover", InstrumentedAssemblyFlagName, TypeAttributes.NotPublic));
         }
 
         private void ProcessModule(ModuleDefinition module)
@@ -67,7 +85,7 @@ namespace CoreCover.Framework
             if (method.DebugInformation.HasSequencePoints)
             {
                 ilProcessor.Body.SimplifyMacros();
-                
+
                 for (var i = ilProcessor.Body.Instructions.Count; i > 0; i--)
                 {
                     var instruction = ilProcessor.Body.Instructions[i - 1];

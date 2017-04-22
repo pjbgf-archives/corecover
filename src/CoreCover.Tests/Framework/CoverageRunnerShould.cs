@@ -9,13 +9,13 @@ using Xunit;
 
 namespace CoreCover.Tests.Framework
 {
-    public class CodeCoverageShould
+    public class CoverageRunnerShould
     {
         private readonly ITestsRunner _testRunnerMock;
         private readonly ICoverageReport _coverageReportMock;
         private readonly IInstrumentator _instrumentatorMock;
 
-        public CodeCoverageShould()
+        public CoverageRunnerShould()
         {
             _testRunnerMock = Substitute.For<ITestsRunner>();
             _coverageReportMock = Substitute.For<ICoverageReport>();

@@ -17,7 +17,7 @@ namespace CoreCover
             new ConsoleRunner(
                     logger, new CoverageRunner(
                     new Instrumentator(new CodeCoverageHandler(new CodeInstrumentationHandler(logger))),
-                    new DotNetTestRunner(new RpcServer(), new Process()), 
+                    new DotNetTestRunner(new RpcServer(logger), new Process()), 
                     new OpenCoverReportAdapter()))
                 .ProcessCommand(args);
         }

@@ -4,7 +4,9 @@ platform: Any CPU
 image: Visual Studio 2017
 
 environment: 
- DOTNET_CLI_TELEMETRY_OPTOUT: 1
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1
+  COVERALLS_TOKEN:
+    secure: W6ZK9C66pG2Ihkikl3Kybq/FGBKLKUzJnQjv8PS8m2SvEicfA6N5t1J0nLb/oyT5
 
 init:
 - ps: $Env:LABEL = "CI" + $Env:APPVEYOR_BUILD_NUMBER.PadLeft(5, "0")
@@ -16,7 +18,7 @@ test_script:
 - build-test
 
 after_test:
-- %USERPROFILE%\.nuget\packages\coveralls.net\0.8.0-unstable0013\tools\csmacnz.Coveralls.exe --opencover -i coverage.xml --repoToken %COVERALLS_TOKEN% --commitId %APPVEYOR_REPO_COMMIT% --commitBranch %APPVEYOR_REPO_BRANCH% --commitAuthor "%APPVEYOR_REPO_COMMIT_AUTHOR%" --commitEmail "%APPVEYOR_REPO_COMMIT_AUTHOR_EMAIL%" --commitMessage "%APPVEYOR_REPO_COMMIT_MESSAGE%" --jobId %APPVEYOR_BUILD_ID% --useRelativePaths
+- ps: %USERPROFILE%\.nuget\packages\coveralls.net\0.8.0-unstable0013\tools\csmacnz.Coveralls.exe --opencover -i coverage.xml --repoToken %COVERALLS_TOKEN% --commitId %APPVEYOR_REPO_COMMIT% --commitBranch %APPVEYOR_REPO_BRANCH% --commitAuthor "%APPVEYOR_REPO_COMMIT_AUTHOR%" --commitEmail "%APPVEYOR_REPO_COMMIT_AUTHOR_EMAIL%" --commitMessage "%APPVEYOR_REPO_COMMIT_MESSAGE%" --jobId %APPVEYOR_BUILD_ID% --useRelativePaths
 
 cache:
 - '%USERPROFILE%\.nuget\packages'

@@ -14,7 +14,7 @@ init:
 - ps: $Env:LABEL = "CI" + $Env:APPVEYOR_BUILD_NUMBER.PadLeft(5, "0")
 
 install:
-- nuget setapikey %myget_secure_key% -source https://www.myget.org/F/pjbgf/api/v3/index.json > NUL
+- nuget setapikey %myget_secure_key% -source https://www.myget.org/F/pjbgf/api/v3/index.json -Verbosity quiet
 - nuget sources add -Name MyGet -Source https://www.myget.org/F/pjbgf/api/v3/index.json
 
 build_script:
@@ -28,7 +28,7 @@ test_script:
 - dotnet %USERPROFILE%\.nuget\packages\CoreCover\0.1.0-prerelease003\tools\netcoreapp1.1\CoreCover.dll src\CoreCover.Sample.Tests\bin\Debug\netcoreapp1.1\
 
 after_test:
-- '%USERPROFILE%\.nuget\packages\coveralls.net\0.8.0-unstable0013\tools\csmacnz.Coveralls.exe --opencover -i coverage.xml --repoToken %COVERALLS_TOKEN% --commitId %APPVEYOR_REPO_COMMIT% --commitBranch %APPVEYOR_REPO_BRANCH% --commitAuthor "%APPVEYOR_REPO_COMMIT_AUTHOR%" --commitEmail "%APPVEYOR_REPO_COMMIT_AUTHOR_EMAIL%" --commitMessage "%APPVEYOR_REPO_COMMIT_MESSAGE%" --jobId %APPVEYOR_BUILD_ID% --useRelativePath'
+- '%USERPROFILE%\.nuget\packages\coveralls.net\0.7.0\tools\csmacnz.Coveralls.exe --opencover -i coverage.xml --repoToken %COVERALLS_TOKEN% --commitId %APPVEYOR_REPO_COMMIT% --commitBranch %APPVEYOR_REPO_BRANCH% --commitAuthor "%APPVEYOR_REPO_COMMIT_AUTHOR%" --commitEmail "%APPVEYOR_REPO_COMMIT_AUTHOR_EMAIL%" --commitMessage "%APPVEYOR_REPO_COMMIT_MESSAGE%" --jobId %APPVEYOR_BUILD_ID% --useRelativePath'
 
 #artifacts:
 #  - path: '**\*.nupkg'

@@ -1,5 +1,7 @@
 version: '0.1.{build}' 
-configuration: Debug 
+configuration:
+- Debug 
+- Release
 platform: Any CPU 
 image: Visual Studio 2017
 
@@ -10,6 +12,10 @@ environment:
 
 init:
 - ps: $Env:LABEL = "CI" + $Env:APPVEYOR_BUILD_NUMBER.PadLeft(5, "0")
+
+install:
+- nuget setapikey %myget_secure_key% -source https://www.myget.org/F/pjbgf/api/v3/index.json
+- nuget sources add -Name MyGet -Source https://www.myget.org/F/pjbgf/api/v3/index.json
 
 build_script:
 - build

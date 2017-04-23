@@ -38,8 +38,9 @@ namespace CoreCover.Framework
             CopyDependencyTo(Path.Combine(directoryPath, InstrumentationAssemblyName), targetPath);
         }
 
-        private static void CopyDependencyTo(string dependencyFilePath, string targetDirectory)
+        private void CopyDependencyTo(string dependencyFilePath, string targetDirectory)
         {
+            _logger.LogInformation($"Dependency Location: {dependencyFilePath}");
             var targetFilePath = Path.Combine(targetDirectory, Path.GetFileName(dependencyFilePath));
 
             if (!File.Exists(targetFilePath))

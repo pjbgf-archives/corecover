@@ -30,12 +30,21 @@ namespace CoreCover.Framework.Adapters
                             method.Summary.VisitedSequencePoints += sequencePoint.VisitCount > 0 ? 1 : 0;
                         }
 
-                        moduleClass.Summary.NumSequencePoints += method.SequencePoints.Length;
-                        module.Summary.NumSequencePoints += method.SequencePoints.Length;
-
                         method.Summary.VisitedMethods = method.Summary.VisitedSequencePoints > 0 ? 1 : 0;
+                        if (method.Summary.NumSequencePoints > 0)
+                            method.Summary.BranchCoverage = 100 / method.Summary.NumSequencePoints * method.Summary.VisitedMethods;
+
+                        method.BranchCoverage = method.Summary.BranchCoverage;
+
+                        moduleClass.Summary.NumSequencePoints += method.SequencePoints.Length;
                         moduleClass.Summary.VisitedMethods += method.Summary.VisitedMethods;
+                        if (moduleClass.Summary.NumSequencePoints > 0)
+                            moduleClass.Summary.BranchCoverage = 100 / moduleClass.Summary.NumSequencePoints * moduleClass.Summary.VisitedMethods;
+
+                        module.Summary.NumSequencePoints += method.SequencePoints.Length;
                         module.Summary.VisitedMethods += method.Summary.VisitedMethods;
+                        if (module.Summary.NumSequencePoints > 0)
+                            module.Summary.BranchCoverage = 100 / module.Summary.NumSequencePoints * module.Summary.VisitedMethods;
                     }
 
                     moduleClass.Summary.VisitedClasses = moduleClass.Summary.VisitedMethods > 0 ? 1 : 0;

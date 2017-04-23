@@ -1,6 +1,9 @@
 ﻿// MIT License
 // Copyright (c) 2017 Paulo Gomes (https://pjbgf.mit-license.org/)
 
+using System;
+using System.IO;
+using System.Runtime.InteropServices;
 using CoreCover.Framework.Abstractions;
 using CoreCover.Framework.Adapters;
 using NSubstitute;
@@ -13,6 +16,9 @@ namespace CoreCover.Tests.Framework.Adapters
     {
         private readonly IProcess _process;
         private readonly IRpcServer _rpcServerMock;
+
+        private static readonly bool IsWindows = System.Runtime.InteropServices.RuntimeInformation
+            .IsOSPlatform(OSPlatform.Windows);
 
         public DotNetTestRunnerShould()
         {
@@ -52,9 +58,20 @@ namespace CoreCover.Tests.Framework.Adapters
         public void Use_Project_Folder_As_Working_Directory()
         {
             var dotNetTestRunner = new DotNetTestRunner(_rpcServerMock, _process);
-            var testProjectOutputPath = @"c:\git\project\src\projectname\bin\debug\netcoreapp1.1\";
-            var expectedProjectName = @"c:\git\project\src\projectname";
             var coverageSession = new CoverageSession();
+            string testProjectOutputPath;
+            string expectedProjectName;
+
+            if (IsWindows)
+            {
+                testProjectOutputPath = @"c:\git\project\src\projectname\bin\debug\netcoreapp1.1\";
+                expectedProjectName = @"c:\git\project\src\projectname";
+            }
+            else
+            {
+                testProjectOutputPath = @"/home/user/git/project/src/projectname/bin/debug/netcoreapp1.1/";
+                expectedProjectName = @"/home/user/git/project/src/projectname";
+            }
 
             dotNetTestRunner.Run(coverageSession, testProjectOutputPath);
 
@@ -65,9 +82,20 @@ namespace CoreCover.Tests.Framework.Adapters
         public void Disregard_Lack_Of_Trailing_slash()
         {
             var dotNetTestRunner = new DotNetTestRunner(_rpcServerMock, _process);
-            var testProjectOutputPath = @"c:\git\project\src\projectname\bin\debug\netcoreapp1.1";
-            var expectedProjectName = @"c:\git\project\src\projectname";
             var coverageSession = new CoverageSession();
+            string testProjectOutputPath;
+            string expectedProjectName;
+
+            if (IsWindows)
+            {
+                testProjectOutputPath = @"c:\git\project\src\projectname\bin\debug\netcoreapp1.1";
+                expectedProjectName = @"c:\git\project\src\projectname";
+            }
+            else
+            {
+                testProjectOutputPath = @"/home/user/git/project/src/projectname/bin/debug/netcoreapp1.1";
+                expectedProjectName = @"/home/user/git/project/src/projectname";
+            }
 
             dotNetTestRunner.Run(coverageSession, testProjectOutputPath);
 
@@ -78,7 +106,7 @@ namespace CoreCover.Tests.Framework.Adapters
         public void Stop_Rpc_Server_After_Running_Tests()
         {
             var dotNetTestRunner = new DotNetTestRunner(_rpcServerMock, _process);
-            var testProjectOutputPath = "bin /debug";
+            var testProjectOutputPath = "bin/debug";
             var coverageSession = new CoverageSession();
 
             dotNetTestRunner.Run(coverageSession, testProjectOutputPath);

@@ -13,9 +13,37 @@ namespace CoreCover.Framework.Adapters
     {
         public void Export(CoverageSession coverageSession, string reportPath)
         {
+            ConsolidateSummaries(coverageSession);
             GenerateReport(coverageSession, reportPath);
         }
-        
+
+        private void ConsolidateSummaries(CoverageSession coverageSession)
+        {
+            foreach (var module in coverageSession.Modules)
+            {
+                foreach (var moduleClass in module.Classes)
+                {
+                    foreach (var method in moduleClass.Methods)
+                    {
+                        foreach (var sequencePoint in method.SequencePoints)
+                        {
+                            method.Summary.VisitedSequencePoints += sequencePoint.VisitCount > 0 ? 1 : 0;
+                        }
+
+                        moduleClass.Summary.NumSequencePoints += method.SequencePoints.Length;
+                        module.Summary.NumSequencePoints += method.SequencePoints.Length;
+
+                        method.Summary.VisitedMethods = method.Summary.VisitedSequencePoints > 0 ? 1 : 0;
+                        moduleClass.Summary.VisitedMethods += method.Summary.VisitedMethods;
+                        module.Summary.VisitedMethods += method.Summary.VisitedMethods;
+                    }
+
+                    moduleClass.Summary.VisitedClasses = moduleClass.Summary.VisitedMethods > 0 ? 1 : 0;
+                    module.Summary.VisitedClasses += moduleClass.Summary.VisitedClasses;
+                }
+            }
+        }
+
         private void GenerateReport(CoverageSession coverageSession, string reportPath)
         {
             var serializer = new XmlSerializer(typeof(CoverageSession),

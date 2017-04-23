@@ -2,6 +2,7 @@ version: '1.0.{build}'
 configuration: Debug 
 platform: Any CPU 
 image: Visual Studio 2017
+build: off
 
 environment: 
  DOTNET_CLI_TELEMETRY_OPTOUT: 1

@@ -2,7 +2,7 @@
   "profiles": {
     "CoreCover": {
       "commandName": "Project",
-      "commandLineArgs": "src\\CoreCover.Sample.Tests\\bin\\Debug\\netcoreapp1.1",
+      "commandLineArgs": "src\\CoreCover.Tests\\bin\\Debug\\netcoreapp1.1",
       "workingDirectory": "c:\\git\\corecover"
     }
   }

@@ -15,7 +15,6 @@ namespace CoreCover.Framework
 {
     public class Instrumentator : IInstrumentator
     {
-        private readonly bool _useShadowFile = false;
         private readonly IAssemblyInstrumentationHandler _assemblyInstrumentationHandler;
         private readonly string InstrumentationAssemblyName = "CoreCover.Instrumentation.dll";
         private readonly ILogger _logger;
@@ -39,8 +38,9 @@ namespace CoreCover.Framework
             CopyDependencyTo(Path.Combine(directoryPath, InstrumentationAssemblyName), targetPath);
         }
 
-        private static void CopyDependencyTo(string dependencyFilePath, string targetDirectory)
+        private void CopyDependencyTo(string dependencyFilePath, string targetDirectory)
         {
+            _logger.LogInformation($"Dependency Location: {dependencyFilePath}");
             var targetFilePath = Path.Combine(targetDirectory, Path.GetFileName(dependencyFilePath));
 
             if (!File.Exists(targetFilePath))
@@ -58,54 +58,23 @@ namespace CoreCover.Framework
                     continue;
                 }
                 
-                if (Regex.IsMatch(assemblyPath, "Test(s){0,1}.dll$"))
+                if (Regex.IsMatch(assemblyPath, "(OpenCover.Framework.Model|CoreCover.Instrumentation|Test(s){0,1}).dll$"))
                 {
                     _logger.LogInformation($"Skipping {assemblyPath}: test assembly.");
                     continue;
                 }
-
-                var assemblyPathLocal = assemblyPath;
-                if (_useShadowFile)
-                {
-                    assemblyPathLocal = Path.ChangeExtension(assemblyPath, "orig.dll");
-                    RenameOriginalAssembly(assemblyPath, assemblyPathLocal);
-                }
-
-                using (var assembly = LoadAssembly(assemblyPathLocal))
+                
+                using (var assembly = LoadAssembly(assemblyPath))
                 {
                     _assemblyInstrumentationHandler.Handle(coverageSession, assembly);
-                    if (_useShadowFile)
-                        assembly.Write(assemblyPath, new WriterParameters { WriteSymbols = true });
-                    else
-                        assembly.Write(new WriterParameters { WriteSymbols = true });
+                    assembly.Write(new WriterParameters { WriteSymbols = true });
                 }
-
-                if (_useShadowFile)
-                    CleanTempFiles(Path.GetDirectoryName(assemblyPathLocal));
             }
-        }
-
-        private void CleanTempFiles(string folder)
-        {
-            foreach (var file in Directory.EnumerateFiles(folder, "*.orig.*"))
-            {
-                if (Regex.IsMatch(Path.GetExtension(file), "^\\.(pdb|dll)$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled))
-                    File.Delete(file);
-            }
-        }
-
-        private void RenameOriginalAssembly(string assemblyPath, string newAssemblyPath)
-        {
-            var shadowPdbFilePath = Path.ChangeExtension(newAssemblyPath, "pdb");
-            var originalPdbFilePath = Path.ChangeExtension(assemblyPath, "pdb");
-
-            File.Move(assemblyPath, newAssemblyPath);
-            File.Copy(originalPdbFilePath, shadowPdbFilePath);
         }
 
         private AssemblyDefinition LoadAssembly(string assemblyPath)
         {
-            var readerParameters = new ReaderParameters { ReadSymbols = true, ReadWrite = !_useShadowFile };
+            var readerParameters = new ReaderParameters { ReadSymbols = true, ReadWrite = true };
             var assembly = AssemblyDefinition.ReadAssembly(assemblyPath, readerParameters);
 
             return assembly;

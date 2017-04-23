@@ -1,6 +1,7 @@
 ﻿// MIT License
 // Copyright (c) 2017 Paulo Gomes (https://pjbgf.mit-license.org/)
 
+using System;
 using Grpc.Core;
 
 namespace CoreCover.Instrumentation
@@ -19,7 +20,14 @@ namespace CoreCover.Instrumentation
 
         public static void MarkExecution(string moduleHash, int metadataToken, int startLineNumber, int endLineNumber)
         {
-            ExecutionTrackerClient.Track(new ExecutedLine { ModuleHash = moduleHash, MetadataToken = metadataToken, StartLineNumber = startLineNumber, EndLineNumber = endLineNumber});
+            try
+            {
+                ExecutionTrackerClient.Track(new ExecutedLine { ModuleHash = moduleHash, MetadataToken = metadataToken, StartLineNumber = startLineNumber, EndLineNumber = endLineNumber });
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
     }
 }

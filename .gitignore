@@ -301,3 +301,5 @@ __pycache__/
 # Do not version control coverage report by mistake.
 coverage.xml
 report
+
+CoreCover.0.1.0-PRERELEASE002/*

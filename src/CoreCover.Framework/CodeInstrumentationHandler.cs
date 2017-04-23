@@ -59,7 +59,8 @@ namespace CoreCover.Framework
 
             foreach (var type in module.Types)
             {
-                ProcessType(type);
+                if (!type.IsInterface)
+                    ProcessType(type);
             }
         }
 
@@ -69,7 +70,8 @@ namespace CoreCover.Framework
 
             foreach (var method in type.Methods)
             {
-                ProcessMethod(method);
+                if (!method.IsAbstract)
+                    ProcessMethod(method);
             }
         }
 
@@ -118,7 +120,7 @@ namespace CoreCover.Framework
                 new TypeReference("System", "Void", null, new AssemblyNameReference("netstandard", null)));
             var coverageTrackerRef = module.ImportReference(
                 new TypeReference("CoreCover.Instrumentation", "CoverageTracker", null,
-                    new AssemblyNameReference("CoreCover.Instrumentation", new Version(1, 0))));
+                    new AssemblyNameReference("CoreCover.Instrumentation", null)));
             var instrumentationMethodRef = module.ImportReference(new MethodReference("MarkExecution", voidRef,
                 coverageTrackerRef));
             var stringRef = module.ImportReference(

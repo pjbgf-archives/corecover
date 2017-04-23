@@ -12,7 +12,7 @@ init:
 build_script:
 - build
 
-test:
+test_script:
 - build-test
 
 cache:

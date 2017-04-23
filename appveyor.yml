@@ -27,9 +27,7 @@ before_deploy:
 #- appveyor PushArtifact 'src\CoreCover\bin\Any CPU\Debug\CoreCover.0.1.0-PRERELEASE001.nupkg' 'CoreCover.0.1.0-PRERELEASE001.nupkg'
 
 artifacts:
-  - path: 'src\CoreCover\bin\Any CPU\Debug\CoreCover.0.1.0-PRERELEASE001.nupkg'
-    name: CoreCover.0.1.0.nupkg
-    type: NuGetPackage
+  - path: '**\*.nupkg'
 
 deploy:
   - provider: NuGet

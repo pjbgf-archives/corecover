@@ -60,7 +60,7 @@ namespace CoreCover.Framework
                 
                 if (Regex.IsMatch(assemblyPath, "Test(s){0,1}.dll$"))
                 {
-                    _logger.LogInformation($"Skipping {assemblyPath}: test dll.");
+                    _logger.LogInformation($"Skipping {assemblyPath}: test assembly.");
                     continue;
                 }
 

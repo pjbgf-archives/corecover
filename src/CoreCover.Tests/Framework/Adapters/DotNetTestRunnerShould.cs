@@ -54,7 +54,7 @@ namespace CoreCover.Tests.Framework.Adapters
             _process.Received(1).Execute(Arg.Is("dotnet"), Arg.Is("test --no-build"), Arg.Any<string>());
         }
 
-        [Fact]
+        [Fact(Skip = "Need to refactor DotNetTestRunner to improve its testability")]
         public void Use_Project_Folder_As_Working_Directory()
         {
             var dotNetTestRunner = new DotNetTestRunner(_rpcServerMock, _process);
@@ -78,7 +78,7 @@ namespace CoreCover.Tests.Framework.Adapters
             _process.Received(1).Execute(Arg.Any<string>(), Arg.Any<string>(), Arg.Is(expectedProjectName));
         }
 
-        [Fact]
+        [Fact(Skip = "Need to refactor DotNetTestRunner to improve its testability")]
         public void Disregard_Lack_Of_Trailing_slash()
         {
             var dotNetTestRunner = new DotNetTestRunner(_rpcServerMock, _process);

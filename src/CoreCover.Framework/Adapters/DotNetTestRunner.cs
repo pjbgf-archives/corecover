@@ -2,6 +2,7 @@
 // Copyright (c) 2017 Paulo Gomes (https://pjbgf.mit-license.org/)
 
 using System.IO;
+using System.Linq;
 using CoreCover.Framework.Abstractions;
 using OpenCover.Framework.Model;
 
@@ -37,17 +38,22 @@ namespace CoreCover.Framework.Adapters
         {
             var absolutePath = GetAbsolutePath(testProjectOutputPath);
             var absolutePathWithTrailingSlash = GetAbsolutePathWithTrailingSlash(absolutePath);
-            var testProjectPath = ConvertToTestProjectPath(absolutePathWithTrailingSlash);
+            var testProjectPath = FindTestProjectPath(absolutePathWithTrailingSlash);
 
             return testProjectPath;
         }
 
-        private static string ConvertToTestProjectPath(string absolutePathWithTrailingSlash)
+        private static string FindTestProjectPath(string absolutePathWithTrailingSlash)
         {
-            var testProjectPath = Directory.GetParent(absolutePathWithTrailingSlash)
-                .Parent.Parent.Parent.FullName;
-
-            return testProjectPath;
+            if (Directory.Exists(absolutePathWithTrailingSlash) && 
+               !Directory.GetFiles(absolutePathWithTrailingSlash, "*.csproj").Any())
+            {
+                var parent = Directory.GetParent(absolutePathWithTrailingSlash);
+                if (parent != null)
+                    return FindTestProjectPath(parent.FullName);
+            }
+            
+            return absolutePathWithTrailingSlash;
         }
 
         private static string GetAbsolutePathWithTrailingSlash(string absolutePath)

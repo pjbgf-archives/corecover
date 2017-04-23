@@ -27,23 +27,8 @@ namespace CoreCover.Framework
 
         public void Process(CoverageSession coverageSession, string folderPath)
         {
-            var tempFolder = Path.GetTempPath();
-
-            CopyFilesToTempFolder(tempFolder, folderPath);
-            CopyDependenciesTo(tempFolder);
-            ProcessAssemblies(coverageSession, Directory.GetFiles(tempFolder, "*.dll"));
-        }
-
-        private static string CopyFilesToTempFolder(string tempFolder, string folderPath)
-        {
-            var files = Directory.GetFiles(folderPath);
-
-            foreach (var file in files)
-            {
-                File.Copy(file, Path.Combine(tempFolder, Path.GetFileName(file)), true);
-            }
-
-            return tempFolder;
+            CopyDependenciesTo(folderPath);
+            ProcessAssemblies(coverageSession, Directory.GetFiles(folderPath, "*.dll"));
         }
 
         private void CopyDependenciesTo(string targetPath)

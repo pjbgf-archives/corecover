@@ -18,7 +18,7 @@ namespace CoreCover.Framework
         private readonly bool _useShadowFile = false;
         private readonly IAssemblyInstrumentationHandler _assemblyInstrumentationHandler;
         private readonly string InstrumentationAssemblyName = "CoreCover.Instrumentation.dll";
-        private ILogger _logger;
+        private readonly ILogger _logger;
 
         public Instrumentator(ILogger logger, IAssemblyInstrumentationHandler assemblyInstrumentationHandler)
         {

@@ -120,7 +120,7 @@ namespace CoreCover.Framework
                 new TypeReference("System", "Void", null, new AssemblyNameReference("netstandard", null)));
             var coverageTrackerRef = module.ImportReference(
                 new TypeReference("CoreCover.Instrumentation", "CoverageTracker", null,
-                    new AssemblyNameReference("CoreCover.Instrumentation", null)));
+                    new AssemblyNameReference("CoreCover.Instrumentation", new Version("0.1.0.1"))));
             var instrumentationMethodRef = module.ImportReference(new MethodReference("MarkExecution", voidRef,
                 coverageTrackerRef));
             var stringRef = module.ImportReference(

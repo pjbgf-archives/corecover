@@ -15,7 +15,7 @@ namespace CoreCover.Framework
 {
     public class Instrumentator : IInstrumentator
     {
-        private readonly bool _useShadowFile = false;
+        private readonly bool _useShadowFile = true;
         private readonly IAssemblyInstrumentationHandler _assemblyInstrumentationHandler;
         private readonly string InstrumentationAssemblyName = "CoreCover.Instrumentation.dll";
         private readonly ILogger _logger;
@@ -28,8 +28,23 @@ namespace CoreCover.Framework
 
         public void Process(CoverageSession coverageSession, string folderPath)
         {
-            CopyDependenciesTo(folderPath);
-            ProcessAssemblies(coverageSession, Directory.GetFiles(folderPath, "*.dll"));
+            var tempFolder = Path.GetTempPath();
+
+            CopyFilesToTempFolder(tempFolder, folderPath);
+            CopyDependenciesTo(tempFolder);
+            ProcessAssemblies(coverageSession, Directory.GetFiles(tempFolder, "*.dll"));
+        }
+
+        private static string CopyFilesToTempFolder(string tempFolder, string folderPath)
+        {
+            var files = Directory.GetFiles(folderPath);
+
+            foreach (var file in files)
+            {
+                File.Copy(file, Path.Combine(tempFolder, Path.GetFileName(file)), true);
+            }
+
+            return tempFolder;
         }
 
         private void CopyDependenciesTo(string targetPath)

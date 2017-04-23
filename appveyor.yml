@@ -1,7 +1,7 @@
 version: '0.1.{build}' 
 configuration:
 - Debug 
-- Release
+#- Release
 platform: Any CPU 
 image: Visual Studio 2017
 
@@ -27,8 +27,8 @@ test_script:
 - build-test
 - dotnet %USERPROFILE%\.nuget\packages\CoreCover\0.1.0-prerelease003\tools\netcoreapp1.1\CoreCover.dll src\CoreCover.Sample.Tests\bin\Debug\netcoreapp1.1\
 
-#after_test:
-#- '%USERPROFILE%\.nuget\packages\coveralls.net\0.8.0-unstable0013\tools\csmacnz.Coveralls.exe --opencover -i coverage.xml --repoToken %COVERALLS_TOKEN% --commitId %APPVEYOR_REPO_COMMIT% --commitBranch %APPVEYOR_REPO_BRANCH% --commitAuthor "%APPVEYOR_REPO_COMMIT_AUTHOR%" --commitEmail "%APPVEYOR_REPO_COMMIT_AUTHOR_EMAIL%" --commitMessage "%APPVEYOR_REPO_COMMIT_MESSAGE%" --jobId %APPVEYOR_BUILD_ID% --useRelativePath'
+after_test:
+- '%USERPROFILE%\.nuget\packages\coveralls.net\0.8.0-unstable0013\tools\csmacnz.Coveralls.exe --opencover -i coverage.xml --repoToken %COVERALLS_TOKEN% --commitId %APPVEYOR_REPO_COMMIT% --commitBranch %APPVEYOR_REPO_BRANCH% --commitAuthor "%APPVEYOR_REPO_COMMIT_AUTHOR%" --commitEmail "%APPVEYOR_REPO_COMMIT_AUTHOR_EMAIL%" --commitMessage "%APPVEYOR_REPO_COMMIT_MESSAGE%" --jobId %APPVEYOR_BUILD_ID% --useRelativePath'
 
 #artifacts:
 #  - path: '**\*.nupkg'

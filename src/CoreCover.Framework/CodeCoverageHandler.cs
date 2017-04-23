@@ -49,7 +49,7 @@ namespace CoreCover.Framework
 
             foreach (var type in module.Types)
             {
-                if (type.Name == "__CORECOVER__")
+                if (type.Name == "__CORECOVER__" || type.IsInterface)
                     continue;
 
                 //HACK: Needs refactoring.

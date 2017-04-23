@@ -7,11 +7,11 @@ Light-weight cross platform code coverage tool for .Net Core applications.
 The goal is to provide an easy to use command line for linux:
 
 ```
-./run.sh TestProject/BinFolder/ coverage.xml **CURRENT**
+./run.sh TestProject/BinFolder/ coverage.xml
 ```
 And windows:
 ```
-run TestProject\BinFolder\ coverage.xml **CURRENT**
+run TestProject\BinFolder\ coverage.xml
 ```
 
 The reports generated are currently based on [OpenCover](https://github.com/OpenCover/opencover) format.

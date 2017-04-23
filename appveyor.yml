@@ -11,3 +11,6 @@ init:
 
 build_script:
 - ./build
+
+cache:
+- '%USERPROFILE%\.nuget\packages'

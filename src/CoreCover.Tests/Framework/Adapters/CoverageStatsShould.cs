@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using OpenCover.Framework.Model;
+using CoreCover.Framework.Adapters;
+using CoreCover.Tests.Data;
+using NSubstitute.Routing.Handlers;
 using Xunit;
 
 namespace CoreCover.Tests.Framework.Adapters
@@ -12,114 +14,33 @@ namespace CoreCover.Tests.Framework.Adapters
         [Fact]
         public void Consolidate_Method_Summary_Based_On_Sequence_Points()
         {
-            var coverageSession = new CoverageSession
-            {
-                Modules = new[]
-                {
-                    new Module
-                    {
-                        Classes = new[]
-                        {
-                            new Class
-                            {
-                                Methods = new[]
-                                {
-                                    new Method
-                                    {
-                                        SequencePoints = new[]
-                                        {
-                                            new SequencePoint {VisitCount = 1},
-                                            new SequencePoint(),
-                                            new SequencePoint(),
-                                            new SequencePoint()
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            };
-
             var coverageStats = new CoverageStats();
+            var coverageSession = CoverageSessionBuilder.New()
+                .AddModule()
+                .AddClass()
+                .AddMethod(4, 1)
+                .Build();
 
-            var consolidatedCoverageSession = coverageStats.Consolidate(coverageSession);
-            var method = consolidatedCoverageSession.Modules.First().Classes.First().Methods.First();
+            coverageStats.Consolidate(coverageSession);
+            var method = coverageSession.Modules.First().Classes.First().Methods.First();
 
             Assert.Equal(25, method.Summary.SequenceCoverage);
         }
+
         [Fact]
         public void Consolidate_Method_SequenceCoverage_And_Summary_SequenceCoverage()
         {
-            var coverageSession = new CoverageSession
-            {
-                Modules = new[]
-                {
-                    new Module
-                    {
-                        Classes = new[]
-                        {
-                            new Class
-                            {
-                                Methods = new[]
-                                {
-                                    new Method
-                                    {
-                                        SequencePoints = new[]
-                                        {
-                                            new SequencePoint {VisitCount = 1},
-                                            new SequencePoint(),
-                                            new SequencePoint(),
-                                            new SequencePoint()
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            };
-
             var coverageStats = new CoverageStats();
+            var coverageSession = CoverageSessionBuilder.New()
+                .AddModule()
+                .AddClass()
+                .AddMethod(4, 1)
+                .Build();
 
-            var consolidatedCoverageSession = coverageStats.Consolidate(coverageSession);
-            var method = consolidatedCoverageSession.Modules.First().Classes.First().Methods.First();
+            coverageStats.Consolidate(coverageSession);
+            var method = coverageSession.Modules.First().Classes.First().Methods.First();
 
             Assert.Equal(25, method.SequenceCoverage);
-        }
-    }
-
-    public class CoverageStats
-    {
-        public CoverageSession Consolidate(CoverageSession coverageSession)
-        {
-            foreach (var module in coverageSession.Modules)
-            {
-                foreach (var moduleClass in module.Classes)
-                {
-                    foreach (var method in moduleClass.Methods)
-                    {
-                        ProcessMethod(method);
-                    }
-                }
-            }
-
-            return coverageSession;
-        }
-
-        private static void ProcessMethod(Method method)
-        {
-            method.Summary = new Summary
-            {
-                NumSequencePoints = method.SequencePoints.Length,
-                VisitedSequencePoints = method.SequencePoints.Count(x => x.VisitCount > 0),
-            };
-
-            if (method.Summary.NumSequencePoints > 0)
-                method.Summary.SequenceCoverage = 100 / method.Summary.NumSequencePoints * 
-                    method.Summary.VisitedSequencePoints;
-            
-            method.SequenceCoverage = method.Summary.SequenceCoverage;
         }
     }
 }

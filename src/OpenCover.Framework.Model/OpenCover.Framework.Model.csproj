@@ -5,13 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.Runtime.Serialization.Formatters" Version="4.3.0" />
     <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="System.Runtime.Serialization.Formatters">
-      <HintPath>..\..\..\..\Users\pj-pc\.nuget\packages\system.runtime.serialization.formatters\4.3.0\ref\netstandard1.3\System.Runtime.Serialization.Formatters.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

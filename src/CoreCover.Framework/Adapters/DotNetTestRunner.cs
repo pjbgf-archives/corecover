@@ -29,7 +29,7 @@ namespace CoreCover.Framework.Adapters
              * It is important that the --no-build flag is used, otherwise dotnet-test will run a new build of the project 
              * which will overwrite the assembly files that were instrumented.
              */
-            _process.Execute("dotnet", "test --no-build -c self", testProjectPath);
+            _process.Execute("dotnet", "test --no-build", testProjectPath);
 
             _rpcServer.Stop();
         }

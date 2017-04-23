@@ -24,7 +24,7 @@ test_script:
 
 before_deploy:
 - dotnet pack src\CoreCover\CoreCover.csproj
-- appveyor PushArtifact 'C:\projects\corecover\src\CoreCover\bin\Any CPU\Debug\CoreCover.0.1.0-PRERELEASE001.nupkg'
+- appveyor PushArtifact 'C:\projects\corecover\src\CoreCover\bin\Any CPU\Debug\CoreCover.0.1.0-PRERELEASE001.nupkg' 'CoreCover.0.1.0-PRERELEASE001.nupkg'
 
 deploy:
   - provider: NuGet

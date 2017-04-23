@@ -11,12 +11,12 @@ namespace CoreCover.Tests.Framework
 {
     public class ConsoleRunnerShould
     {
-        private readonly ILogger _loggerMock;
+        private readonly IConsole _consoleMock;
         private readonly ICoverageRunner _coverageRunnerMock;
 
         public ConsoleRunnerShould()
         {
-            _loggerMock = Substitute.For<ILogger>();
+            _consoleMock = Substitute.For<IConsole>();
             _coverageRunnerMock = Substitute.For<ICoverageRunner>();
         }
 
@@ -24,22 +24,22 @@ namespace CoreCover.Tests.Framework
         [InlineData(null)]
         public void Show_Usage_When_Not_All_Mandatory_Parameters_Are_Provided(params string[] inputArgs)
         {
-            var consoleRunner = new ConsoleRunner(_loggerMock, _coverageRunnerMock);
+            var consoleRunner = new ConsoleRunner(_consoleMock, _coverageRunnerMock);
 
             consoleRunner.ProcessCommand(inputArgs);
 
-            _loggerMock.ReceivedWithAnyArgs(1).LogCritical(Arg.Any<string>());
+            _consoleMock.Received(1).WriteLine(Arg.Any<string>());
             _coverageRunnerMock.DidNotReceive().Run(Arg.Any<string>(), Arg.Any<string>());
         }
 
         [Fact]
         public void Run_Coverage_Runner_When_All_Mandatory_Parameters_Are_Provided()
         {
-            var consoleRunner = new ConsoleRunner(_loggerMock, _coverageRunnerMock);
+            var consoleRunner = new ConsoleRunner(_consoleMock, _coverageRunnerMock);
 
             consoleRunner.ProcessCommand("TestProject//OutputPath");
 
-            _loggerMock.DidNotReceive().LogCritical(Arg.Any<string>());
+            _consoleMock.DidNotReceive().WriteLine(Arg.Any<string>());
             _coverageRunnerMock.Received(1).Run(Arg.Any<string>(), Arg.Any<string>());
         }
     }

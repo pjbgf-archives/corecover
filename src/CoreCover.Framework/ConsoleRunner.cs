@@ -9,12 +9,12 @@ namespace CoreCover.Framework
 {
     public class ConsoleRunner
     {
-        private readonly ILogger _logger;
+        private readonly IConsole _console;
         private readonly ICoverageRunner _coverageRunner;
 
-        public ConsoleRunner(ILogger logger, ICoverageRunner coverageRunner)
+        public ConsoleRunner(IConsole console, ICoverageRunner coverageRunner)
         {
-            _logger = logger;
+            _console = console;
             _coverageRunner = coverageRunner;
         }
 
@@ -22,7 +22,7 @@ namespace CoreCover.Framework
         {
             if (inputArgs == null || inputArgs.Length < 1)
             {
-                _logger.LogCritical("usage: dotnet corecover.dll TestProjectOutputPath [path]coverage-report.xml");
+                _console.WriteLine("usage: dotnet corecover.dll TestProjectOutputPath [path]coverage-report.xml");
                 return;
             }
             

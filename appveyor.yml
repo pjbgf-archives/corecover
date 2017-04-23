@@ -24,9 +24,14 @@ test_script:
 
 before_deploy:
 - dotnet pack src\CoreCover\CoreCover.csproj
-
-deploy:
 - appveyor PushArtifact CoreCover.0.1.0-PRERELEASE001.nupkg
 
+deploy:
+  - provider: NuGet
+    symbol_server: https://ci.appveyor.com/nuget/pjbgf/api/v2/package
+    api_key:
+      secure: kBraVpfC1aObEmg12ev0RD1x4UkYr7ajTE3ZKgtm+h4=
+    artifact: /.*\.nupkg/
+    
 # cache:
 # - '%USERPROFILE%\.nuget\packages'

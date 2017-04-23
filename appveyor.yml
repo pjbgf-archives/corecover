@@ -18,19 +18,15 @@ test_script:
 - build-test
 - run src\CoreCover.Sample.Tests\bin\Debug\netcoreapp1.1\
 
+#after_test:
+#- '%USERPROFILE%\.nuget\packages\CoreCover\run.cmd src\CoreCover.Sample.Tests\bin\Debug\netcoreapp1.1\'
+#- '%USERPROFILE%\.nuget\packages\coveralls.net\0.8.0-unstable0013\tools\csmacnz.Coveralls.exe --opencover -i coverage.xml --repoToken %COVERALLS_TOKEN% --commitId %APPVEYOR_REPO_COMMIT% --commitBranch %APPVEYOR_REPO_BRANCH% --commitAuthor "%APPVEYOR_REPO_COMMIT_AUTHOR%" --commitEmail "%APPVEYOR_REPO_COMMIT_AUTHOR_EMAIL%" --commitMessage "%APPVEYOR_REPO_COMMIT_MESSAGE%" --jobId %APPVEYOR_BUILD_ID% --useRelativePath'
+
 before_deploy:
 - dotnet pack src\CoreCover\CoreCover.csproj
-- appveyor PushArtifact '*.nupkg'
 
 deploy:
-  - provider: NuGet
-    symbol_server: https://ci.appveyor.com/nuget/pjbgf/api/v2/package
-    api_key:
-      secure: kBraVpfC1aObEmg12ev0RD1x4UkYr7ajTE3ZKgtm+h4=
-    artifact: /.*\.nupkg/
-
-#after_test:
-#- '%USERPROFILE%\.nuget\packages\coveralls.net\0.8.0-unstable0013\tools\csmacnz.Coveralls.exe --opencover -i coverage.xml --repoToken %COVERALLS_TOKEN% --commitId %APPVEYOR_REPO_COMMIT% --commitBranch %APPVEYOR_REPO_BRANCH% --commitAuthor "%APPVEYOR_REPO_COMMIT_AUTHOR%" --commitEmail "%APPVEYOR_REPO_COMMIT_AUTHOR_EMAIL%" --commitMessage "%APPVEYOR_REPO_COMMIT_MESSAGE%" --jobId %APPVEYOR_BUILD_ID% --useRelativePath'
+- appveyor PushArtifact CoreCover.0.1.0-PRERELEASE001.nupkg
 
 # cache:
 # - '%USERPROFILE%\.nuget\packages'

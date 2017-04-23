@@ -53,7 +53,16 @@ namespace CoreCover.Framework
             {
                 var pdbFile = Path.ChangeExtension(assemblyPath, "pdb");
                 if (!File.Exists(pdbFile))
+                {
+                    _logger.LogInformation($"Skipping {assemblyPath}: missing pdb.");
                     continue;
+                }
+                
+                if (Regex.IsMatch(assemblyPath, "Test(s){0,1}.dll$"))
+                {
+                    _logger.LogInformation($"Skipping {assemblyPath}: test dll.");
+                    continue;
+                }
 
                 var assemblyPathLocal = assemblyPath;
                 if (_useShadowFile)

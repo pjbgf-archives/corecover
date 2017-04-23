@@ -1,6 +1,6 @@
 # corecover
-![Alt text](https://travis-ci.org/pjbgf/corecover.svg?branch=master "Master branch status") 
-[![Build status](https://ci.appveyor.com/api/projects/status/lqs8r879krlnkba8?svg=true)](https://ci.appveyor.com/project/pjbgf/corecover)  
+[![Linux Build text](https://travis-ci.org/pjbgf/corecover.svg?branch=setting-up-ci-cd)](https://travis-ci.org/pjbgf/corecover)
+[![Windows Build status](https://ci.appveyor.com/api/projects/status/lqs8r879krlnkba8?svg=true)](https://ci.appveyor.com/project/pjbgf/corecover)  
 [![Coverage Status](https://coveralls.io/repos/github/pjbgf/corecover/badge.svg?branch=master)](https://coveralls.io/github/pjbgf/corecover?branch=master) [![License](http://img.shields.io/:license-mit-blue.svg)](http://pjbgf.mit-license.org)  
 Light-weight cross platform code coverage tool for .Net Core applications.
 

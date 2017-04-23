@@ -14,7 +14,7 @@ init:
 - ps: $Env:LABEL = "CI" + $Env:APPVEYOR_BUILD_NUMBER.PadLeft(5, "0")
 
 install:
-- nuget setapikey %myget_secure_key% -source https://www.myget.org/F/pjbgf/api/v3/index.json
+- nuget setapikey %myget_secure_key% -source https://www.myget.org/F/pjbgf/api/v3/index.json > NUL
 - nuget sources add -Name MyGet -Source https://www.myget.org/F/pjbgf/api/v3/index.json
 
 build_script:

@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CoreCover" Version="0.1.0-PRERELEASE003" />
     <PackageReference Include="Google.Protobuf" Version="3.2.0" />
     <PackageReference Include="Grpc" Version="1.2.2" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />

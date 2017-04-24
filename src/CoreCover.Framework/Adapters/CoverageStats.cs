@@ -28,6 +28,7 @@ namespace CoreCover.Framework.Adapters
             };
 
             ProcessMethodSequenceCoverage(method);
+            method.Visited = method.SequenceCoverage > 0;
         }
 
         private static void ProcessMethodSequenceCoverage(Method method)
@@ -36,6 +37,7 @@ namespace CoreCover.Framework.Adapters
                 method.Summary.SequenceCoverage = 100 / method.Summary.NumSequencePoints *
                                                   method.Summary.VisitedSequencePoints;
 
+            method.Summary.VisitedMethods = method.Summary.SequenceCoverage > 0 ? 1 : 0;
             method.SequenceCoverage = method.Summary.SequenceCoverage;
         }
     }

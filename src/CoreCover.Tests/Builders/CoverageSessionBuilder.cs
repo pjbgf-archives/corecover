@@ -26,7 +26,7 @@ namespace CoreCover.Tests.Data
 
         public CoverageSessionBuilder AddClass()
         {
-            Enumerable.First<Module>(_coverageSession.Modules).Classes = new[]
+            _coverageSession.Modules.First<Module>().Classes = new[]
             {
                 new Class
                 {

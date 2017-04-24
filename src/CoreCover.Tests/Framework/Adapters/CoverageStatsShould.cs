@@ -49,7 +49,7 @@ namespace CoreCover.Tests.Framework.Adapters
         }
 
         [Fact]
-        public void Consolidate_Method_Summary_For_Not_Visited_Sequence_Points()
+        public void Consolidate_Method_Summary_For_Unvisited_Sequence_Points()
         {
             var coverageStats = new CoverageStats();
             var coverageSession = CoverageSessionBuilder.New()

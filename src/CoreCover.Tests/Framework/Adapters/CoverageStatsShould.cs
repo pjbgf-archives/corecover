@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CoreCover.Framework.Adapters;
-using CoreCover.Tests.Data;
+using CoreCover.Tests.Builders;
 using NSubstitute.Routing.Handlers;
 using Xunit;
 
@@ -18,7 +18,7 @@ namespace CoreCover.Tests.Framework.Adapters
             var coverageSession = CoverageSessionBuilder.New()
                 .AddModule()
                 .AddClass()
-                .AddMethod(4, 1)
+                .AddMethod(4, 1, 0, 0)
                 .Build();
 
             coverageStats.Consolidate(coverageSession);
@@ -37,7 +37,7 @@ namespace CoreCover.Tests.Framework.Adapters
             var coverageSession = CoverageSessionBuilder.New()
                 .AddModule()
                 .AddClass()
-                .AddMethod(4, 1)
+                .AddMethod(4, 1, 0, 0)
                 .Build();
 
             coverageStats.Consolidate(coverageSession);
@@ -55,7 +55,7 @@ namespace CoreCover.Tests.Framework.Adapters
             var coverageSession = CoverageSessionBuilder.New()
                 .AddModule()
                 .AddClass()
-                .AddMethod(5, 0)
+                .AddMethod(5, 0, 0, 0)
                 .Build();
 
             coverageStats.Consolidate(coverageSession);
@@ -65,6 +65,26 @@ namespace CoreCover.Tests.Framework.Adapters
             Assert.Equal(0, method.Summary.SequenceCoverage);
             Assert.Equal(5, method.Summary.NumSequencePoints);
             Assert.Equal(0, method.Summary.VisitedSequencePoints);
+        }
+
+        [Fact]
+        public void Consolidate_Method_Summary_Based_On_Branch_Points()
+        {
+            var coverageStats = new CoverageStats();
+            var coverageSession = CoverageSessionBuilder.New()
+                .AddModule()
+                .AddClass()
+                .AddMethod(0, 0, 4, 1)
+                .Build();
+
+            coverageStats.Consolidate(coverageSession);
+            var method = coverageSession.Modules.First().Classes.First().Methods.First();
+
+            Assert.Equal(1, method.Summary.VisitedMethods);
+            Assert.Equal(1, method.Summary.VisitedClasses);
+            Assert.Equal(25, method.Summary.BranchCoverage);
+            Assert.Equal(4, method.Summary.NumBranchPoints);
+            Assert.Equal(1, method.Summary.VisitedBranchPoints);
         }
     }
 }

@@ -8,8 +8,9 @@
     <Version>0.1.0-PRERELEASE001</Version>
     <Description>Light-weight cross platform code coverage tool for .Net Core applications.</Description>
     <PackageLicenseUrl>https://pjbgf.mit-license.org/</PackageLicenseUrl>
-    <RepositoryUrl>https://github.com/pjbgf/corecover</RepositoryUrl>
+    <RepositoryUrl></RepositoryUrl>
     <PackageTags>test-coverage, code-coverage, dotnet-core</PackageTags>
+    <PackageProjectUrl>https://github.com/pjbgf/corecover</PackageProjectUrl>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

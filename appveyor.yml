@@ -13,6 +13,7 @@ init:
 install:
 - nuget setapikey %myget_secure_key% -source https://www.myget.org/F/pjbgf/api/v3/index.json -Verbosity quiet
 - nuget sources add -Name MyGet -Source https://www.myget.org/F/pjbgf/api/v3/index.json
+- nuget install CoreCover
 
 build_script:
 - build

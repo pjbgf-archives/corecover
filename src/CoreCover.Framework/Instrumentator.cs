@@ -52,6 +52,7 @@ namespace CoreCover.Framework
         {
             foreach (var assemblyPath in assemblyPaths)
             {
+                _logger.LogInformation($"Processing {assemblyPath}...");
                 var pdbFile = Path.ChangeExtension(assemblyPath, "pdb");
                 if (!File.Exists(pdbFile))
                 {
@@ -59,7 +60,7 @@ namespace CoreCover.Framework
                     continue;
                 }
 
-                if (Regex.IsMatch(assemblyPath, "(CoreCover.Extensions.OpenCoverReport|CoreCover.Instrumentation|Test(s){0,1}).dll$"))
+                if (Regex.IsMatch(assemblyPath, "(CoreCover.Extensions.OpenCoverReport|CoreCover.Instrumentation|Test(s){0,1})+.dll$"))
                 {
                     _logger.LogInformation($"Skipping {assemblyPath}: test assembly.");
                     continue;

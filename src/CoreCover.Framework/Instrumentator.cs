@@ -59,7 +59,7 @@ namespace CoreCover.Framework
                     continue;
                 }
 
-                if (Regex.IsMatch(assemblyPath, "(OpenCover.Framework.Model|CoreCover.Instrumentation|Test(s){0,1}).dll$"))
+                if (Regex.IsMatch(assemblyPath, "(CoreCover.Extensions.OpenCoverReport|CoreCover.Instrumentation|Test(s){0,1}).dll$"))
                 {
                     _logger.LogInformation($"Skipping {assemblyPath}: test assembly.");
                     continue;

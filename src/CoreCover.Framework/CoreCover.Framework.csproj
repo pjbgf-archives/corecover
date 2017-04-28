@@ -17,8 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CoreCover.Extensions.OpenCoverReport\CoreCover.Extensions.OpenCoverReport.csproj" />
     <ProjectReference Include="..\CoreCover.Instrumentation\CoreCover.Instrumentation.csproj" />
-    <ProjectReference Include="..\OpenCover.Framework.Model\OpenCover.Framework.Model.csproj" />
   </ItemGroup>
 
 </Project>

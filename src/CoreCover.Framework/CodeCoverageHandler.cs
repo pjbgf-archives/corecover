@@ -7,8 +7,10 @@ using System.IO;
 using System.Linq;
 using CoreCover.Framework.Abstractions;
 using Mono.Cecil;
+using Mono.Cecil.Cil;
 using OpenCover.Framework.Model;
 using File = OpenCover.Framework.Model.File;
+using SequencePoint = OpenCover.Framework.Model.SequencePoint;
 
 namespace CoreCover.Framework
 {
@@ -59,7 +61,7 @@ namespace CoreCover.Framework
 
                 var file = new File { FullPath = documentUrl };
                 files.Add(file);
-                
+
                 var processType = ProcessType(type, file.UniqueId);
                 if (processType != null)
                     types.Add(processType);
@@ -100,14 +102,24 @@ namespace CoreCover.Framework
             coverageMethod.IsStatic = method.IsStatic;
             coverageMethod.IsSetter = method.IsSetter;
             coverageMethod.IsGetter = method.IsGetter;
-            coverageMethod.MetadataToken = method.MetadataToken.ToInt32();
+            coverageMethod.MetadataToken = method.MetadataToken.ToInt32();         
 
             coverageMethod.Summary = new Summary();
 
             if (method.DebugInformation.HasSequencePoints)
             {
-                uint ordinal = 0;
-                coverageMethod.SequencePoints = method.DebugInformation.SequencePoints.Select(x => new SequencePoint
+                coverageMethod.SequencePoints = GetSequencePoints(method, fileId);
+                coverageMethod.BranchPoints = GetBranchPoints(method, fileId);
+                coverageMethod.MethodPoint = coverageMethod.SequencePoints.FirstOrDefault();
+            }
+
+            return coverageMethod;
+        }
+
+        private static SequencePoint[] GetSequencePoints(MethodDefinition method, uint fileId)
+        {
+            uint ordinal = 0;
+            return method.DebugInformation.SequencePoints.Select(x => new SequencePoint
                 {
                     Offset = x.Offset,
                     StartLine = x.StartLine,
@@ -116,12 +128,34 @@ namespace CoreCover.Framework
                     EndColumn = x.EndColumn,
                     Ordinal = ordinal++,
                     FileId = fileId
+                })
+                .ToArray();
+        }
+
+        private static BranchPoint[] GetBranchPoints(MethodDefinition method, uint fileId)
+        {
+            uint ordinal = 0;
+            return method.DebugInformation.GetScopes()
+                .Select(x =>
+                {
+                    var branchPoint = new BranchPoint
+                    {
+                        OffsetPoints = new List<int>(),
+                        Offset = x.Start.Offset,
+                        EndOffset = x.End.Offset,
+                        Ordinal = ordinal++,
+                        FileId = fileId
+                    };
+                    
+                    if (x.HasScopes)
+                        using (var enumerator = x.Scopes.GetEnumerator())
+                            while (enumerator.MoveNext())
+                            {
+                                branchPoint.OffsetPoints.Add(enumerator.Current.Start.Offset);
+                            }
+            
+                    return branchPoint;
                 }).ToArray();
-
-                coverageMethod.Summary.NumSequencePoints = coverageMethod.SequencePoints.Length;
-            }
-
-            return coverageMethod;
         }
     }
 }

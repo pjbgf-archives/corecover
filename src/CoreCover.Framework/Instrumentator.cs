@@ -16,7 +16,7 @@ namespace CoreCover.Framework
     public class Instrumentator : IInstrumentator
     {
         private readonly IAssemblyInstrumentationHandler _assemblyInstrumentationHandler;
-        private readonly string InstrumentationAssemblyName = "CoreCover.Instrumentation.dll";
+        private readonly string[] DependencyAssemblyNames = { "CoreCover.Instrumentation.dll", "Google.Protobuf.dll", "Grpc.Core.dll" };
         private readonly ILogger _logger;
 
         public Instrumentator(ILogger logger, IAssemblyInstrumentationHandler assemblyInstrumentationHandler)
@@ -35,7 +35,8 @@ namespace CoreCover.Framework
         {
             var directoryPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
 
-            CopyDependencyTo(Path.Combine(directoryPath, InstrumentationAssemblyName), targetPath);
+            foreach (var assemblyName in DependencyAssemblyNames)
+                CopyDependencyTo(Path.Combine(directoryPath, assemblyName), targetPath);
         }
 
         private void CopyDependencyTo(string dependencyFilePath, string targetDirectory)
@@ -57,13 +58,13 @@ namespace CoreCover.Framework
                     _logger.LogInformation($"Skipping {assemblyPath}: missing pdb.");
                     continue;
                 }
-                
+
                 if (Regex.IsMatch(assemblyPath, "(OpenCover.Framework.Model|CoreCover.Instrumentation|Test(s){0,1}).dll$"))
                 {
                     _logger.LogInformation($"Skipping {assemblyPath}: test assembly.");
                     continue;
                 }
-                
+
                 using (var assembly = LoadAssembly(assemblyPath))
                 {
                     _assemblyInstrumentationHandler.Handle(coverageSession, assembly);

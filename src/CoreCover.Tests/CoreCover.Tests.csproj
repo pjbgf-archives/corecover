@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CoreCover" Version="0.1.0-PRERELEASE003" />
     <PackageReference Include="coveralls.io" Version="1.3.4" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
     <PackageReference Include="NSubstitute" Version="2.0.2" />

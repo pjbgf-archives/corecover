@@ -103,10 +103,38 @@ namespace CoreCover.Tests.Framework.Adapters
 
             Assert.Equal(2, classType.Summary.VisitedMethods);
             Assert.Equal(75, classType.Summary.SequenceCoverage);
+            Assert.Equal(100, classType.Summary.BranchCoverage);
             Assert.Equal(6, classType.Summary.NumSequencePoints);
             Assert.Equal(4, classType.Summary.VisitedSequencePoints);
             Assert.Equal(1, classType.Summary.NumBranchPoints);
             Assert.Equal(1, classType.Summary.VisitedBranchPoints);
+        }
+
+
+        [Fact]
+        public void Consolidate_Module_Summary_Based_On_Classes()
+        {
+            var coverageStats = new CoverageStats();
+            var coverageSession = CoverageSessionBuilder.New()
+                .AddModule()
+                .AddClass()
+                .AddMethod(1, 1, 1, 1)
+                .AddClass()
+                .AddMethod(2, 1, 2, 1)
+                .AddClass()
+                .AddMethod(4, 2, 4, 2)
+                .Build();
+
+            coverageStats.Consolidate(coverageSession);
+            var module = coverageSession.Modules.First();
+
+            Assert.Equal(3, module.Summary.VisitedMethods);
+            Assert.Equal(66.666666666666666666666666667M, module.Summary.SequenceCoverage);
+            Assert.Equal(66.666666666666666666666666667M, module.Summary.BranchCoverage);
+            Assert.Equal(7, module.Summary.NumSequencePoints);
+            Assert.Equal(4, module.Summary.VisitedSequencePoints);
+            Assert.Equal(7, module.Summary.NumBranchPoints);
+            Assert.Equal(4, module.Summary.VisitedBranchPoints);
         }
     }
 }

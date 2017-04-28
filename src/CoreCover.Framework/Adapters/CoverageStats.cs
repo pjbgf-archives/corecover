@@ -18,6 +18,31 @@ namespace CoreCover.Framework.Adapters
 
                     ProcessClass(moduleClass);
                 }
+
+                ProcessModule(module);
+            }
+        }
+
+        private static void ProcessModule(Module module)
+        {
+            module.Summary = new Summary
+            {
+                NumClasses = module.Classes.Length,
+                NumSequencePoints = module.Classes.Sum(x => x.Summary.NumSequencePoints),
+                NumBranchPoints = module.Classes.Sum(x => x.Summary.NumBranchPoints),
+                VisitedBranchPoints = module.Classes.Sum(x => x.Summary.VisitedBranchPoints),
+                VisitedMethods = module.Classes.Sum(x => x.Summary.VisitedMethods),
+                VisitedSequencePoints = module.Classes.Sum(x => x.Summary.VisitedSequencePoints)
+            };
+
+            if (module.Classes.Length > 0)
+            {
+                module.Summary.SequenceCoverage =
+                    module.Classes.Sum(x => x.Summary.SequenceCoverage) /
+                    module.Classes.Length;
+                module.Summary.BranchCoverage =
+                    module.Classes.Sum(x => x.Summary.BranchCoverage) /
+                    module.Classes.Length;
             }
         }
 
@@ -37,14 +62,17 @@ namespace CoreCover.Framework.Adapters
             if (moduleClass.Summary.VisitedMethods > 0)
                 moduleClass.Summary.VisitedClasses = 1;
 
-            if (moduleClass.Methods.Length > 0)
-
+            if (moduleClass.Methods.Count(x => x.Summary.NumSequencePoints > 0) > 0)
             {
                 moduleClass.Summary.SequenceCoverage =
-                    moduleClass.Methods.Sum(x => x.Summary.SequenceCoverage) / moduleClass.Methods.Length;
+                    moduleClass.Methods.Sum(x => x.Summary.SequenceCoverage) /
+                    moduleClass.Methods.Count(x => x.Summary.NumSequencePoints > 0);
+            }
 
+            if (moduleClass.Methods.Count(x => x.Summary.NumBranchPoints > 0) > 0)
+                { 
                 moduleClass.Summary.BranchCoverage =
-                    moduleClass.Methods.Sum(x => x.Summary.BranchCoverage) / moduleClass.Methods.Length;
+                    moduleClass.Methods.Sum(x => x.Summary.BranchCoverage) / moduleClass.Methods.Count(x => x.Summary.NumBranchPoints > 0);
             }
         }
 

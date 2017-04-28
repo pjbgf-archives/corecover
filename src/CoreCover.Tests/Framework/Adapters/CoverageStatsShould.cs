@@ -86,5 +86,27 @@ namespace CoreCover.Tests.Framework.Adapters
             Assert.Equal(4, method.Summary.NumBranchPoints);
             Assert.Equal(1, method.Summary.VisitedBranchPoints);
         }
+
+        [Fact]
+        public void Consolidate_Class_Summary_Based_On_Methods()
+        {
+            var coverageStats = new CoverageStats();
+            var coverageSession = CoverageSessionBuilder.New()
+                .AddModule()
+                .AddClass()
+                .AddMethod(4, 2, 0, 0)
+                .AddMethod(2, 2, 1, 1)
+                .Build();
+
+            coverageStats.Consolidate(coverageSession);
+            var classType = coverageSession.Modules.First().Classes.First();
+
+            Assert.Equal(2, classType.Summary.VisitedMethods);
+            Assert.Equal(75, classType.Summary.SequenceCoverage);
+            Assert.Equal(6, classType.Summary.NumSequencePoints);
+            Assert.Equal(4, classType.Summary.VisitedSequencePoints);
+            Assert.Equal(1, classType.Summary.NumBranchPoints);
+            Assert.Equal(1, classType.Summary.VisitedBranchPoints);
+        }
     }
 }

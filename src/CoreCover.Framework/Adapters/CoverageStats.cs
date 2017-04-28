@@ -15,7 +15,36 @@ namespace CoreCover.Framework.Adapters
                     {
                         ProcessMethod(method);
                     }
+
+                    ProcessClass(moduleClass);
                 }
+            }
+        }
+
+        private static void ProcessClass(Class moduleClass)
+        {
+            moduleClass.Summary = new Summary
+            {
+                NumClasses = 1,
+                NumMethods = moduleClass.Methods.Length,
+                NumSequencePoints = moduleClass.Methods.Sum(x => x.Summary.NumSequencePoints),
+                NumBranchPoints = moduleClass.Methods.Sum(x => x.Summary.NumBranchPoints),
+                VisitedBranchPoints = moduleClass.Methods.Sum(x => x.Summary.VisitedBranchPoints),
+                VisitedMethods = moduleClass.Methods.Sum(x => x.Summary.VisitedMethods),
+                VisitedSequencePoints = moduleClass.Methods.Sum(x => x.Summary.VisitedSequencePoints)
+            };
+
+            if (moduleClass.Summary.VisitedMethods > 0)
+                moduleClass.Summary.VisitedClasses = 1;
+
+            if (moduleClass.Methods.Length > 0)
+
+            {
+                moduleClass.Summary.SequenceCoverage =
+                    moduleClass.Methods.Sum(x => x.Summary.SequenceCoverage) / moduleClass.Methods.Length;
+
+                moduleClass.Summary.BranchCoverage =
+                    moduleClass.Methods.Sum(x => x.Summary.BranchCoverage) / moduleClass.Methods.Length;
             }
         }
 
@@ -42,7 +71,7 @@ namespace CoreCover.Framework.Adapters
             if (method.Summary.NumBranchPoints > 0)
                 method.Summary.BranchCoverage = 100 / method.Summary.NumBranchPoints *
                                                   method.Summary.VisitedBranchPoints;
-            
+
             method.BranchCoverage = method.Summary.BranchCoverage;
         }
 

@@ -26,10 +26,18 @@ namespace CoreCover.Framework
                 return;
             }
             
-            var testProjectOutputPath = inputArgs.First();
-            var reportPath = inputArgs.ElementAtOrDefault(1);
+            var testProjectOutputPath = SanitiseInput(inputArgs.First());
+            var reportPath = SanitiseInput(inputArgs.ElementAtOrDefault(1));
             
             _coverageRunner.Run(testProjectOutputPath, reportPath);
+        }
+
+        string SanitiseInput(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return string.Empty;
+
+            return input.Replace("\"", string.Empty);
         }
     }
 }

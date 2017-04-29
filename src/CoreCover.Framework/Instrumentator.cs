@@ -33,6 +33,7 @@ namespace CoreCover.Framework
 
         private void CopyDependenciesTo(string targetPath)
         {
+            _logger.LogInformation($"CoreCover Location: {Assembly.GetEntryAssembly().Location}");
             var directoryPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
 
             foreach (var assemblyName in DependencyAssemblyNames)

@@ -24,9 +24,13 @@ namespace CoreCover.Framework
 
         public override Task<ExecutedLineReply> Track(ExecutedLine request, ServerCallContext context)
         {
+            _logger?.LogInformation($"gRPC Server Received: {request.MetadataToken}:{request.StartLineNumber}:{request.EndLineNumber}");
+            
             //TODO: Requires refactoring
-            var method = _coverageSession.Modules.First(x => x.ModuleHash == request.ModuleHash)
-                .Classes.First(x => x.Methods.Any(y => y.MetadataToken == request.MetadataToken))
+            var module = _coverageSession.Modules.First(x => x.ModuleHash == request.ModuleHash);
+            var @class = module
+                .Classes.First(x => x.Methods.Any(y => y.MetadataToken == request.MetadataToken));
+            var method = @class
                 .Methods.First(y => y.MetadataToken == request.MetadataToken);
 
             method.Visited = true;
@@ -35,7 +39,6 @@ namespace CoreCover.Framework
             foreach (var sequencePoint in sequencePoints)
                 sequencePoint.VisitCount++;
             
-            _logger?.LogInformation($"gRPC Server Received: {request.MetadataToken}:{request.StartLineNumber}:{request.EndLineNumber}");
             return Task.FromResult(new ExecutedLineReply());
         }
     }

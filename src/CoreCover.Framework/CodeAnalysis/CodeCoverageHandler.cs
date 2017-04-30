@@ -1,18 +1,17 @@
 ﻿// MIT License
 // Copyright (c) 2017 Paulo Gomes (https://pjbgf.mit-license.org/)
 
+
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using CoreCover.Framework.Abstractions;
 using Mono.Cecil;
-using Mono.Cecil.Cil;
 using OpenCover.Framework.Model;
 using File = OpenCover.Framework.Model.File;
-using SequencePoint = OpenCover.Framework.Model.SequencePoint;
 
-namespace CoreCover.Framework
+namespace CoreCover.Framework.CodeAnalysis
 {
     public sealed class CodeCoverageHandler : AssemblyInstrumentationHandler
     {

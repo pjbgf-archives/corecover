@@ -6,6 +6,7 @@ using System.IO;
 using System.Reflection;
 using CoreCover.Framework;
 using CoreCover.Framework.Adapters;
+using CoreCover.Framework.CodeAnalysis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 

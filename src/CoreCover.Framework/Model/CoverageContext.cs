@@ -1,7 +1,8 @@
-﻿using System;
+﻿// MIT License
+// Copyright (c) 2017 Paulo Gomes (https://pjbgf.mit-license.org/)
+
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using CoreCover.Framework.CodeAnalysis;
 using CoreCover.Instrumentation;
 

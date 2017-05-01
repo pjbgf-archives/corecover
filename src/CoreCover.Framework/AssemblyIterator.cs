@@ -1,6 +1,7 @@
 // MIT License
 // Copyright (c) 2017 Paulo Gomes (https://pjbgf.mit-license.org/)
 
+using System;
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -25,7 +26,8 @@ namespace CoreCover.Framework
 
         public void ProcessAssembliesInFolder(CoverageContext coverageContext, string folderPath)
         {
-            ProcessAssemblies(coverageContext, Directory.GetFiles(folderPath, "*.dll"));
+            var assemblyPaths = Directory.GetFiles(folderPath, "*.dll");
+            ProcessAssemblies(coverageContext, assemblyPaths);
         }
 
         public void ProcessAssemblies(CoverageContext coverageContext, string[] assemblyPaths)
@@ -33,16 +35,11 @@ namespace CoreCover.Framework
             foreach (var assemblyPath in assemblyPaths)
             {
                 _logger.LogInformation($"Processing {assemblyPath}...");
-                var pdbFile = Path.ChangeExtension(assemblyPath, "pdb");
-                if (!File.Exists(pdbFile))
-                {
-                    _logger.LogInformation($"Skipping {assemblyPath}: missing pdb.");
-                    continue;
-                }
 
-                if (Regex.IsMatch(assemblyPath, "(CoreCover.Extensions.OpenCoverReport|CoreCover.Instrumentation|Test(s){0,1})+.dll$"))
+                string reason;
+                if (AssemblyShouldBeSkipped(assemblyPath, out reason))
                 {
-                    _logger.LogInformation($"Skipping {assemblyPath}: test assembly.");
+                    _logger.LogInformation($"Skipping {assemblyPath}: {reason}.");
                     continue;
                 }
 
@@ -52,6 +49,29 @@ namespace CoreCover.Framework
                     assembly.Write(new WriterParameters { WriteSymbols = true });
                 }
             }
+        }
+
+        private bool AssemblyShouldBeSkipped(string assemblyPath, out string reason)
+        {
+            if (PdbForAssemblyIsMissing(assemblyPath))
+                reason = "pdb is missing";
+            else if (IsTestAssembly(assemblyPath))
+                reason = "test assembly";
+            else
+                reason = string.Empty;
+
+            return !string.IsNullOrEmpty(reason);
+        }
+
+        private static bool PdbForAssemblyIsMissing(string assemblyPath)
+        {
+            var pdbFilePath = Path.ChangeExtension(assemblyPath, "pdb");
+            return !File.Exists(pdbFilePath);
+        }
+
+        private static bool IsTestAssembly(string assemblyPath)
+        {
+            return Regex.IsMatch(assemblyPath, "(CoreCover.Extensions.OpenCoverReport|CoreCover.Instrumentation|Test(s){0,1})+.dll$");
         }
 
         private AssemblyDefinition LoadAssembly(string assemblyPath)

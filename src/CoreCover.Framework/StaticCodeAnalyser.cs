@@ -13,14 +13,16 @@ namespace CoreCover.Framework
 {
     public sealed class StaticCodeAnalyser : AssemblyInstrumentationHandler
     {
+        public StaticCodeAnalyser() : this(null)
+        {
+        }
+
         public StaticCodeAnalyser(AssemblyInstrumentationHandler sucessorHandler) : base(sucessorHandler)
         {
         }
 
         public override void Handle(CoverageContext coverageContext, AssemblyDefinition assemblyDefinition)
         {
-            Console.WriteLine($"Reporting Assembly: {assemblyDefinition.FullName}");
-            
             foreach (var module in assemblyDefinition.Modules)
             {
                 coverageContext.AddModule(ProcessModule(module));
@@ -34,13 +36,17 @@ namespace CoreCover.Framework
             var coverageModule = new Module();
 
             coverageModule.ModuleHash = module.Mvid.ToString();
-            coverageModule.ModulePath = Path.GetFullPath(module.FileName);
-            coverageModule.ModuleName = Path.GetFileNameWithoutExtension(module.FileName);
-            coverageModule.ModuleTime = System.IO.File.GetLastWriteTimeUtc(module.FileName);
+            coverageModule.ModuleName = Path.GetFileNameWithoutExtension(module.Name);
+
+            if (!string.IsNullOrEmpty(module.FileName))
+            {
+                coverageModule.ModulePath = Path.GetFullPath(module.FileName);
+                coverageModule.ModuleTime = System.IO.File.GetLastWriteTimeUtc(module.FileName);
+            }
 
             foreach (var type in module.Types)
             {
-                if (type.Name == "__CORECOVER__" || type.IsInterface)
+                if (string.Compare(type.Name, "__CORECOVER__", StringComparison.CurrentCultureIgnoreCase) == 0 || type.IsInterface)
                     continue;
 
                 //HACK: Needs refactoring.
@@ -91,16 +97,15 @@ namespace CoreCover.Framework
         {
             uint ordinal = 0;
             return method.DebugInformation.SequencePoints.Select(x => new SequencePoint
-                {
-                    Offset = x.Offset,
-                    StartLine = x.StartLine,
-                    EndLine = x.EndLine,
-                    StartColumn = x.StartColumn,
-                    EndColumn = x.EndColumn,
-                    Ordinal = ordinal++,
-                    FileReference = fileReference
-            })
-                .ToArray();
+            {
+                Offset = x.Offset,
+                StartLine = x.StartLine,
+                EndLine = x.EndLine,
+                StartColumn = x.StartColumn,
+                EndColumn = x.EndColumn,
+                Ordinal = ordinal++,
+                FileReference = fileReference
+            }).ToArray();
         }
 
         private static BranchPoint[] GetBranchPoints(MethodDefinition method, FileReference fileReference)
@@ -116,14 +121,14 @@ namespace CoreCover.Framework
                         Ordinal = ordinal++,
                         FileReference = fileReference
                     };
-                    
+
                     if (x.HasScopes)
                         using (var enumerator = x.Scopes.GetEnumerator())
                             while (enumerator.MoveNext())
                             {
                                 branchPoint.OffsetPoints.Add(enumerator.Current.Start.Offset);
                             }
-            
+
                     return branchPoint;
                 }).ToArray();
         }

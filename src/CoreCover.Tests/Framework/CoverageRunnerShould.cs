@@ -23,7 +23,7 @@ namespace CoreCover.Tests.Framework
         }
 
         [Fact]
-        public void Instrument_Code_Before_Executing_Tests()
+        public void Transform_Assembly_Before_Executing_Tests()
         {
             var coverageRunner = new CoverageRunner(_instrumentatorMock, _testRunnerMock, _coverageReportMock);
 

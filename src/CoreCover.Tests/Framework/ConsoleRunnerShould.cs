@@ -42,5 +42,16 @@ namespace CoreCover.Tests.Framework
             _consoleMock.DidNotReceive().WriteLine(Arg.Any<string>());
             _coverageRunnerMock.Received(1).Run(Arg.Any<string>(), Arg.Any<string>());
         }
+
+        [Fact]
+        public void Sanatise_Input_To_Remove_Quotes()
+        {
+            var consoleRunner = new ConsoleRunner(_consoleMock, _coverageRunnerMock);
+
+            consoleRunner.ProcessCommand("\"TestProject//OutputPath\"", "\"report.xml\"");
+
+            _consoleMock.DidNotReceive().WriteLine(Arg.Any<string>());
+            _coverageRunnerMock.Received(1).Run(Arg.Is("TestProject//OutputPath"), Arg.Is("report.xml"));
+        }
     }
 }

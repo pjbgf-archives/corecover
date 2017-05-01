@@ -3,8 +3,8 @@
 
 using CoreCover.Framework;
 using CoreCover.Framework.Abstractions;
+using CoreCover.Framework.Model;
 using NSubstitute;
-using OpenCover.Framework.Model;
 using Xunit;
 
 namespace CoreCover.Tests.Framework
@@ -31,8 +31,8 @@ namespace CoreCover.Tests.Framework
 
             Received.InOrder(() =>
             {
-                _instrumentatorMock.Process(Arg.Any<CoverageSession>(), Arg.Any<string>());
-                _testRunnerMock.Run(Arg.Any<CoverageSession>(), Arg.Any<string>());
+                _instrumentatorMock.Process(Arg.Any<CoverageContext>(), Arg.Any<string>());
+                _testRunnerMock.Run(Arg.Any<CoverageContext>(), Arg.Any<string>());
             });
         }
 
@@ -45,8 +45,8 @@ namespace CoreCover.Tests.Framework
 
             Received.InOrder(() =>
             {
-                _testRunnerMock.Run(Arg.Any<CoverageSession>(), Arg.Any<string>());
-                _coverageReportMock.Export(Arg.Any<CoverageSession>(), Arg.Any<string>());
+                _testRunnerMock.Run(Arg.Any<CoverageContext>(), Arg.Any<string>());
+                _coverageReportMock.Export(Arg.Any<CoverageContext>(), Arg.Any<string>());
             });
         }
 
@@ -57,7 +57,7 @@ namespace CoreCover.Tests.Framework
 
             coverageRunner.Run("testProjectOutputPath", string.Empty);
 
-            _coverageReportMock.Received(1).Export(Arg.Any<CoverageSession>(), 
+            _coverageReportMock.Received(1).Export(Arg.Any<CoverageContext>(), 
                 Arg.Is<string>(s => s.EndsWith("coverage.xml"))
             );
         }

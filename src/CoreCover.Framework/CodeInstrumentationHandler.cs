@@ -4,6 +4,7 @@
 using System;
 using System.Linq;
 using CoreCover.Framework.Abstractions;
+using CoreCover.Framework.Model;
 using Microsoft.Extensions.Logging;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
@@ -26,7 +27,7 @@ namespace CoreCover.Framework
             _logger = logger;
         }
 
-        public override void Handle(CoverageSession coverageSession, AssemblyDefinition assemblyDefinition)
+        public override void Handle(CoverageContext coverageContext, AssemblyDefinition assemblyDefinition)
         {
             _logger.LogInformation($"Instrumentating Assembly: {assemblyDefinition.FullName}");
             foreach (var module in assemblyDefinition.Modules)
@@ -40,7 +41,7 @@ namespace CoreCover.Framework
                     _logger.LogInformation($"Skipping {assemblyDefinition.FullName}, assembly is already instrumented.");
             }
 
-            base.Handle(coverageSession, assemblyDefinition);
+            base.Handle(coverageContext, assemblyDefinition);
         }
 
         private static bool IsAssemblyInstrumented(AssemblyDefinition assembly)

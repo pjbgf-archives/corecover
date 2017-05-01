@@ -1,4 +1,5 @@
 using CoreCover.Framework.Abstractions;
+using CoreCover.Framework.Model;
 using CoreCover.Instrumentation;
 using Grpc.Core;
 using Microsoft.Extensions.Logging;
@@ -20,10 +21,10 @@ namespace CoreCover.Framework
             _server.Ports.Add(new ServerPort(ServerAddress, ServerPort, ServerCredentials.Insecure));
         }
 
-        public void Start(CoverageSession coverageSession)
+        public void Start(CoverageContext coverageContext)
         {
             _logger.LogInformation($"Starting RPC server at {ServerAddress}:{ServerPort}.");
-            _server.Services.Add(ExecutionTracker.BindService(new ExecutionTrackerServer(coverageSession)));
+            _server.Services.Add(ExecutionTracker.BindService(new ExecutionTrackerServer(coverageContext)));
             _server.Start();
         }
 

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using CoreCover.Framework.Abstractions;
+using CoreCover.Framework.Model;
 using Microsoft.Extensions.Logging;
 using Mono.Cecil;
 using OpenCover.Framework.Model;
@@ -25,10 +26,10 @@ namespace CoreCover.Framework
             _logger = logger;
         }
 
-        public void Process(CoverageSession coverageSession, string folderPath)
+        public void Process(CoverageContext coverageContext, string folderPath)
         {
             CopyDependenciesTo(folderPath);
-            ProcessAssemblies(coverageSession, Directory.GetFiles(folderPath, "*.dll"));
+            ProcessAssemblies(coverageContext, Directory.GetFiles(folderPath, "*.dll"));
         }
 
         private void CopyDependenciesTo(string targetPath)
@@ -49,7 +50,7 @@ namespace CoreCover.Framework
                 File.Copy(dependencyFilePath, targetFilePath);
         }
 
-        public void ProcessAssemblies(CoverageSession coverageSession, string[] assemblyPaths)
+        public void ProcessAssemblies(CoverageContext coverageContext, string[] assemblyPaths)
         {
             foreach (var assemblyPath in assemblyPaths)
             {
@@ -69,7 +70,7 @@ namespace CoreCover.Framework
 
                 using (var assembly = LoadAssembly(assemblyPath))
                 {
-                    _assemblyInstrumentationHandler.Handle(coverageSession, assembly);
+                    _assemblyInstrumentationHandler.Handle(coverageContext, assembly);
                     assembly.Write(new WriterParameters { WriteSymbols = true });
                 }
             }

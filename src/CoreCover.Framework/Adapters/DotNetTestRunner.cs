@@ -4,6 +4,7 @@
 using System.IO;
 using System.Linq;
 using CoreCover.Framework.Abstractions;
+using CoreCover.Framework.Model;
 using OpenCover.Framework.Model;
 
 namespace CoreCover.Framework.Adapters
@@ -19,11 +20,11 @@ namespace CoreCover.Framework.Adapters
             _process = process;
         }
 
-        public void Run(CoverageSession coverageSession, string testProjectOutputPath)
+        public void Run(CoverageContext coverageContext, string testProjectOutputPath)
         {
             var testProjectPath = GetTestProjectPath(testProjectOutputPath);
 
-            _rpcServer.Start(coverageSession);
+            _rpcServer.Start(coverageContext);
 
             /*
              * It is important that the --no-build flag is used, otherwise dotnet-test will run a new build of the project 

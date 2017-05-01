@@ -6,6 +6,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using CoreCover.Framework.Abstractions;
 using CoreCover.Framework.Adapters;
+using CoreCover.Framework.Model;
 using NSubstitute;
 using OpenCover.Framework.Model;
 using Xunit;
@@ -31,13 +32,13 @@ namespace CoreCover.Tests.Framework.Adapters
         {
             var dotNetTestRunner = new DotNetTestRunner(_rpcServerMock, _process);
             var testProjectOutputPath = "bin/debug";
-            var coverageSession = new CoverageSession();
+            var coverageContext = new CoverageContext();
 
-            dotNetTestRunner.Run(coverageSession, testProjectOutputPath);
+            dotNetTestRunner.Run(coverageContext, testProjectOutputPath);
 
             Received.InOrder(() =>
             {
-                _rpcServerMock.Start(Arg.Any<CoverageSession>());
+                _rpcServerMock.Start(Arg.Any<CoverageContext>());
                 _process.Execute(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>());
             });
         }
@@ -46,10 +47,10 @@ namespace CoreCover.Tests.Framework.Adapters
         public void Execute_DotNet_Test_Command_Line()
         {
             var dotNetTestRunner = new DotNetTestRunner(_rpcServerMock, _process);
-            var coverageSession = new CoverageSession();
+            var coverageContext = new CoverageContext();
             var testProjectOutputPath = "bin/debug";
 
-            dotNetTestRunner.Run(coverageSession, testProjectOutputPath);
+            dotNetTestRunner.Run(coverageContext, testProjectOutputPath);
 
             _process.Received(1).Execute(Arg.Is("dotnet"), Arg.Is("test --no-build"), Arg.Any<string>());
         }
@@ -58,7 +59,7 @@ namespace CoreCover.Tests.Framework.Adapters
         public void Use_Project_Folder_As_Working_Directory()
         {
             var dotNetTestRunner = new DotNetTestRunner(_rpcServerMock, _process);
-            var coverageSession = new CoverageSession();
+            var coverageContext = new CoverageContext();
             string testProjectOutputPath;
             string expectedProjectName;
 
@@ -73,7 +74,7 @@ namespace CoreCover.Tests.Framework.Adapters
                 expectedProjectName = @"/home/user/git/project/src/projectname";
             }
 
-            dotNetTestRunner.Run(coverageSession, testProjectOutputPath);
+            dotNetTestRunner.Run(coverageContext, testProjectOutputPath);
 
             _process.Received(1).Execute(Arg.Any<string>(), Arg.Any<string>(), Arg.Is(expectedProjectName));
         }
@@ -82,7 +83,7 @@ namespace CoreCover.Tests.Framework.Adapters
         public void Disregard_Lack_Of_Trailing_slash()
         {
             var dotNetTestRunner = new DotNetTestRunner(_rpcServerMock, _process);
-            var coverageSession = new CoverageSession();
+            var coverageContext = new CoverageContext();
             string testProjectOutputPath;
             string expectedProjectName;
 
@@ -97,7 +98,7 @@ namespace CoreCover.Tests.Framework.Adapters
                 expectedProjectName = @"/home/user/git/project/src/projectname";
             }
 
-            dotNetTestRunner.Run(coverageSession, testProjectOutputPath);
+            dotNetTestRunner.Run(coverageContext, testProjectOutputPath);
 
             _process.Received(1).Execute(Arg.Any<string>(), Arg.Any<string>(), Arg.Is(expectedProjectName));
         }
@@ -107,9 +108,9 @@ namespace CoreCover.Tests.Framework.Adapters
         {
             var dotNetTestRunner = new DotNetTestRunner(_rpcServerMock, _process);
             var testProjectOutputPath = "bin/debug";
-            var coverageSession = new CoverageSession();
+            var coverageContext = new CoverageContext();
 
-            dotNetTestRunner.Run(coverageSession, testProjectOutputPath);
+            dotNetTestRunner.Run(coverageContext, testProjectOutputPath);
 
             Received.InOrder(() =>
             {

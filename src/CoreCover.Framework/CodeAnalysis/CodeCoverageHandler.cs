@@ -1,15 +1,13 @@
 ﻿// MIT License
 // Copyright (c) 2017 Paulo Gomes (https://pjbgf.mit-license.org/)
 
-
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using CoreCover.Framework.Abstractions;
+using CoreCover.Framework.Model;
 using Mono.Cecil;
-using OpenCover.Framework.Model;
-using File = OpenCover.Framework.Model.File;
+using Type = CoreCover.Framework.Model.Type;
 
 namespace CoreCover.Framework.CodeAnalysis
 {
@@ -19,34 +17,26 @@ namespace CoreCover.Framework.CodeAnalysis
         {
         }
 
-        public override void Handle(CoverageSession coverageSession, AssemblyDefinition assemblyDefinition)
+        public override void Handle(CoverageContext coverageContext, AssemblyDefinition assemblyDefinition)
         {
             Console.WriteLine($"Reporting Assembly: {assemblyDefinition.FullName}");
-
-            var modules = new List<Module>(coverageSession.Modules.Length + assemblyDefinition.Modules.Count);
-            modules.AddRange(coverageSession.Modules);
-
+            
             foreach (var module in assemblyDefinition.Modules)
             {
-                modules.Add(ProcessModule(module));
+                coverageContext.AddModule(ProcessModule(module));
             }
 
-            coverageSession.Modules = modules.ToArray();
-
-            base.Handle(coverageSession, assemblyDefinition);
+            base.Handle(coverageContext, assemblyDefinition);
         }
 
         private Module ProcessModule(ModuleDefinition module)
         {
             var coverageModule = new Module();
-            var types = new List<Class>(module.Types.Count);
 
             coverageModule.ModuleHash = module.Mvid.ToString();
             coverageModule.ModulePath = Path.GetFullPath(module.FileName);
             coverageModule.ModuleName = Path.GetFileNameWithoutExtension(module.FileName);
             coverageModule.ModuleTime = System.IO.File.GetLastWriteTimeUtc(module.FileName);
-
-            var files = new List<File>(module.Types.Count);
 
             foreach (var type in module.Types)
             {
@@ -58,41 +48,26 @@ namespace CoreCover.Framework.CodeAnalysis
                 if (string.IsNullOrEmpty(documentUrl))
                     continue;
 
-                var file = new File { FullPath = documentUrl };
-                files.Add(file);
-
-                var processType = ProcessType(type, file.UniqueId);
+                var fileReference = coverageModule.AddFileReference(documentUrl);
+                var processType = ProcessType(type, fileReference);
                 if (processType != null)
-                    types.Add(processType);
+                    coverageModule.AddType(processType);
             }
-
-            coverageModule.Files = files.ToArray();
-            coverageModule.Classes = types.ToArray();
 
             return coverageModule;
         }
 
-        private Class ProcessType(TypeDefinition type, uint fileId)
+        private Type ProcessType(TypeDefinition type, FileReference fileReference)
         {
-            var coverageClass = new Class();
-            var methods = new List<Method>(type.Methods.Capacity);
-
-            coverageClass.FullName = type.FullName;
+            var coverageClass = new Type(type.FullName, type.Methods.Count);
 
             foreach (var method in type.Methods)
-                methods.Add(ProcessMethod(method, fileId));
-
-            coverageClass.Summary = new Summary
-            {
-                NumMethods = type.Methods.Count
-            };
-
-            coverageClass.Methods = methods.ToArray();
+                coverageClass.AddMethod(ProcessMethod(method, fileReference));
 
             return coverageClass;
         }
 
-        private Method ProcessMethod(MethodDefinition method, uint fileId)
+        private Method ProcessMethod(MethodDefinition method, FileReference fileReference)
         {
             var coverageMethod = new Method();
 
@@ -102,20 +77,17 @@ namespace CoreCover.Framework.CodeAnalysis
             coverageMethod.IsSetter = method.IsSetter;
             coverageMethod.IsGetter = method.IsGetter;
             coverageMethod.MetadataToken = method.MetadataToken.ToInt32();
-            
-            coverageMethod.Summary = new Summary();
 
             if (method.DebugInformation.HasSequencePoints)
             {
-                coverageMethod.SequencePoints = GetSequencePoints(method, fileId);
-                coverageMethod.BranchPoints = GetBranchPoints(method, fileId);
-                coverageMethod.MethodPoint = coverageMethod.SequencePoints.FirstOrDefault();
+                coverageMethod.AddSequencePoints(GetSequencePoints(method, fileReference));
+                coverageMethod.AddBranchPoints(GetBranchPoints(method, fileReference));
             }
 
             return coverageMethod;
         }
 
-        private static SequencePoint[] GetSequencePoints(MethodDefinition method, uint fileId)
+        private static SequencePoint[] GetSequencePoints(MethodDefinition method, FileReference fileReference)
         {
             uint ordinal = 0;
             return method.DebugInformation.SequencePoints.Select(x => new SequencePoint
@@ -126,19 +98,12 @@ namespace CoreCover.Framework.CodeAnalysis
                     StartColumn = x.StartColumn,
                     EndColumn = x.EndColumn,
                     Ordinal = ordinal++,
-                    FileId = fileId,
-                    IsSkipped = IsAutoGenerated(x)
+                    FileReference = fileReference
             })
                 .ToArray();
         }
 
-        private static bool IsAutoGenerated(Mono.Cecil.Cil.SequencePoint sequencePoint)
-        {
-            return sequencePoint.StartLine == 16707566 
-                && sequencePoint.EndLine == sequencePoint.StartLine;
-        }
-
-        private static BranchPoint[] GetBranchPoints(MethodDefinition method, uint fileId)
+        private static BranchPoint[] GetBranchPoints(MethodDefinition method, FileReference fileReference)
         {
             uint ordinal = 0;
             return method.DebugInformation.GetScopes()
@@ -146,11 +111,10 @@ namespace CoreCover.Framework.CodeAnalysis
                 {
                     var branchPoint = new BranchPoint
                     {
-                        OffsetPoints = new List<int>(),
                         Offset = x.Start.Offset,
                         EndOffset = x.End.Offset,
                         Ordinal = ordinal++,
-                        FileId = fileId
+                        FileReference = fileReference
                     };
                     
                     if (x.HasScopes)

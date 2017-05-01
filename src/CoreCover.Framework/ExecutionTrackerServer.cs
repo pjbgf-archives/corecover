@@ -4,6 +4,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using CoreCover.Framework.Model;
 using CoreCover.Instrumentation;
 using Grpc.Core;
 using Microsoft.Extensions.Logging;
@@ -14,30 +15,19 @@ namespace CoreCover.Framework
     public class ExecutionTrackerServer : ExecutionTracker.ExecutionTrackerBase
     {
         private readonly ILogger _logger;
-        private readonly CoverageSession _coverageSession;
+        private readonly CoverageContext _coverageContext;
 
-        public ExecutionTrackerServer(CoverageSession coverageSession, ILogger logger = null)
+        public ExecutionTrackerServer(CoverageContext coverageContext, ILogger logger = null)
         {
             _logger = logger;
-            _coverageSession = coverageSession;
+            _coverageContext = coverageContext;
         }
 
         public override Task<ExecutedLineReply> Track(ExecutedLine request, ServerCallContext context)
         {
             _logger?.LogInformation($"gRPC Server Received: {request.MetadataToken}:{request.StartLineNumber}:{request.EndLineNumber}");
-            
-            //TODO: Requires refactoring
-            var module = _coverageSession.Modules.First(x => x.ModuleHash == request.ModuleHash);
-            var @class = module
-                .Classes.First(x => x.Methods.Any(y => y.MetadataToken == request.MetadataToken));
-            var method = @class
-                .Methods.First(y => y.MetadataToken == request.MetadataToken);
 
-            method.Visited = true;
-            var sequencePoints = method.SequencePoints.Where(x => request.StartLineNumber == x.StartLine);
-
-            foreach (var sequencePoint in sequencePoints)
-                sequencePoint.VisitCount++;
+            _coverageContext.MarkExecution(request);
             
             return Task.FromResult(new ExecutedLineReply());
         }

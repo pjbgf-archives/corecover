@@ -1,8 +1,8 @@
 ﻿// MIT License
 // Copyright (c) 2017 Paulo Gomes (https://pjbgf.mit-license.org/)
 
+using CoreCover.Framework.Model;
 using Mono.Cecil;
-using OpenCover.Framework.Model;
 
 namespace CoreCover.Framework.Abstractions
 {
@@ -15,9 +15,9 @@ namespace CoreCover.Framework.Abstractions
             _sucessorHandler = sucessorHandler;
         }
 
-        public virtual void Handle(CoverageSession coverageSession, AssemblyDefinition assemblyDefinition)
+        public virtual void Handle(CoverageContext coverageContext, AssemblyDefinition assemblyDefinition)
         {
-            _sucessorHandler?.Handle(coverageSession, assemblyDefinition);
+            _sucessorHandler?.Handle(coverageContext, assemblyDefinition);
         }
     }
 }

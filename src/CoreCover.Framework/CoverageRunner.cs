@@ -2,6 +2,7 @@
 // Copyright (c) 2017 Paulo Gomes (https://pjbgf.mit-license.org/)
 
 using CoreCover.Framework.Abstractions;
+using CoreCover.Framework.Model;
 using OpenCover.Framework.Model;
 
 namespace CoreCover.Framework
@@ -24,10 +25,10 @@ namespace CoreCover.Framework
             if (string.IsNullOrEmpty(reportPath))
                 reportPath = "coverage.xml";
 
-            var coverageSession = new CoverageSession();
-            _instrumentator.Process(coverageSession, testProjectOutputPath);
-            _testRunner.Run(coverageSession, testProjectOutputPath);
-            _coverageReport.Export(coverageSession, reportPath);
+            var coverageContext = new CoverageContext();
+            _instrumentator.Process(coverageContext, testProjectOutputPath);
+            _testRunner.Run(coverageContext, testProjectOutputPath);
+            _coverageReport.Export(coverageContext, reportPath);
         }
     }
 }

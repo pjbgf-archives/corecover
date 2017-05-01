@@ -25,6 +25,20 @@ namespace CoreCover.Tests.Framework
         }
 
         [Fact]
+        public void Deploy_Dependencies_Before_Transforming_Assemblies()
+        {
+            var coverageRunner = new CoverageRunner(_instrumentatorMock, _testRunnerMock, _coverageReportMock, _coverageDependenciesMock);
+
+            coverageRunner.Run("testProjectOutputPath", "report.xml");
+
+            Received.InOrder(() =>
+            {
+                _coverageDependenciesMock.DeployTo(Arg.Is("testProjectOutputPath"));
+                _instrumentatorMock.ProcessAssembliesInFolder(Arg.Any<CoverageContext>(), Arg.Is("testProjectOutputPath"));
+            });
+        }
+
+        [Fact]
         public void Transform_Assembly_Before_Executing_Tests()
         {
             var coverageRunner = new CoverageRunner(_instrumentatorMock, _testRunnerMock, _coverageReportMock, _coverageDependenciesMock);

@@ -28,8 +28,8 @@ namespace CoreCover.Framework
             if (String.IsNullOrEmpty(reportPath))
                 reportPath = "coverage.xml";
 
-            _coverageDependencies.DeployTo(testProjectOutputPath);
             var coverageContext = new CoverageContext();
+            _coverageDependencies.DeployTo(testProjectOutputPath);
             _instrumentator.ProcessAssembliesInFolder(coverageContext, testProjectOutputPath);
             _testRunner.Run(coverageContext, testProjectOutputPath);
             _coverageReport.Export(coverageContext, reportPath);

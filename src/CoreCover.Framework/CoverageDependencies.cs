@@ -18,8 +18,8 @@ namespace CoreCover.Framework
         private static void CopyDependency(string dependencyFilePath, string targetDirectory)
         {
             var targetFilePath = Path.Combine(targetDirectory, Path.GetFileName(dependencyFilePath));
-            if (!System.IO.File.Exists(targetFilePath))
-                System.IO.File.Copy(dependencyFilePath, targetFilePath);
+            if (!File.Exists(targetFilePath))
+                File.Copy(dependencyFilePath, targetFilePath);
         }
     }
 }

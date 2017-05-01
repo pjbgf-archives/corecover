@@ -18,9 +18,9 @@ namespace CoreCover
             var logger = GetLogger();
             new ConsoleRunner(
                     new ConsoleAdapter(), new CoverageRunner(
-                    new Instrumentator(logger, new StaticCodeAnalyser(new PreTestExecutionAssemblyTransformer(logger))),
+                    new AssemblyIterator(logger, new StaticCodeAnalyser(new PreTestExecutionAssemblyTransformer(logger))),
                     new DotNetTestRunner(new RpcServer(logger), new Process()), 
-                    new OpenCoverReportAdapter()))
+                    new OpenCoverReportAdapter(), new CoverageDependencies()))
                 .ProcessCommand(args);
         }
 

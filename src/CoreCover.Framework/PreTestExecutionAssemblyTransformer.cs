@@ -11,7 +11,7 @@ using Mono.Cecil.Rocks;
 
 namespace CoreCover.Framework
 {
-    public sealed class PreTestExecutionAssemblyTransformer : AssemblyInstrumentationHandler
+    public sealed class PreTestExecutionAssemblyTransformer : AssemblyHandler
     {
         private const string InstrumentedAssemblyFlagName = "__CORECOVER__";
         private readonly ILogger _logger;
@@ -20,7 +20,7 @@ namespace CoreCover.Framework
         {
         }
 
-        public PreTestExecutionAssemblyTransformer(ILogger logger, AssemblyInstrumentationHandler sucessorHandler) : base(sucessorHandler)
+        public PreTestExecutionAssemblyTransformer(ILogger logger, AssemblyHandler sucessorHandler) : base(sucessorHandler)
         {
             _logger = logger;
         }

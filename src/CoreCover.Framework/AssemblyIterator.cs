@@ -12,40 +12,20 @@ using File = System.IO.File;
 
 namespace CoreCover.Framework
 {
-    public class Instrumentator : IInstrumentator
+    public class AssemblyIterator : IAssemblyIterator
     {
-        private static readonly string[] DependencyAssemblyNames = { "CoreCover.Instrumentation.dll", "Google.Protobuf.dll", "Grpc.Core.dll" };
-        private readonly IAssemblyInstrumentationHandler _assemblyInstrumentationHandler;
+        private readonly IAssemblyHandler _assemblyInstrumentationHandler;
         private readonly ILogger _logger;
 
-        public Instrumentator(ILogger logger, IAssemblyInstrumentationHandler assemblyInstrumentationHandler)
+        public AssemblyIterator(ILogger logger, IAssemblyHandler assemblyInstrumentationHandler)
         {
             _assemblyInstrumentationHandler = assemblyInstrumentationHandler;
             _logger = logger;
         }
 
-        public void Process(CoverageContext coverageContext, string folderPath)
+        public void ProcessAssembliesInFolder(CoverageContext coverageContext, string folderPath)
         {
-            CopyDependenciesTo(folderPath);
             ProcessAssemblies(coverageContext, Directory.GetFiles(folderPath, "*.dll"));
-        }
-
-        private void CopyDependenciesTo(string targetPath)
-        {
-            _logger.LogInformation($"CoreCover Location: {Assembly.GetEntryAssembly().Location}");
-            var directoryPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-
-            foreach (var assemblyName in DependencyAssemblyNames)
-                CopyDependencyTo(Path.Combine(directoryPath, assemblyName), targetPath);
-        }
-
-        private void CopyDependencyTo(string dependencyFilePath, string targetDirectory)
-        {
-            _logger.LogInformation($"Dependency Location: {dependencyFilePath}");
-            var targetFilePath = Path.Combine(targetDirectory, Path.GetFileName(dependencyFilePath));
-
-            if (!File.Exists(targetFilePath))
-                File.Copy(dependencyFilePath, targetFilePath);
         }
 
         public void ProcessAssemblies(CoverageContext coverageContext, string[] assemblyPaths)

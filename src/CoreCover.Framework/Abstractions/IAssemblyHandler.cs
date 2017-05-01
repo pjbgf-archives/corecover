@@ -6,7 +6,7 @@ using Mono.Cecil;
 
 namespace CoreCover.Framework.Abstractions
 {
-    public interface IAssemblyInstrumentationHandler
+    public interface IAssemblyHandler
     {
         void Handle(CoverageContext coverageContext, AssemblyDefinition assemblyDefinition);
     }

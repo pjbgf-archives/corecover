@@ -11,13 +11,13 @@ using Type = CoreCover.Framework.Model.Type;
 
 namespace CoreCover.Framework
 {
-    public sealed class StaticCodeAnalyser : AssemblyInstrumentationHandler
+    public sealed class StaticCodeAnalyser : AssemblyHandler
     {
         public StaticCodeAnalyser() : this(null)
         {
         }
 
-        public StaticCodeAnalyser(AssemblyInstrumentationHandler sucessorHandler) : base(sucessorHandler)
+        public StaticCodeAnalyser(AssemblyHandler sucessorHandler) : base(sucessorHandler)
         {
         }
 

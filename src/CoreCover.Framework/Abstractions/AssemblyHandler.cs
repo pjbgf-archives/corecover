@@ -6,11 +6,11 @@ using Mono.Cecil;
 
 namespace CoreCover.Framework.Abstractions
 {
-    public abstract class AssemblyInstrumentationHandler : IAssemblyInstrumentationHandler
+    public abstract class AssemblyHandler : IAssemblyHandler
     {
-        private readonly AssemblyInstrumentationHandler _sucessorHandler;
+        private readonly AssemblyHandler _sucessorHandler;
 
-        protected AssemblyInstrumentationHandler(AssemblyInstrumentationHandler sucessorHandler)
+        protected AssemblyHandler(AssemblyHandler sucessorHandler)
         {
             _sucessorHandler = sucessorHandler;
         }

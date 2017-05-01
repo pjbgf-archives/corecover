@@ -9,18 +9,18 @@ using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Mono.Cecil.Rocks;
 
-namespace CoreCover.Framework.TestExecution
+namespace CoreCover.Framework
 {
-    public sealed class CodeInstrumentationHandler : AssemblyInstrumentationHandler
+    public sealed class PreTestExecutionAssemblyTransformer : AssemblyInstrumentationHandler
     {
         private const string InstrumentedAssemblyFlagName = "__CORECOVER__";
         private readonly ILogger _logger;
 
-        public CodeInstrumentationHandler(ILogger logger) : this(logger, null)
+        public PreTestExecutionAssemblyTransformer(ILogger logger) : this(logger, null)
         {
         }
 
-        public CodeInstrumentationHandler(ILogger logger, AssemblyInstrumentationHandler sucessorHandler) : base(sucessorHandler)
+        public PreTestExecutionAssemblyTransformer(ILogger logger, AssemblyInstrumentationHandler sucessorHandler) : base(sucessorHandler)
         {
             _logger = logger;
         }

@@ -6,8 +6,6 @@ using System.IO;
 using System.Reflection;
 using CoreCover.Framework;
 using CoreCover.Framework.Adapters;
-using CoreCover.Framework.CodeAnalysis;
-using CoreCover.Framework.TestExecution;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
@@ -20,7 +18,7 @@ namespace CoreCover
             var logger = GetLogger();
             new ConsoleRunner(
                     new ConsoleAdapter(), new CoverageRunner(
-                    new Instrumentator(logger, new CodeCoverageHandler(new CodeInstrumentationHandler(logger))),
+                    new Instrumentator(logger, new StaticCodeAnalyser(new PreTestExecutionAssemblyTransformer(logger))),
                     new DotNetTestRunner(new RpcServer(logger), new Process()), 
                     new OpenCoverReportAdapter()))
                 .ProcessCommand(args);

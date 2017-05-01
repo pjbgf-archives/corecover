@@ -3,7 +3,6 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using CoreCover.Framework.CodeAnalysis;
 using CoreCover.Instrumentation;
 
 namespace CoreCover.Framework.Model

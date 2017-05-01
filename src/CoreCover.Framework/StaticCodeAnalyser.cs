@@ -9,11 +9,11 @@ using CoreCover.Framework.Model;
 using Mono.Cecil;
 using Type = CoreCover.Framework.Model.Type;
 
-namespace CoreCover.Framework.CodeAnalysis
+namespace CoreCover.Framework
 {
-    public sealed class CodeCoverageHandler : AssemblyInstrumentationHandler
+    public sealed class StaticCodeAnalyser : AssemblyInstrumentationHandler
     {
-        public CodeCoverageHandler(AssemblyInstrumentationHandler sucessorHandler) : base(sucessorHandler)
+        public StaticCodeAnalyser(AssemblyInstrumentationHandler sucessorHandler) : base(sucessorHandler)
         {
         }
 

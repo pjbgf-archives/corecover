@@ -2,22 +2,20 @@
 // Copyright (c) 2017 Paulo Gomes (https://pjbgf.mit-license.org/)
 
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using CoreCover.Framework.Abstractions;
 using CoreCover.Framework.Model;
 using Microsoft.Extensions.Logging;
 using Mono.Cecil;
-using OpenCover.Framework.Model;
 using File = System.IO.File;
 
 namespace CoreCover.Framework
 {
     public class Instrumentator : IInstrumentator
     {
+        private static readonly string[] DependencyAssemblyNames = { "CoreCover.Instrumentation.dll", "Google.Protobuf.dll", "Grpc.Core.dll" };
         private readonly IAssemblyInstrumentationHandler _assemblyInstrumentationHandler;
-        private readonly string[] DependencyAssemblyNames = { "CoreCover.Instrumentation.dll", "Google.Protobuf.dll", "Grpc.Core.dll" };
         private readonly ILogger _logger;
 
         public Instrumentator(ILogger logger, IAssemblyInstrumentationHandler assemblyInstrumentationHandler)

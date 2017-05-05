@@ -28,7 +28,7 @@ namespace CoreCover
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location))
-                .AddJsonFile("appSettings.json", false);
+                .AddJsonFile("appSettings.json", true);
 
             var config = builder.Build();
             var loggerFactory = new LoggerFactory()

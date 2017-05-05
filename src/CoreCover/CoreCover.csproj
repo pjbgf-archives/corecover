@@ -2,17 +2,16 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <TargetFramework>netcoreapp1.0</TargetFramework>
     <AssemblyVersion>0.1.1.0</AssemblyVersion>
     <FileVersion>0.1.1.0</FileVersion>
-    <Version>0.1.1</Version>
+    <Version>0.1.6</Version>
     <Description>Light-weight cross platform code coverage tool for .Net Core applications.</Description>
     <PackageLicenseUrl>https://pjbgf.mit-license.org/</PackageLicenseUrl>
     <PackageId>CoreCover</PackageId>
     <PackageTags>test-coverage, code-coverage, dotnet-core, dotnet-cover, coverage, cover</PackageTags>
     <PackageProjectUrl>https://github.com/pjbgf/corecover</PackageProjectUrl>
     <AssemblyName>dotnet-cover</AssemblyName>
-    <IsTool>true</IsTool>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

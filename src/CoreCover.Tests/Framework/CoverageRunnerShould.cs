@@ -14,34 +14,18 @@ namespace CoreCover.Tests.Framework
         private readonly ITestsRunner _testRunnerMock;
         private readonly ICoverageReport _coverageReportMock;
         private readonly IAssemblyIterator _instrumentatorMock;
-        private readonly ICoverageDependencies _coverageDependenciesMock;
 
         public CoverageRunnerShould()
         {
             _testRunnerMock = Substitute.For<ITestsRunner>();
             _coverageReportMock = Substitute.For<ICoverageReport>();
             _instrumentatorMock = Substitute.For<IAssemblyIterator>();
-            _coverageDependenciesMock = Substitute.For<ICoverageDependencies>();
-        }
-
-        [Fact]
-        public void Deploy_Dependencies_Before_Transforming_Assemblies()
-        {
-            var coverageRunner = new CoverageRunner(_instrumentatorMock, _testRunnerMock, _coverageReportMock, _coverageDependenciesMock);
-
-            coverageRunner.Run("testProjectOutputPath", "report.xml");
-
-            Received.InOrder(() =>
-            {
-                _coverageDependenciesMock.DeployTo(Arg.Is("testProjectOutputPath"));
-                _instrumentatorMock.ProcessAssembliesInFolder(Arg.Any<CoverageContext>(), Arg.Is("testProjectOutputPath"));
-            });
         }
 
         [Fact]
         public void Transform_Assembly_Before_Executing_Tests()
         {
-            var coverageRunner = new CoverageRunner(_instrumentatorMock, _testRunnerMock, _coverageReportMock, _coverageDependenciesMock);
+            var coverageRunner = new CoverageRunner(_instrumentatorMock, _testRunnerMock, _coverageReportMock);
 
             coverageRunner.Run("testProjectOutputPath", "report.xml");
 
@@ -55,7 +39,7 @@ namespace CoreCover.Tests.Framework
         [Fact]
         public void Generate_Report_Once_Tests_Were_Executed()
         {
-            var coverageRunner = new CoverageRunner(_instrumentatorMock, _testRunnerMock, _coverageReportMock, _coverageDependenciesMock);
+            var coverageRunner = new CoverageRunner(_instrumentatorMock, _testRunnerMock, _coverageReportMock);
 
             coverageRunner.Run("testProjectOutputPath", "report.xml");
 
@@ -69,7 +53,7 @@ namespace CoreCover.Tests.Framework
         [Fact]
         public void Use_Default_Report_File_Name_If_None_Is_Provided()
         {
-            var coverageRunner = new CoverageRunner(_instrumentatorMock, _testRunnerMock, _coverageReportMock, _coverageDependenciesMock);
+            var coverageRunner = new CoverageRunner(_instrumentatorMock, _testRunnerMock, _coverageReportMock);
 
             coverageRunner.Run("testProjectOutputPath", string.Empty);
 

@@ -20,7 +20,7 @@ namespace CoreCover
                     new ConsoleAdapter(), new CoverageRunner(
                     new AssemblyIterator(logger, new StaticCodeAnalyser(new PreTestExecutionAssemblyTransformer(logger))),
                     new DotNetTestRunner(new RpcServer(logger), new Process()), 
-                    new OpenCoverReportAdapter(), new CoverageDependencies()))
+                    new OpenCoverReportAdapter()))
                 .ProcessCommand(args);
         }
 

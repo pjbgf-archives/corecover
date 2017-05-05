@@ -5,7 +5,7 @@
     <TargetFramework>netcoreapp1.0</TargetFramework>
     <AssemblyVersion>0.1.1.0</AssemblyVersion>
     <FileVersion>0.1.1.0</FileVersion>
-    <Version>0.1.6</Version>
+    <Version>0.1.7</Version>
     <Description>Light-weight cross platform code coverage tool for .Net Core applications.</Description>
     <PackageLicenseUrl>https://pjbgf.mit-license.org/</PackageLicenseUrl>
     <PackageId>CoreCover</PackageId>

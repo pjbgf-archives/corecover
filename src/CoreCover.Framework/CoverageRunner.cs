@@ -13,14 +13,12 @@ namespace CoreCover.Framework
         private readonly ITestsRunner _testRunner;
         private readonly IAssemblyIterator _instrumentator;
         private readonly ICoverageReport _coverageReport;
-        private readonly ICoverageDependencies _coverageDependencies;
 
-        public CoverageRunner(IAssemblyIterator instrumentator, ITestsRunner testRunner, ICoverageReport coverageReport, ICoverageDependencies coverageDependencies)
+        public CoverageRunner(IAssemblyIterator instrumentator, ITestsRunner testRunner, ICoverageReport coverageReport)
         {
             _instrumentator = instrumentator;
             _testRunner = testRunner;
             _coverageReport = coverageReport;
-            _coverageDependencies = coverageDependencies;
         }
 
         public void Run(string testProjectOutputPath, string reportPath)
@@ -29,7 +27,6 @@ namespace CoreCover.Framework
                 reportPath = "coverage.xml";
 
             var coverageContext = new CoverageContext();
-            _coverageDependencies.DeployTo(testProjectOutputPath);
             _instrumentator.ProcessAssembliesInFolder(coverageContext, testProjectOutputPath);
             _testRunner.Run(coverageContext, testProjectOutputPath);
             _coverageReport.Export(coverageContext, reportPath);

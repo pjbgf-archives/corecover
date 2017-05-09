@@ -10,24 +10,16 @@ environment:
 init:
 - ps: $Env:LABEL = "CI" + $Env:APPVEYOR_BUILD_NUMBER.PadLeft(5, "0") 
 
-install:
-- nuget setapikey %myget_secure_key% -source https://www.myget.org/F/pjbgf/api/v3/index.json -Verbosity quiet
-- nuget sources add -Name MyGet -Source https://www.myget.org/F/pjbgf/api/v3/index.json
-- nuget install CoreCover -prerelease
-
 build_script:
 - build
 
-after_build:
-- dotnet pack src\CoreCover\CoreCover.csproj
-
 test_script:
 - build-test
-#- run.cmd src\CoreCover.Tests\bin\Debug\netcoreapp1.1\
-- dotnet %USERPROFILE%\.nuget\packages\CoreCover\0.1.0-prerelease003\tools\netcoreapp1.1\CoreCover.dll "src\CoreCover.Tests\bin\Any CPU\Debug\netcoreapp1.1\"
+- run.cmd src\CoreCover.Tests\bin\Debug\netcoreapp1.1\
 
 after_test:
 - '%USERPROFILE%\.nuget\packages\coveralls.io\1.3.4\tools\coveralls.net.exe --opencover coverage.xml --r %COVERALLS_TOKEN% -f'
+- pack-all
 
 artifacts:
 - path: '**\*.nupkg'

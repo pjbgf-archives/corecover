@@ -1,1 +1,1 @@
-dotnet restore src && dotnet build src
+dotnet build src

@@ -10,6 +10,16 @@ environment:
 init:
 - ps: $Env:LABEL = "CI" + $Env:APPVEYOR_BUILD_NUMBER.PadLeft(5, "0") 
 
+install:
+  - choco install gitversion.portable -pre -y
+
+assembly_info:
+  patch: false
+
+before_build:
+- nuget restore
+- ps: gitversion /l console /output buildserver /updateAssemblyInfo
+
 build_script:
 - build
 
@@ -19,7 +29,7 @@ test_script:
 
 after_test:
 - '%USERPROFILE%\.nuget\packages\coveralls.io\1.3.4\tools\coveralls.net.exe --opencover coverage.xml --r %COVERALLS_TOKEN% -f'
-- pack-all
+- pack-all -version "%GitVersion_NuGetVersion%" -prop "target=%CONFIGURATION%"
 
 artifacts:
 - path: '**\*.nupkg'

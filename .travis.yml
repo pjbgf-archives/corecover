@@ -8,6 +8,7 @@ before_install:
 - chmod +x build-test.sh
 
 install:
+- dotnet restore src
 - ./build.sh
 
 script:

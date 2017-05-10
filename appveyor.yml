@@ -12,7 +12,6 @@ init:
 
 install:
 - choco install gitversion.portable -pre -y
-- nuget install GitReleaseNotes
 
 assembly_info:
   patch: false
@@ -43,9 +42,5 @@ deploy:
       secure: Hh52nD8i4YR/X5yRRaqWNchtVaH3/IvAzl9XcGPsrfQI0DnvJB9Odeju0e5yIG4D
     artifact: /.*\.nupkg/
  
-on_success:
- - '%USERPROFILE%\.nuget\packages\gitreleasenotes\0.7.0\tools\GitReleaseNotes.exe . /O ReleaseNotes.md'
- - tail ReleaseNotes.md
-
 skip_commits:
   files: '**/*.md'

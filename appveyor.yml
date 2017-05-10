@@ -48,5 +48,4 @@ on_success:
  - tail ReleaseNotes.md
 
 skip_commits:
-  files:
-    - *.md
+  files: '**/*.md'
